@@ -1,0 +1,23 @@
+.float-label {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 12px;
+  top: 10px;
+  transition: 0.2s ease all;
+}
+
+.label-float {
+  top: 2px;
+  font-size: 8px;
+}
+
+.ant-input-affix-wrapper {
+  z-index: 0 !important;
+}

@@ -14,8 +14,9 @@
 }
 
 .label-float {
-  top: 2px;
-  font-size: 8px;
+  top: -8px;
+  font-size: 10px;
+  background-color: white;
 }
 
 .ant-input-affix-wrapper {

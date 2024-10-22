@@ -398,4 +398,16 @@
     FROM USERS
     WHERE USER_NAME = #{userName,jdbcType=VARCHAR}
   </select>
+
+   <select id="findUserByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT *
+    FROM USERS
+    WHERE EMAIL = #{email,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updatePasswordUser">
+    update USERS
+    SET PASSWORD = #{password,jdbcType=VARCHAR}
+    WHERE USER_NAME = #{userName,jdbcType=VARCHAR}
+  </update>
 </mapper>

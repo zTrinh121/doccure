@@ -49,6 +49,7 @@ public class UserResponse {
         return UserResponse
                 .builder()
                 .userId(users.getUserId())
+                .userName(users.getUsername())
                 .firstName(users.getFirstName())
                 .lastName(users.getLastName())
                 .gender(users.getGender())

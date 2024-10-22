@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+                        connectionURL="jdbc:oracle:thin:@localhost:1521:orcl21"
+                        userId="system"
+                        password="12345">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.doccure.BE.model" targetProject="C:\Users\FPT SHOP\Downloads\Intership\doccure\project\doccure\BE\doccure\src\main\java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="com.doccure.BE.mapper"  targetProject="C:\Users\FPT SHOP\Downloads\Intership\doccure\project\doccure\BE\doccure\src\main\resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.doccure.BE.mapper"  targetProject="C:\Users\FPT SHOP\Downloads\Intership\doccure\project\doccure\BE\doccure\src\main\java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <table tableName="slot"></table>
+        <table tableName="appointment"></table>
+        <table tableName="doctor"></table>
+        <table tableName="rating"></table>
+        <table tableName="users"></table>
+        <table tableName="token"></table>
+        <table tableName="specialization"></table>
+        <table tableName="doctor_specialization"></table>
+        <table tableName="invoice"></table>
+        <table tableName="invoice_item"></table>
+    </context>
+</generatorConfiguration>

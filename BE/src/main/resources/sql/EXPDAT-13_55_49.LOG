@@ -1,0 +1,32 @@
+Starting "SYSTEM"."DOCCURE_EXPORT-13_52_05":  
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+.  estimated "SYSTEM"."APPOINTMENT"                      4.683 KB
+.  estimated "SYSTEM"."DOCTOR"                           4.683 KB
+.  estimated "SYSTEM"."RATING"                           4.683 KB
+.  estimated "SYSTEM"."SLOT"                             4.683 KB
+.  estimated "SYSTEM"."SPECIALIZATION"                   4.683 KB
+.  estimated "SYSTEM"."TOKEN"                            4.683 KB
+.  estimated "SYSTEM"."USERS"                            4.683 KB
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/TABLE/IDENTITY_COLUMN
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+. . exported "SYSTEM"."APPOINTMENT"                          0 KB       0 rows
+. . exported "SYSTEM"."DOCTOR"                           5.593 KB      10 rows
+. . exported "SYSTEM"."RATING"                               0 KB       0 rows
+. . exported "SYSTEM"."SLOT"                             5.281 KB      12 rows
+. . exported "SYSTEM"."SPECIALIZATION"                   5.140 KB      10 rows
+. . exported "SYSTEM"."TOKEN"                                0 KB       0 rows
+. . exported "SYSTEM"."USERS"                            6.078 KB      10 rows
+Master table "SYSTEM"."DOCCURE_EXPORT-13_52_05" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYSTEM.DOCCURE_EXPORT-13_52_05 is:
+  C:\U01\APP\ORACLE\ADMIN\ORCL21\DPDUMP\EXPDAT01-13_55_49.DMP
+Job "SYSTEM"."DOCCURE_EXPORT-13_52_05" successfully completed at Thu Oct 17 13:56:21 2024 elapsed 0 00:00:32

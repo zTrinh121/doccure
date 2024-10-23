@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginRequest {
-    @JsonProperty("user_name")
+    @JsonProperty("username")
     @NotNull(message = "User name cannot be empty")
     private String userName;
 

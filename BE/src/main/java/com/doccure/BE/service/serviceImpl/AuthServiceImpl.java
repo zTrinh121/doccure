@@ -60,13 +60,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse authenticate(Users request) {
+    public AuthResponse authenticate(Users request) throws DataNotFoundException {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()));
 
         Users user = usersMapper.findUserByUserName(request.getUsername());
+        if(user == null) throw new DataNotFoundException("No user found");
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -103,30 +104,31 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String changePassword(ChangePasswordResquest changePasswordResquest, HttpServletRequest request) throws Exception {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    changePasswordResquest.getUserName(),
+                    changePasswordResquest.getOldPassword()));
         String token = checkToken(request);
-        // check if the user exist in database
+        //Check if the user exist in database
         Users user = usersMapper.findUserByUserName(changePasswordResquest.getUserName());
-        if (user == null) throw new DataNotFoundException("No user found");
+        if (user == null) throw new DataNotFoundException("No user found with username = " + changePasswordResquest.getUserName());
 
-        //Ensure that the username from the token matches the one in the request
+        //Check that the username from the token matches the one in the request
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
         if(!Objects.equals(accessTokenUser.getUserId(), user.getUserId())){
-            throw new PasswordChangeNotAllowedException("You cannot change password");
+            throw new PasswordChangeNotAllowedException("You don't have authorization to change password");
         }
+
         usersMapper.updatePasswordUser(passwordEncoder.encode(changePasswordResquest.getNewPassword()), changePasswordResquest.getUserName());
         revokeAllTokenByUser(user);
         return "Change password successfully. Please login again";
-    }
-
-    public Users getUserByName(String userName) {
-        return  usersMapper.findUserByUserName(userName);
     }
 
     private String checkToken(HttpServletRequest request) throws Exception{
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new UnauthorizedException("Unauthorized");
+            throw new UnauthorizedException("Unauthorized (Token is not existed or valid)");
         }
 
         return authHeader.substring(7);

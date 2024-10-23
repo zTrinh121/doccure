@@ -1,10 +1,9 @@
 package com.doccure.BE.controller;
 
+import com.doccure.BE.exception.DataNotFoundException;
 import com.doccure.BE.model.Users;
 import com.doccure.BE.request.ChangePasswordResquest;
-import com.doccure.BE.response.AuthResponse;
 import com.doccure.BE.response.ResponseHandler;
-import com.doccure.BE.response.UserResponse;
 import com.doccure.BE.service.AuthService;
 import com.doccure.BE.service.serviceImpl.AuthServiceImpl;
 
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final AuthServiceImpl authServiceImpl;
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(
@@ -37,7 +35,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(
-            @RequestBody Users request) {
+            @RequestBody Users request) throws DataNotFoundException {
         return ResponseHandler.responseBuilder("Login successfully",
                 HttpStatus.OK,
                 authService.authenticate(request));
@@ -51,18 +49,6 @@ public class AuthController {
                 HttpStatus.OK,
                 authService.refreshToken(request, response));
     }
-
-    @GetMapping("/access")
-    public String testAuth() {
-        return "Hello, access successfully";
-    }
-
-    @GetMapping("/{username}")
-    public Users testUsserID(@PathVariable("username") String username) {
-        return authServiceImpl.getUserByName(username);
-
-    }
-
 
     @PutMapping("/change-password")
     public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordResquest changePassword,

@@ -1,5 +1,6 @@
 package com.doccure.BE.service;
 
+import com.doccure.BE.exception.DataNotFoundException;
 import com.doccure.BE.exception.UsernameAlreadyExistsException;
 import com.doccure.BE.model.Users;
 import com.doccure.BE.request.ChangePasswordResquest;
@@ -10,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
     UserResponse register(Users request) throws Exception;
-    AuthResponse authenticate(Users request);
+    AuthResponse authenticate(Users request) throws DataNotFoundException;
 
     AuthResponse refreshToken(HttpServletRequest request,
                                 HttpServletResponse response) throws Exception;

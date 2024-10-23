@@ -1,21 +1,19 @@
+import loginImage from '../../../assets/login.png';
+import { Col, Row, Skeleton } from 'antd';
+import { Image } from 'antd';
+import { Flex } from 'antd';
 
-import loginImage from "../assets/login.png";
-import { Col, Row, Skeleton } from "antd";
-import { Image } from "antd";
-import { Flex } from "antd";
-
-
-import LoginCard from "../components/LoginCard";
-import HomeLayout from "../layout/HomeLayout";
+import LoginCard from '../../../features/auth/components/LoginCard';
 
 // import './App.css'
 
 function LoginPage() {
   return (
-    <HomeLayout>
-      <>
+    // <HomeLayout>
+    <>
+      {/* <RedirectIfLoggedIn> */}
         <div>
-          <Flex justify="center" align="center" style={{ height: "80vh" }}>
+          <Flex justify="center" align="center">
             <Row>
               <Col span={4}></Col>
               <Col span={8}>
@@ -25,6 +23,7 @@ function LoginPage() {
                   fallback={<Skeleton.Image />}
                 />
               </Col>
+
               <Col span={8}>
                 <LoginCard></LoginCard>
               </Col>
@@ -32,8 +31,8 @@ function LoginPage() {
             </Row>
           </Flex>
         </div>
-      </>
-    </HomeLayout>
+      {/* </RedirectIfLoggedIn> */}
+    </>
   );
 }
 

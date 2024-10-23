@@ -1,10 +1,11 @@
-import HomeLayout from '../../../components/layouts/HomeLayout';
 import background from '../../../assets/background.png';
-import { Flex, Image, Input, Space } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-import { Carousel } from 'antd';
+import { Flex,  Input, Space, Carousel } from 'antd';
 import CircleCard from '../../../components/ui/circleCard';
 import DoctorCard from '../../../features/doctors/components/DoctorCard';
+import { SearchOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+
+import { useAuthStore } from '../../../stores/authStore';
 
 const HomePage = () => {
   const contentStyle = {
@@ -20,8 +21,14 @@ const HomePage = () => {
     console.log(currentSlide);
   };
 
+  const username = useAuthStore((state) => state.username);
+
+  const accessToken = useAuthStore((state) => state.accessToken);
+  console.log('username', username, accessToken);
+
   return (
-    <HomeLayout>
+
+    <>
       <Flex
         justify="center"
         style={{
@@ -32,13 +39,14 @@ const HomePage = () => {
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center bottom',
         }}
-      >
+        >
         <Space>
-          {/* <Input></Input> */}
+
           <Input prefix={<SearchOutlined />}></Input>
         </Space>
       </Flex>
 
+      <Link to="/profile">Profile</Link>
       <CircleCard></CircleCard>
 
       <Carousel
@@ -47,7 +55,7 @@ const HomePage = () => {
         slidesToShow={3}
         arrows
         afterChange={onChange}
-      >
+        >
         <CircleCard></CircleCard> <CircleCard></CircleCard>
         <CircleCard></CircleCard> <CircleCard></CircleCard>
         <div>
@@ -67,7 +75,7 @@ const HomePage = () => {
         slidesToShow={3}
         arrows
         afterChange={onChange}
-      >
+        >
         <DoctorCard></DoctorCard>
         <DoctorCard></DoctorCard>
         <DoctorCard></DoctorCard>
@@ -75,8 +83,8 @@ const HomePage = () => {
         <DoctorCard></DoctorCard>
         <DoctorCard></DoctorCard>
       </Carousel>
-      {/* <DoctorCard></DoctorCard> */}
-    </HomeLayout>
+
+  </>
   );
 };
 

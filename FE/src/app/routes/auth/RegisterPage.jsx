@@ -1,14 +1,13 @@
 import loginImage from '../../../assets/login.png';
-import HomeLayout from '../../../components/layouts/HomeLayout';
 import RegisterCard from '../../../features/auth/components/RegisterCard';
 import { Flex, Row, Col, Image, Skeleton } from 'antd';
 
 const RegisterPage = () => {
   return (
-    <HomeLayout>
+    // <HomeLayout>
       <>
         <div>
-          <Flex justify="center" align="center" style={{ height: '80vh' }}>
+          <Flex justify="center" align="center">
             <Row>
               <Col span={4}></Col>
               <Col span={8}>
@@ -26,7 +25,7 @@ const RegisterPage = () => {
           </Flex>
         </div>
       </>
-    </HomeLayout>
+
   );
 };
 

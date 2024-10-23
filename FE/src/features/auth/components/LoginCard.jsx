@@ -1,17 +1,53 @@
 import { Button, Card, Flex, Form, Input, Space } from 'antd';
 import FloatLabel from '../../../components/ui/float-lable/FloatLabel';
 import { useState } from 'react';
+import { login } from '../../../lib/auth';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import { useAuthStore } from '../../../stores/authStore';
 const { Meta } = Card;
 
 const LoginCard = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const updateUsername = useAuthStore((state) => state.updateUsername);
+  const updateAccessToken = useAuthStore((state) => state.updateAccessToken);
+
+  const navigate = useNavigate();
+
   const onValuesChange = (_, allValues) => {
-    console.log(_);
-    console.log(allValues);
     setUsername(allValues.username);
     setPassword(allValues.password);
+  };
+
+  const onFinish = async (values) => {
+    console.log(values);
+    // console.log(registerWithEmailAndPassword());
+    try {
+      const response = await login(values);
+      const decoded = jwtDecode(response.data.data.access_token);
+
+      updateAccessToken(response.data.data.access_token);
+      updateUsername(decoded.sub);
+
+      navigate('/');
+    } catch (error) {
+      console.log('e');
+      console.log(error);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received:', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', error.message);
+      }
+      console.error('Full error object:', error.config);
+    }
   };
 
   return (
@@ -20,6 +56,7 @@ const LoginCard = () => {
         <Meta title="Login Doccure" />
 
         <Form
+          onFinish={onFinish}
           onValuesChange={onValuesChange}
           name="basic"
           labelCol={{

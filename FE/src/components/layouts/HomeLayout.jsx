@@ -21,14 +21,31 @@ import {
 import { Link } from 'react-router-dom';
 
 import { useLocation, useNavigate } from 'react-router-dom';
+import { notification } from 'antd';
+import { useAuthStore } from '../../stores/authStore';
+import { Popover } from 'antd';
+import { Outlet } from 'react-router-dom';
 
 const HomeLayout = ({ children }) => {
   let location = useLocation();
+  const username = useAuthStore((state) => state.username);
 
   const navigate = useNavigate();
 
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = (description) => {
+    api.error({
+      message: 'Notification Title',
+      description: description,
+      showProgress: true,
+    });
+  };
+
   return (
     <Layout>
+      {contextHolder}
+
       <Header
         style={{
           position: 'sticky',
@@ -77,46 +94,78 @@ const HomeLayout = ({ children }) => {
           <Divider type="vertical" />
           <Col span={4}>
             <Space>
-              {location.pathname === '/register' ? (
-                <></>
-              ) : (
-                <Button
-                  onClick={() => {
-                    navigate('/register');
-                  }}
-                >
-                  <UserAddOutlined />
-                  Register
-                </Button>
-              )}
+              {username}
+              {!username ? ( // Only render if username is empty
+                <>
+                  {location.pathname === '/register' ? (
+                    <></>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        navigate('/register');
+                      }}
+                    >
+                      <UserAddOutlined />
+                      Register
+                    </Button>
+                  )}
 
-              {location.pathname === '/login' ? (
-                <></>
+                  {location.pathname === '/login' ? (
+                    <></>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        navigate('/login');
+                      }}
+                    >
+                      <LoginOutlined />
+                      Login
+                    </Button>
+                  )}
+                </>
               ) : (
-                <Button
-                  onClick={() => {
-                    navigate('/login');
-                  }}
+                <Popover
+                  placement="bottomLeft"
+                  content={
+                    <Col>
+                      <Menu
+                        // onClick={onClick}
+                        // style={{
+                        //   width: 256,
+                        // }}
+                        // defaultSelectedKeys={['1']}
+                        // defaultOpenKeys={['sub1']}
+                        mode="inline"
+                        items={[
+                          {
+                            key: 'profile',
+                            label: username,
+                          },
+                          {
+                            key: 'logout',
+                            label: 'Log out',
+                          },
+                        ]}
+                      />
+                    </Col>
+                  }
                 >
-                  <LoginOutlined />
-                  Login
-                </Button>
+                  <Avatar size={30} icon={<UserOutlined />} />
+                </Popover>
               )}
-              <Avatar size={30} icon={<UserOutlined />} />
             </Space>
           </Col>
         </Row>
       </Header>
 
       <Content
-        style={
-          {
-            // padding: "0 48px",
-          }
-        }
+        style={{
+          padding: '48px 0',
+        }}
       >
-        {children}
+        <Outlet />
       </Content>
+
       <Footer
         style={{
           textAlign: 'center',

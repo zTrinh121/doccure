@@ -1,11 +1,11 @@
-import { Button, Card, Flex, Form, Input, Space } from "antd";
-import FloatLabel from "./FloatLabel";
-import { useState } from "react";
+import { Button, Card, Flex, Form, Input, Space } from 'antd';
+import FloatLabel from '../../../components/ui/float-lable/FloatLabel';
+import { useState } from 'react';
 const { Meta } = Card;
 
 const LoginCard = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const onValuesChange = (_, allValues) => {
     console.log(_);
@@ -16,7 +16,7 @@ const LoginCard = () => {
 
   return (
     <Card>
-      <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
         <Meta title="Login Doccure" />
 
         <Form
@@ -39,7 +39,7 @@ const LoginCard = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: 'Please input your username!',
                 },
               ]}
             >
@@ -52,7 +52,7 @@ const LoginCard = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your password!",
+                  message: 'Please input your password!',
                 },
               ]}
             >

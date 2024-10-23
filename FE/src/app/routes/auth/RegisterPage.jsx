@@ -1,21 +1,14 @@
+import loginImage from '../../../assets/login.png';
+import HomeLayout from '../../../components/layouts/HomeLayout';
+import RegisterCard from '../../../features/auth/components/RegisterCard';
+import { Flex, Row, Col, Image, Skeleton } from 'antd';
 
-import loginImage from "../assets/login.png";
-import { Col, Row, Skeleton } from "antd";
-import { Image } from "antd";
-import { Flex } from "antd";
-
-
-import LoginCard from "../components/LoginCard";
-import HomeLayout from "../layout/HomeLayout";
-
-// import './App.css'
-
-function LoginPage() {
+const RegisterPage = () => {
   return (
     <HomeLayout>
       <>
         <div>
-          <Flex justify="center" align="center" style={{ height: "80vh" }}>
+          <Flex justify="center" align="center" style={{ height: '80vh' }}>
             <Row>
               <Col span={4}></Col>
               <Col span={8}>
@@ -26,7 +19,7 @@ function LoginPage() {
                 />
               </Col>
               <Col span={8}>
-                <LoginCard></LoginCard>
+                <RegisterCard></RegisterCard>
               </Col>
               <Col span={4}></Col>
             </Row>
@@ -35,6 +28,6 @@ function LoginPage() {
       </>
     </HomeLayout>
   );
-}
+};
 
-export default LoginPage;
+export default RegisterPage;

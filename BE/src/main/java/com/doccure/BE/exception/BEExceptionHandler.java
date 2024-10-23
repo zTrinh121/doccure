@@ -24,9 +24,9 @@ public class BEExceptionHandler {
         DataException dataException = new DataException(
                 emailAlreadyExistsException.getMessage(),
                 emailAlreadyExistsException.getCause(),
-                HttpStatus.NOT_FOUND
+                HttpStatus.EXPECTATION_FAILED
         );
-        return new ResponseEntity<>(dataException, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(dataException, HttpStatus.EXPECTATION_FAILED);
     }
 
     @ExceptionHandler(value = {PasswordChangeNotAllowedException.class})
@@ -35,9 +35,9 @@ public class BEExceptionHandler {
         DataException dataException = new DataException(
                 passwordChangeNotAllowedException.getMessage(),
                 passwordChangeNotAllowedException.getCause(),
-                HttpStatus.NOT_FOUND
+                HttpStatus.NOT_MODIFIED
         );
-        return new ResponseEntity<>(dataException, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(dataException, HttpStatus.NOT_MODIFIED);
     }
 
     @ExceptionHandler(value = {UnauthorizedException.class})
@@ -46,9 +46,9 @@ public class BEExceptionHandler {
         DataException dataException = new DataException(
                 unauthorizedException.getMessage(),
                 unauthorizedException.getCause(),
-                HttpStatus.NOT_FOUND
+                HttpStatus.UNAUTHORIZED
         );
-        return new ResponseEntity<>(dataException, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(dataException, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = {UsernameAlreadyExistsException.class})
@@ -57,9 +57,31 @@ public class BEExceptionHandler {
         DataException dataException = new DataException(
                 usernameAlreadyExistsException.getMessage(),
                 usernameAlreadyExistsException.getCause(),
-                HttpStatus.NOT_FOUND
+                HttpStatus.EXPECTATION_FAILED
         );
-        return new ResponseEntity<>(dataException, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(dataException, HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @ExceptionHandler(value = {OTPExpiredException.class})
+    public ResponseEntity<Object> handleOTPExpiredException(
+        OTPExpiredException otpExpiredException) {
+        DataException dataException = new DataException(
+                otpExpiredException.getMessage(),
+                otpExpiredException.getCause(),
+                HttpStatus.EXPECTATION_FAILED
+        );
+        return new ResponseEntity<>(dataException, HttpStatus.EXPECTATION_FAILED);
+    }
+
+    @ExceptionHandler(value = {DataIntegrityViolationException.class})
+    public ResponseEntity<Object> handleDataIntegrityViolationException(
+            DataIntegrityViolationException dataIntegrityViolationException) {
+        DataException dataException = new DataException(
+                dataIntegrityViolationException.getMessage(),
+                dataIntegrityViolationException.getCause(),
+                HttpStatus.CONFLICT
+        );
+        return new ResponseEntity<>(dataException, HttpStatus.CONFLICT);
     }
 
 }

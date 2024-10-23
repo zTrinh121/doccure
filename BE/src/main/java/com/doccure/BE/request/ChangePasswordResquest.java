@@ -23,4 +23,8 @@ public class ChangePasswordResquest {
     @JsonProperty("new_password")
     @NotNull(message = "New password cannot be empty")
     private String newPassword;
+
+        @JsonProperty("confirm_password")
+    @NotNull(message = "Confirm password cannot be empty")
+    private String confirmPassword;
 }

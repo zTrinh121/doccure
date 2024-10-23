@@ -1,12 +1,14 @@
 package com.doccure.BE.controller;
 
 import com.doccure.BE.exception.DataNotFoundException;
+import com.doccure.BE.exception.PasswordChangeNotAllowedException;
 import com.doccure.BE.model.Users;
 import com.doccure.BE.request.ChangePasswordResquest;
+import com.doccure.BE.request.ForgotPasswordRequest;
 import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.AuthService;
-import com.doccure.BE.service.serviceImpl.AuthServiceImpl;
 
+import io.jsonwebtoken.lang.Objects;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("${apiPrefix}/auth")
@@ -35,10 +38,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(
-            @RequestBody Users request) throws DataNotFoundException {
+            @RequestBody Users request, HttpServletResponse response) throws DataNotFoundException {
         return ResponseHandler.responseBuilder("Login successfully",
                 HttpStatus.OK,
-                authService.authenticate(request));
+                authService.authenticate(request, response));
     }
 
     @PostMapping("/refresh_token")
@@ -52,8 +55,8 @@ public class AuthController {
 
     @PutMapping("/change-password")
     public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordResquest changePassword,
-            BindingResult result,
-            HttpServletRequest request) throws Exception {
+                                                 BindingResult result,
+                                                 HttpServletRequest request) throws Exception {
         if (result.hasErrors()) {
             List<String> errorMessages = result.getFieldErrors()
                     .stream()
@@ -69,4 +72,32 @@ public class AuthController {
                 authService.changePassword(changePassword, request));
     }
 
+    @PostMapping("/verify-mail/{email}")
+    public ResponseEntity<Object> verifyEmail(@PathVariable String email) throws Exception {
+        return ResponseHandler.responseBuilder("Sent OTP to email successfully",
+                HttpStatus.OK,
+                authService.verifyEmail(email));
+
+    }
+
+    @PostMapping("/verify-otp/{otp}/{email}")
+    public ResponseEntity<Object> verifyOtp(@PathVariable Long otp, 
+    @PathVariable String email) throws Exception{
+        return ResponseHandler.responseBuilder("Verified OTP successfully",
+                HttpStatus.OK,
+                authService.verifyOtp(otp, email));
+    }
+
+    @PostMapping("/forgot-password/{email}")
+    public ResponseEntity<Object> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest,
+    @PathVariable String email) throws PasswordChangeNotAllowedException {
+        
+        return ResponseHandler.responseBuilder("Sent password reset link to email successfully",
+                HttpStatus.OK,
+                authService.forgotPassword(forgotPasswordRequest, email));
+
+    }
+
+
+    
 }

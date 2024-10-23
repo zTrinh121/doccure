@@ -48,7 +48,9 @@ public class SecurityConfiguration {
                         req->req.requestMatchers("/api/v1/auth/login/**",
                                         "/api/v1/auth/register/**",
                                         "/api/v1/auth/refresh_token/**",
-                                        "/api/v1/auth/forgot/**"
+                                        "/api/v1/auth/verify-otp/**",
+                                        "/api/v1/auth/verify-mail/**",
+                                        "/api/v1/auth/forgot-password/**"
                                 )
                                 .permitAll()
                                 .anyRequest()
@@ -63,7 +65,7 @@ public class SecurityConfiguration {
                                 )
                                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .logout(l->l
-                        .logoutUrl("/logout")
+                        .logoutUrl("/api/v1/auth/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()
                         ))

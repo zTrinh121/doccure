@@ -48,8 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails = usersMapper.findUserByUserName(username);
 
             if (request.getRequestURI().startsWith("/api/v1/auth/refresh_token")) {
-                filterChain.doFilter(request, response); // Continue without further checks
-                return; // Exit the filter method
+                filterChain.doFilter(request, response);
+                return;
             }
             if(jwtService.isValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

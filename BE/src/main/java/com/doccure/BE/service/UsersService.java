@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface UsersService {
     UserResponse getUserByUsername(String username) throws Exception;
-    UserResponse updateUser(Users user, Long userId, MultipartFile file) throws Exception;
+    UserResponse updateUser(Users user, Long userId) throws Exception;
+
+    UserResponse updateAvatar(Long userId, MultipartFile file) throws Exception;
 
 
     

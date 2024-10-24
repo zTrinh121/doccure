@@ -29,10 +29,10 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<Object> updateUser(@RequestBody Users updateUser,
-        @PathVariable("userId") Long userId,
-        @RequestPart final MultipartFile file,
-        BindingResult result) throws Exception {
+    public ResponseEntity<Object> updateUser(
+            @RequestBody Users updateUser,
+            @PathVariable("userId") Long userId,
+            BindingResult result) throws Exception {
          if (result.hasErrors()) {
             List<String> errorMessages = result.getFieldErrors()
                     .stream()
@@ -46,6 +46,16 @@ public class UserController {
         
         return ResponseHandler.responseBuilder("Update user successfully with user id = " + userId + "  ",
                 HttpStatus.OK,
-                usersService.updateUser(updateUser, userId, file));
+                usersService.updateUser(updateUser, userId));
+    }
+
+    @PutMapping("/avatar/{userId}")
+    public ResponseEntity<Object> updateUser(@PathVariable("userId") Long userId,
+                                             @RequestPart final MultipartFile file
+                                             ) throws Exception {
+
+        return ResponseHandler.responseBuilder("Update avatar successfully for user id = " + userId + "  ",
+                HttpStatus.OK,
+                usersService.updateAvatar( userId, file));
     }
 }

@@ -92,7 +92,7 @@ public class AuthController {
     public ResponseEntity<Object> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest,
     @PathVariable String email) throws PasswordChangeNotAllowedException {
         
-        return ResponseHandler.responseBuilder("Sent password reset link to email successfully",
+        return ResponseHandler.responseBuilder("Please login again",
                 HttpStatus.OK,
                 authService.forgotPassword(forgotPasswordRequest, email));
 

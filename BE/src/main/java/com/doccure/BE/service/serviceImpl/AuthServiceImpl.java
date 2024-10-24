@@ -193,7 +193,7 @@ public class AuthServiceImpl implements AuthService {
 
         ForgotPass fp = ForgotPass.builder()
                 .otp((long) otp)
-                .expiredTime(new Date(System.currentTimeMillis() + 10 * 1000))
+                .expiredTime(new Date(System.currentTimeMillis() + 5 * 60 * 1000))
                 .userId(user.getUserId())
                 .build();
 

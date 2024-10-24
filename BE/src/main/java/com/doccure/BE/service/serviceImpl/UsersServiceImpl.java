@@ -34,7 +34,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public UserResponse updateUser(Users user, Long userId, MultipartFile file) throws Exception{
+    public UserResponse updateUser(Users user, Long userId) throws Exception{
         if(usersMapper.selectByPrimaryKey(userId) == null){
             throw new DataNotFoundException("No user found with id = " + userId);
         }
@@ -44,6 +44,18 @@ public class UsersServiceImpl implements UsersService {
         if(!usersMapper.findUserDifferentByEmail(userId, user.getEmail()).isEmpty()){
             throw new EmailAlreadyExistsException("Email already exists. Please choose a different email");
         }
+
+        user.setUserId(userId);
+        usersMapper.updateByPrimaryKeySelective(user);
+        return UserResponse.fromUsers(user);
+    }
+
+    @Override
+    public UserResponse updateAvatar(Long userId, MultipartFile file) throws Exception {
+        Users user = usersMapper.selectByPrimaryKey(userId);
+        if(user == null){
+            throw new DataNotFoundException("No user found with id = " + userId);
+        }
         //Handle avatar
         if(!file.isEmpty()){
             CloudinaryUtil.assertAllowed(file, CloudinaryUtil.IMAGE_PATTERN);
@@ -51,7 +63,6 @@ public class UsersServiceImpl implements UsersService {
             Map<String, String> responseFileMap = uploadFile(file, fileName);
             user.setAvatar(responseFileMap.get("url"));
         }
-
 
         user.setUserId(userId);
         usersMapper.updateByPrimaryKeySelective(user);

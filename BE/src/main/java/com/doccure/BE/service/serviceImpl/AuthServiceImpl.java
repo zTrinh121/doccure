@@ -128,9 +128,9 @@ public class AuthServiceImpl implements AuthService {
             saveUserToken(accessToken, refreshToken, user);
 
             Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
-            refreshTokenCookie.setHttpOnly(true); 
-            refreshTokenCookie.setSecure(true); 
-            refreshTokenCookie.setPath("/"); 
+            refreshTokenCookie.setHttpOnly(true);
+            refreshTokenCookie.setSecure(true);
+            refreshTokenCookie.setPath("/");
             refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);
             response.addCookie(refreshTokenCookie);
 

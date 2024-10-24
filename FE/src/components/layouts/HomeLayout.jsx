@@ -32,6 +32,7 @@ const HomeLayout = ({ children }) => {
   let location = useLocation();
   // const [username, setUsername] = useState('');
   const accessToken = useAuthStore((state) => state.accessToken);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   let username = getUsernameFromToken(accessToken);
 
@@ -50,9 +51,8 @@ const HomeLayout = ({ children }) => {
   };
 
   const handleLogout = () => {
-    return () => {
-      setAccessToken('');
-    };
+    setAccessToken('');
+
     //todos:implement more here, particularly making logout request
   };
 
@@ -140,21 +140,16 @@ const HomeLayout = ({ children }) => {
                   placement="bottom"
                   arrow={false}
                   content={
-                    <Col>
-                      {/* <Menu
-                        mode="inline"
-                        items={[
-                          {
-                            key: 'profile',
-                            label: username,
-                          },
-                          {
-                            key: 'logout',
-                            label: 'Log out',
-                          },
-                        ]}
-                      /> */}
-                      <Button block size="small" type="text">
+                    <>
+                   
+                      <Button
+                        block
+                        size="small"
+                        type="text"
+                        onClick={() => {
+                          navigate('/profile');
+                        }}
+                      >
                         Profile
                       </Button>
                       <Button
@@ -165,7 +160,7 @@ const HomeLayout = ({ children }) => {
                       >
                         Logout
                       </Button>
-                    </Col>
+                    </>
                   }
                 >
                   <Avatar size={30} icon={<UserOutlined />} />

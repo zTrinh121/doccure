@@ -102,7 +102,7 @@ const RegisterCard = () => {
               },
             ]}
           >
-            <Input />
+            <Input.Password />
           </Form.Item>
 
           <Form.Item
@@ -115,7 +115,7 @@ const RegisterCard = () => {
               },
             ]}
           >
-            <Input />
+            <Input.Password />
           </Form.Item>
 
           <Form.Item

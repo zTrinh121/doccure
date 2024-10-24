@@ -25,6 +25,7 @@ const LoginCard = () => {
       const response = await login(values);
 
       setAccessToken(response.data.data.access_token);
+//! temp set cookies for testing, remove later
 
 
       navigate('/');

@@ -39,36 +39,35 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final CustomLogoutHandler logoutHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
-                        req->req.requestMatchers("/api/v1/auth/login/**",
-                                        "/api/v1/auth/register/**",
-                                        "/api/v1/auth/refresh_token/**",
-                                        "/api/v1/auth/verify-otp/**",
-                                        "/api/v1/auth/verify-mail/**",
-                                        "/api/v1/auth/forgot-password/**"
-                                )
+                        req -> req.requestMatchers("/api/v1/auth/login/**",
+                                "/api/v1/auth/register/**",
+                                "/api/v1/auth/refresh_token/**",
+                                "/api/v1/auth/verify-otp/**",
+                                "/api/v1/auth/verify-mail/**",
+                                "/api/v1/auth/forgot-password/**")
                                 .permitAll()
                                 .anyRequest()
-                                .authenticated()
-                ).userDetailsService(userDetailsServiceImp)
-                .sessionManagement(session->session
+                                .authenticated())
+                .userDetailsService(userDetailsServiceImp)
+                .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
-                        e->e.accessDeniedHandler(
-                                        (request, response, accessDeniedException)->response.setStatus(403)
-                                )
+                        e -> e.accessDeniedHandler(
+                                (request, response, accessDeniedException) -> response.setStatus(403))
                                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .logout(l->l
+                .logout(l -> l
                         .logoutUrl("/api/v1/auth/logout")
                         .addLogoutHandler(logoutHandler)
-                        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()
-                        ))
+                        .logoutSuccessHandler(
+                                (request, response, authentication) -> SecurityContextHolder.clearContext()))
                 .build();
     }
 
@@ -85,8 +84,9 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" ));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173/"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
         configuration.setExposedHeaders(List.of("x-auth-token"));
 

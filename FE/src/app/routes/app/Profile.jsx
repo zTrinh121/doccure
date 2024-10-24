@@ -1,8 +1,11 @@
-
+import { Link } from 'react-router-dom';
 const Profile = () => {
   return (
-    <div>Profile</div>
-  )
-}
+    <>
+      <div>Profile</div>
+      <Link to="/changePassword">Change Password</Link>
+    </>
+  );
+};
 
-export default Profile
+export default Profile;

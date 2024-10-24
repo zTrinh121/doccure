@@ -10,6 +10,7 @@ import RegisterPage from './routes/auth/RegisterPage';
 import Profile from './routes/app/Profile';
 import { ProtectedRoute } from '../lib/auth';
 import HomeLayout from '../components/layouts/HomeLayout';
+import ChangePasswordPage from './routes/app/ChangePasswordPage';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/changePassword',
+        element: (
+          <ProtectedRoute>
+            <ChangePasswordPage />
           </ProtectedRoute>
         ),
       },

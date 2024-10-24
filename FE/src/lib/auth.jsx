@@ -20,6 +20,20 @@ export const getUsernameFromToken = (token) => {
   }
 };
 
+export const changePassword = async (token, data) => {
+  data.username = getUsernameFromToken(token);
+  console.log(data);
+  return axiosInstance.put('/auth/change-password', data, {
+    headers: {
+      Authorization: `Bearer ${token}`, // Adding the Bearer token to the request
+    },
+  });
+};
+
+export const getNewAccessToken = () => {
+  return axiosInstance.post('auth/refresh_token');
+};
+
 export const ProtectedRoute = ({ children }) => {
   const accessToken = useAuthStore((state) => state.accessToken);
 

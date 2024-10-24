@@ -3,7 +3,6 @@ import FloatLabel from '../../../components/ui/float-lable/FloatLabel';
 import { useState } from 'react';
 import { login } from '../../../lib/auth';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 import { useAuthStore } from '../../../stores/authStore';
 const { Meta } = Card;
 
@@ -11,8 +10,7 @@ const LoginCard = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const updateUsername = useAuthStore((state) => state.updateUsername);
-  const updateAccessToken = useAuthStore((state) => state.updateAccessToken);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   const navigate = useNavigate();
 
@@ -23,13 +21,11 @@ const LoginCard = () => {
 
   const onFinish = async (values) => {
     console.log(values);
-    // console.log(registerWithEmailAndPassword());
     try {
       const response = await login(values);
-      const decoded = jwtDecode(response.data.data.access_token);
 
-      updateAccessToken(response.data.data.access_token);
-      updateUsername(decoded.sub);
+      setAccessToken(response.data.data.access_token);
+
 
       navigate('/');
     } catch (error) {

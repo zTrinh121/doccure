@@ -26,11 +26,18 @@ import { useAuthStore } from '../../stores/authStore';
 import { Popover } from 'antd';
 import { Outlet } from 'react-router-dom';
 
+import { getUsernameFromToken } from '../../lib/auth';
+
 const HomeLayout = ({ children }) => {
   let location = useLocation();
-  const username = useAuthStore((state) => state.username);
+  // const [username, setUsername] = useState('');
+  const accessToken = useAuthStore((state) => state.accessToken);
+
+  let username = getUsernameFromToken(accessToken);
 
   const navigate = useNavigate();
+
+  // const logout = useLogout();
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -40,6 +47,13 @@ const HomeLayout = ({ children }) => {
       description: description,
       showProgress: true,
     });
+  };
+
+  const handleLogout = () => {
+    return () => {
+      setAccessToken('');
+    };
+    //todos:implement more here, particularly making logout request
   };
 
   return (
@@ -65,12 +79,10 @@ const HomeLayout = ({ children }) => {
           <Col span={4}>
             <Link to="/">
               <Image
-                onClick={console.log('a')}
                 preview={false}
                 src={doccure}
                 style={{
                   height: '35px',
-                  // margin: "10px",
                 }}
               />
             </Link>
@@ -125,16 +137,11 @@ const HomeLayout = ({ children }) => {
                 </>
               ) : (
                 <Popover
-                  placement="bottomLeft"
+                  placement="bottom"
+                  arrow={false}
                   content={
                     <Col>
-                      <Menu
-                        // onClick={onClick}
-                        // style={{
-                        //   width: 256,
-                        // }}
-                        // defaultSelectedKeys={['1']}
-                        // defaultOpenKeys={['sub1']}
+                      {/* <Menu
                         mode="inline"
                         items={[
                           {
@@ -146,7 +153,18 @@ const HomeLayout = ({ children }) => {
                             label: 'Log out',
                           },
                         ]}
-                      />
+                      /> */}
+                      <Button block size="small" type="text">
+                        Profile
+                      </Button>
+                      <Button
+                        block
+                        size="small"
+                        type="text"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </Button>
                     </Col>
                   }
                 >

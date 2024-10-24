@@ -11,7 +11,7 @@ public interface UsersMapper {
 
     int deleteByExample(UsersExample example);
 
-    int deleteByPrimaryKey(Long userId);
+    int deleteByUsername(String username);
 
     int insert(Users row);
 
@@ -31,7 +31,14 @@ public interface UsersMapper {
 
     Users findUserByUserName(String username);
 
+    List<Users> findUserDifferentByUserName(@Param("userId") Long userId, @Param("username") String username);
+
     Users findUserByEmail(String email);
 
-    int updatePasswordUser(@Param("password") String password, @Param("userName") String username);
+    List<Users> findUserDifferentByEmail(@Param("userId") Long userId, @Param("email") String email);
+
+    int updatePasswordUser(@Param("password") String password, @Param("username") String username);
+
+    List<Users> findAll();
+    int updatePasswordUserEmail(@Param("password") String password, @Param("email") String email);
 }

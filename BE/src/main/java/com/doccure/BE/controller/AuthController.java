@@ -8,7 +8,6 @@ import com.doccure.BE.request.ForgotPasswordRequest;
 import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.AuthService;
 
-import io.jsonwebtoken.lang.Objects;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

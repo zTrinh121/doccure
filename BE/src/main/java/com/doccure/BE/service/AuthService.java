@@ -14,10 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public interface AuthService {
     UserResponse register(Users request) throws Exception;
     AuthResponse authenticate(Users request, HttpServletResponse response) throws DataNotFoundException;
-
     AuthResponse refreshToken(HttpServletRequest request,
                                 HttpServletResponse response) throws Exception;
-
     String changePassword(ChangePasswordResquest changePasswordResquest, HttpServletRequest request) throws Exception;
 
     void sendSimpleMessage(MailBodyRequest mailBody);

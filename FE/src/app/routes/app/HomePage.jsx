@@ -4,8 +4,9 @@ import CircleCard from '../../../components/ui/circleCard';
 import DoctorCard from '../../../features/doctors/components/DoctorCard';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { useAccessToken } from '../../../stores/authStore';
 
-import { useAuthStore } from '../../../stores/authStore';
+// import { useAuthStore } from '../../../stores/authStore';
 
 const HomePage = () => {
   const contentStyle = {
@@ -18,13 +19,14 @@ const HomePage = () => {
   };
 
   const onChange = (currentSlide) => {
-    console.log(currentSlide);
+    // console.log(currentSlide);
   };
 
-  const username = useAuthStore((state) => state.username);
+  // const username = useAuthStore((state) => state.username);
 
-  const accessToken = useAuthStore((state) => state.accessToken);
-  console.log('username', username, accessToken);
+  const accessToken =useAccessToken()
+  
+  // console.log('username', username, accessToken);
 
   return (
 

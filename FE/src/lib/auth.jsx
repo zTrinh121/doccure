@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { axiosInstance } from './apiClient';
 import { useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { getActions, useAccessToken } from '../stores/authStore';
+import { getActions, useAccessToken, useResetStep } from '../stores/authStore';
 
 const { setAccessToken, clearTokens } = getActions();
 
@@ -19,18 +19,16 @@ export const logout = async () => {
 };
 
 export const getUsernameFromToken = (token) => {
-  console.log(token);
   try {
     return jwtDecode(token).sub;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
   }
 };
 
 export const changePassword = async (token, data) => {
   //todos: extract to function for features that may try to refresh
   data.username = getUsernameFromToken(token);
-  console.log(data);
   try {
     const response = await axiosInstance.put('/auth/change-password', data, {
       headers: {
@@ -40,7 +38,6 @@ export const changePassword = async (token, data) => {
     return response;
   } catch (error) {
     try {
-     
       console.log(error);
       let newToken = await getNewAccessToken();
       return axiosInstance.put('/auth/change-password', data, {
@@ -58,12 +55,23 @@ export const getNewAccessToken = async () => {
   try {
     const response = await axiosInstance.post('auth/refresh_token');
     setAccessToken(response.data.data.access_token);
-    console.log(response);
     return response.data.data.access_token;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
     return undefined;
   }
+};
+
+export const sendResetEmail = async ({ email }) => {
+  return axiosInstance.post(`auth/verify-mail/${email}`);
+};
+
+export const verifyOtp = async ({ otp, email }) => {
+  return axiosInstance.post(`auth/verify-otp/${otp}/${email}`);
+};
+
+export const forgotPassword = async ({ values, email }) => {
+  return axiosInstance.post(`auth/forgot-password/${email}`, values);
 };
 
 export const ProtectedRoute = ({ children }) => {
@@ -75,3 +83,12 @@ export const ProtectedRoute = ({ children }) => {
 
   return children;
 };
+
+export function RequireOtpVerification({ children, resetStepName }) {
+  const resetStep = useResetStep();
+  return resetStep === resetStepName ? (
+    children
+  ) : (
+    <Navigate to="/forgotPassword" replace />
+  );
+}

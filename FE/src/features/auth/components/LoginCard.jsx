@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { getActions } from '../../../stores/authStore';
 import { notification } from 'antd';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 // import { useAuthStore } from '../../../stores/authStore';
 const { Meta } = Card;
 
@@ -25,9 +26,6 @@ const LoginCard = () => {
     });
   };
 
-  useEffect(() => {
-    console.log('render');
-  });
 
   const navigate = useNavigate();
 
@@ -37,8 +35,6 @@ const LoginCard = () => {
   };
 
   const onFinish = async (values) => {
-    // console.log('a');
-
     setIsLoading(true);
     try {
       const response = await login(values);
@@ -106,7 +102,7 @@ const LoginCard = () => {
             </FloatLabel>
             <Form.Item>
               <Flex justify="flex-end" align="center">
-                <a href="">Forgot password</a>
+                <Link to="/forgotPassword">Forgot password</Link>
               </Flex>
             </Form.Item>
             <Form.Item>

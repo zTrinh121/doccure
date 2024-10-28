@@ -3,10 +3,11 @@ import router from './router';
 import '../index.css';
 import { useEffect } from 'react';
 import { getNewAccessToken } from '../lib/auth';
-import { getActions, useIsLoading } from '../stores/authStore';
+import { getActions, useAccessToken, useIsLoading } from '../stores/authStore';
 import { Spin } from 'antd';
 
 function App() {
+  const accessToken = useAccessToken();
   //temp
   function sleep(milliseconds) {
     var start = new Date().getTime();
@@ -25,8 +26,9 @@ function App() {
 
     const fetchAccessToken = async () => {
       try {
-        setIsLoading(true); // Start loading
-        await getNewAccessToken(abortController);
+          setIsLoading(true); // Start loading
+          await getNewAccessToken(abortController);
+        
       } catch (error) {
         console.log(error);
       } finally {

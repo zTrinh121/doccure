@@ -21,18 +21,16 @@ const RegisterCard = () => {
   };
 
   const onFinish = async (values) => {
-    console.log(values);
-    // console.log(registerWithEmailAndPassword());
+
     try {
       const response = await registerWithEmailAndPassword(values);
 
       openNotification('Succesful');
       navigate('/login');
     } catch (error) {
-      console.log('e');
       console.log(error);
       if (error.response) {
-        // console.log(response);
+   
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         openNotification(error.response.data.message);

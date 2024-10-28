@@ -1,5 +1,5 @@
 import background from '../../../assets/background.png';
-import { Flex,  Input, Space, Carousel } from 'antd';
+import { Flex, Input, Space, Carousel, Button } from 'antd';
 import CircleCard from '../../../components/ui/circleCard';
 import DoctorCard from '../../../features/doctors/components/DoctorCard';
 import { SearchOutlined } from '@ant-design/icons';
@@ -19,17 +19,15 @@ const HomePage = () => {
   };
 
   const onChange = (currentSlide) => {
-    // console.log(currentSlide);
+    
   };
 
   // const username = useAuthStore((state) => state.username);
 
-  const accessToken =useAccessToken()
-  
-  // console.log('username', username, accessToken);
+  const accessToken = useAccessToken();
+
 
   return (
-
     <>
       <Flex
         justify="center"
@@ -41,52 +39,114 @@ const HomePage = () => {
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center bottom',
         }}
-        >
+      >
         <Space>
-
           <Input prefix={<SearchOutlined />}></Input>
         </Space>
       </Flex>
 
-      <Link to="/profile">Profile</Link>
-      <CircleCard></CircleCard>
+      <div className="px-8 my-12">
+        {/* Services Section */}
+        <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
+          Our Services
+        </h2>
+        <Carousel autoplay draggable slidesToShow={3} arrows>
+          <CircleCard
+            title="General Consultation"
+            description="Comprehensive health checks for all ages."
+          />
+          <CircleCard
+            title="Pediatrics"
+            description="Specialized care for infants and children."
+          />
+          <CircleCard
+            title="Dermatology"
+            description="Expert skin care and treatment."
+          />
+          <CircleCard
+            title="Cardiology"
+            description="Advanced heart health services."
+          />
+          <CircleCard
+            title="Orthopedics"
+            description="Bone and joint care solutions."
+          />
+        </Carousel>
+      </div>
 
-      <Carousel
-        autoplay
-        draggable={true}
-        slidesToShow={3}
-        arrows
-        afterChange={onChange}
-        >
-        <CircleCard></CircleCard> <CircleCard></CircleCard>
-        <CircleCard></CircleCard> <CircleCard></CircleCard>
-        <div>
-          <h3 style={contentStyle}>2</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>3</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>4</h3>
-        </div>
-      </Carousel>
+      {/* Testimonials Section */}
+      <div className="bg-gray-100 py-12">
+        <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
+          What Our Patients Say
+        </h2>
+        <Carousel autoplay draggable slidesToShow={2} arrows>
+          <div className="p-4">
+            <blockquote className="italic text-gray-600">
+              "The doctors here are compassionate and attentive. Highly
+              recommended!"
+            </blockquote>
+            <p className="mt-2 text-right">- Patient A</p>
+          </div>
+          <div className="p-4">
+            <blockquote className="italic text-gray-600">
+              "Efficient and friendly service. I felt at ease the entire time."
+            </blockquote>
+            <p className="mt-2 text-right">- Patient B</p>
+          </div>
+          <div className="p-4">
+            <blockquote className="italic text-gray-600">
+              "Doccure offers excellent care and a welcoming atmosphere."
+            </blockquote>
+            <p className="mt-2 text-right">- Patient C</p>
+          </div>
+          <div className="p-4">
+            <blockquote className="italic text-gray-600">
+              "Highly skilled professionals and prompt service!"
+            </blockquote>
+            <p className="mt-2 text-right">- Patient D</p>
+          </div>
+        </Carousel>
+      </div>
 
-      <Carousel
-        autoplay
-        draggable={true}
-        slidesToShow={3}
-        arrows
-        afterChange={onChange}
-        >
-        <DoctorCard></DoctorCard>
-        <DoctorCard></DoctorCard>
-        <DoctorCard></DoctorCard>
-        <DoctorCard></DoctorCard>
-        <DoctorCard></DoctorCard>
-        <DoctorCard></DoctorCard>
-      </Carousel>
+      <Flex
+        justify="center"
+        align="center"
+        style={{
+          width: '100%',
+          padding: '2rem 0',
+          backgroundColor: '#E6F7FF',
+          textAlign: 'center',
+          marginTop: '2rem',
+        }}
+      >
+        <Space direction="vertical" align="center">
+          <h2 className="text-2xl font-semibold text-blue-700">
+            Book an Appointment Today
+          </h2>
+          <p className="text-gray-600">
+            We are here to provide you with exceptional care and support.
+          </p>
+          <Link to="/appointments">
+            <Button type="primary" size="large">
+              Schedule Now
+            </Button>
+          </Link>
+        </Space>
+      </Flex>
 
-  </>
+      <div className="px-8 my-12">
+        <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
+          Our Doctors
+        </h2>
+        <Carousel autoplay draggable slidesToShow={3} arrows>
+          <DoctorCard name="Dr. Jane Smith" specialty="Cardiology" />
+          <DoctorCard name="Dr. John Doe" specialty="Dermatology" />
+          <DoctorCard name="Dr. Emily Davis" specialty="Pediatrics" />
+          <DoctorCard name="Dr. Michael Brown" specialty="Orthopedics" />
+        </Carousel>
+      </div>
+  
+    </>
   );
 };
 

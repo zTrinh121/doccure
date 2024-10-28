@@ -8,9 +8,12 @@ import HomePage from './routes/app/HomePage';
 import LoginPage from './routes/auth/LoginPage';
 import RegisterPage from './routes/auth/RegisterPage';
 import Profile from './routes/app/Profile';
-import { ProtectedRoute } from '../lib/auth';
+import { ProtectedRoute, RequireOtpVerification } from '../lib/auth';
 import HomeLayout from '../components/layouts/HomeLayout';
 import ChangePasswordPage from './routes/app/ChangePasswordPage';
+import ForgotPasswordPage from './routes/auth/ForgotPasswordPage';
+import OtpPage from './routes/auth/OtpPage';
+import ResetPasswordPage from './routes/auth/ResetPasswordPage';
 
 const router = createBrowserRouter([
   {
@@ -22,13 +25,37 @@ const router = createBrowserRouter([
         element: <HomePage></HomePage>,
       },
       {
-        path: 'login',
+        path: '/login',
         element: <LoginPage />,
       },
       {
-        path: 'register',
+        path: '/register',
         element: <RegisterPage />,
       },
+
+      //forget password
+      {
+        path: '/forgotPassword',
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: '/otp',
+        element: (
+          // <RequireOtpVerification resetStepName='otp'>
+          <OtpPage />
+          // </RequireOtpVerification>
+        ),
+      },
+      {
+        path: '/resetPassword',
+        element: (
+          // <RequireOtpVerification resetStepName="password">
+            <ResetPasswordPage />
+          // </RequireOtpVerification>
+        ),
+      },
+      //end of forget pw
+
       {
         path: '/profile',
         element: (

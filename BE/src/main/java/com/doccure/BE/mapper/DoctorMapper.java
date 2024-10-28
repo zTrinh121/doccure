@@ -3,6 +3,8 @@ package com.doccure.BE.mapper;
 import com.doccure.BE.model.Doctor;
 import com.doccure.BE.model.DoctorExample;
 import com.doccure.BE.model.DoctorFull;
+import com.doccure.BE.model.DoctorRating;
+import com.doccure.BE.model.DoctorSlot;
 
 import java.util.List;
 
@@ -34,5 +36,15 @@ public interface DoctorMapper {
     List<DoctorFull> getAllDoctorFulls();
 
     DoctorFull getDoctorFullById(Long doctorId);
+
+    List<DoctorRating> getAllDoctorRatings();
+
+    DoctorRating getDoctorRatingsById(Long doctorId);
+
+    List<DoctorSlot> getAllDoctorSlots();
+
+    DoctorSlot getDoctorSlotsById(Long doctorId);
+
+
 
 }

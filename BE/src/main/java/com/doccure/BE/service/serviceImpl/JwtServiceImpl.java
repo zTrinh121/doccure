@@ -47,11 +47,12 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateToken(Users user, long expireTime) {
+        long expireTimeInMillis = expireTime * 1000L;
         return Jwts
                 .builder()
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expireTime))
+                .expiration(new Date(System.currentTimeMillis() + expireTimeInMillis))
                 .signWith(getSigninKey())
                 .compact();
     }

@@ -13,15 +13,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DoctorFull {
+public class DoctorSlot {
     private Long doctorId;
     private String firstName;
     private String lastName;
     private Long experience;
     private String hospital;
     private String avatar;
-    // private Long specializationId;
-    // private String specializationName;
     private List<Specialization> specializations;
-    // private List<Rating> ratings;
+    private List<SlotAppointment> slots;
+    // private SlotAppointment appointment;
 }

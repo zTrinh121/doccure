@@ -22,17 +22,19 @@ import { Link } from 'react-router-dom';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { notification } from 'antd';
-import { useAuthStore } from '../../stores/authStore';
+// import { useAuthStore } from '../../stores/authStore';
 import { Popover } from 'antd';
 import { Outlet } from 'react-router-dom';
 
-import { getUsernameFromToken } from '../../lib/auth';
+import { getUsernameFromToken, logout } from '../../lib/auth';
+import { getActions, useAccessToken } from '../../stores/authStore';
 
 const HomeLayout = ({ children }) => {
   let location = useLocation();
   // const [username, setUsername] = useState('');
-  const accessToken = useAuthStore((state) => state.accessToken);
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const accessToken = useAccessToken();
+  const { setAccessToken } = getActions();
+  // const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   let username = getUsernameFromToken(accessToken);
 
@@ -40,26 +42,14 @@ const HomeLayout = ({ children }) => {
 
   // const logout = useLogout();
 
-  const [api, contextHolder] = notification.useNotification();
-
-  const openNotification = (description) => {
-    api.error({
-      message: 'Notification Title',
-      description: description,
-      showProgress: true,
-    });
-  };
-
   const handleLogout = () => {
-    setAccessToken('');
+    logout();
 
     //todos:implement more here, particularly making logout request
   };
 
   return (
     <Layout>
-      {contextHolder}
-
       <Header
         style={{
           position: 'sticky',
@@ -79,11 +69,12 @@ const HomeLayout = ({ children }) => {
           <Col span={4}>
             <Link to="/">
               <Image
-                preview={false}
                 src={doccure}
+                alt="Logo"
                 style={{
                   height: '35px',
                 }}
+                preview={false}
               />
             </Link>
           </Col>
@@ -141,7 +132,6 @@ const HomeLayout = ({ children }) => {
                   arrow={false}
                   content={
                     <>
-                   
                       <Button
                         block
                         size="small"

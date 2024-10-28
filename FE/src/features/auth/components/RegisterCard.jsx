@@ -6,7 +6,7 @@ import { notification } from 'antd';
 import { registerWithEmailAndPassword } from '../../../lib/auth';
 import { Radio } from 'antd';
 import { useNavigate } from 'react-router-dom';
-
+//todos:check correct confirm password
 const RegisterCard = () => {
   const navigate = useNavigate();
 

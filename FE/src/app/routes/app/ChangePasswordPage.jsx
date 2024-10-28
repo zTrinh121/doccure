@@ -1,16 +1,18 @@
-import React from 'react';
-import { Form, Input, Radio, Button } from 'antd';
-import { useAuthStore } from '../../../stores/authStore';
-import { changePassword, getNewAccessToken } from '../../../lib/auth';
-
+import { Form, Input, Button } from 'antd';
+import { useAccessToken } from '../../../stores/authStore';
+import { changePassword, getNewAccessToken, logout } from '../../../lib/auth';
+//todos: extract component, check confirm password front end
 const ChangePasswordPage = () => {
-  const accessToken = useAuthStore((state) => state.accessToken);
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const accessToken = useAccessToken();
 
-  const onFinish = (data) => {
-    // console.log(data);
-    changePassword(accessToken, data);
-    setAccessToken('');
+  const onFinish = async (data) => {
+    try {
+      await changePassword(accessToken, data);
+
+      logout();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

@@ -5,13 +5,11 @@ import { Flex } from 'antd';
 
 import LoginCard from '../../../features/auth/components/LoginCard';
 
-// import './App.css'
+
 
 function LoginPage() {
   return (
-    // <HomeLayout>
     <>
-      {/* <RedirectIfLoggedIn> */}
         <div>
           <Flex justify="center" align="center">
             <Row>
@@ -31,7 +29,6 @@ function LoginPage() {
             </Row>
           </Flex>
         </div>
-      {/* </RedirectIfLoggedIn> */}
     </>
   );
 }

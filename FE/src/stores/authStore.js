@@ -14,6 +14,8 @@ const authStore = createStore()(
       accessToken: undefined,
       accessTokenData: undefined,
       isLoading: true,
+      resetStep: '',
+      resetEmail: '',
 
 
       actions: {
@@ -36,6 +38,14 @@ const authStore = createStore()(
           set({ isLoading });
         },
 
+        setResetStep: (resetStep) => {
+          set({ resetStep });
+        },
+
+        setResetEmail: (resetEmail) => {
+          set({ resetEmail });
+        },
+
         clearTokens: () =>
           set({
             accessToken: undefined,
@@ -56,13 +66,18 @@ const authStore = createStore()(
 const accessTokenSelector = (state) => state.accessToken;
 const accessTokenDataSelector = (state) => state.accessTokenData;
 const isLoadingSelector = (state) => state.isLoading;
+const resetStepSelector = (state) => state.resetStep;
+const resetEmailSelector = (state) => state.resetEmail;
 const actionsSelector = (state) => state.actions;
 
 // getters
 export const getAccessToken = () => accessTokenSelector(authStore.getState());
 export const getAccessTokenData = () => accessTokenDataSelector(authStore.getState());
 export const getIsLoading = () => isLoadingSelector(authStore.getState());
+export const getResetStep = () => resetStepSelector(authStore.getResetStep());
+export const getResetEmailSelector = () => resetEmailSelector(authStore.getState())
 export const getActions = () => actionsSelector(authStore.getState());
+
 
 function useAuthStore(selector, equalityFn) {
   return useStore(authStore, selector, equalityFn);
@@ -72,4 +87,6 @@ function useAuthStore(selector, equalityFn) {
 export const useAccessToken = () => useAuthStore(accessTokenSelector);
 export const useAccessTokenData = () => useAuthStore(accessTokenDataSelector);
 export const useIsLoading = () => useAuthStore(isLoadingSelector);
+export const useResetStep = () => useAuthStore(resetStepSelector);
+export const useResetEmail = () => useAuthStore(resetEmailSelector);
 export const useActions = () => useAuthStore(actionsSelector);

@@ -238,9 +238,17 @@
         <id column="SPECIALIZATION_ID" jdbcType="NUMERIC" property="specializationId" />
     <result column="SPECIALIZATION_NAME" jdbcType="VARCHAR" property="specializationName" />
     </collection>
+
+     <collection property="ratings" javaType="List" ofType="com.doccure.BE.model.Rating">
+        <id column="RATING_ID" jdbcType="NUMERIC" property="ratingId" />
+        <result column="COMMENT_RATING" jdbcType="VARCHAR" property="commentRating" />
+        <result column="RATING" jdbcType="NUMERIC" property="rating" />
+        <result column="CREATED_AT" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="APPOINTMENT_ID" jdbcType="NUMERIC" property="appointmentId" />
+    </collection>
   </resultMap>
 
-  <resultMap id="DoctorSpecialization" type="com.doccure.BE.model.DoctorSpecialization">
+  <!-- <resultMap id="DoctorSpecialization" type="com.doccure.BE.model.DoctorSpecialization">
     <id column="DOCTOR_SPECIALIZATION_ID" jdbcType="NUMERIC" property="doctorSpecializationId" />
     <result column="DOCTOR_ID" jdbcType="NUMERIC" property="doctorId" />
     <result column="SPECIALIZATION_ID" jdbcType="NUMERIC" property="specializationId" />
@@ -249,24 +257,29 @@
   <resultMap id="Specialization" type="com.doccure.BE.model.Specialization">
     <id column="SPECIALIZATION_ID" jdbcType="NUMERIC" property="specializationId" />
     <result column="SPECIALIZATION_NAME" jdbcType="VARCHAR" property="specializationName" />
-  </resultMap>
+  </resultMap> -->
 
   <select id="getAllDoctorFulls" resultMap="BaseResultMapFull">
-  SELECT d.*, s.*
-  FROM doctor d
-  JOIN doctor_specialization ds
-    ON d.doctor_id = ds.doctor_id
-  JOIN specialization s
-    ON ds.specialization_id = s.specialization_id
+    SELECT d.doctor_id, d.first_name, d.last_name, d.experience, d.hospital, d.avatar, 
+          s.specialization_name, s.specialization_id,
+          r.rating, r.comment_rating, r.created_at, r.appointment_id, r.rating_id
+    FROM doctor d  
+    JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id  
+    JOIN specialization s ON ds.specialization_id = s.specialization_id 
+    JOIN appointment a ON ds.doctor_specialization_id = a.doctor_specialization_id 
+    JOIN rating r ON a.appointment_id = r.appointment_id
+
   </select>
 
    <select id="getDoctorFullById" resultMap="BaseResultMapFull" parameterType="java.lang.Long">
-  SELECT d.*, s.*
-  FROM doctor d
-  JOIN doctor_specialization ds
-    ON d.doctor_id = ds.doctor_id
-  JOIN specialization s
-    ON ds.specialization_id = s.specialization_id
-  WHERE d.doctor_id = #{doctorId,jdbcType=NUMERIC}
+      SELECT d.doctor_id, d.first_name, d.last_name, d.experience, d.hospital, d.avatar, 
+            s.specialization_name, s.specialization_id,
+            r.rating, r.comment_rating, r.created_at, r.appointment_id, r.rating_id
+      FROM doctor d  
+      JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id  
+      JOIN specialization s ON ds.specialization_id = s.specialization_id 
+      JOIN appointment a ON ds.doctor_specialization_id = a.doctor_specialization_id 
+      JOIN rating r ON a.appointment_id = r.appointment_id
+        WHERE d.doctor_id = #{doctorId,jdbcType=NUMERIC}
   </select>
 </mapper>

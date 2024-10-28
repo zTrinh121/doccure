@@ -1,8 +1,11 @@
 package com.doccure.BE.response;
 
 import com.doccure.BE.model.DoctorFull;
+import com.doccure.BE.model.Rating;
 import com.doccure.BE.model.Specialization;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import lombok.*;
 
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonPropertyOrder({"doctorId", "firstName", "lastName", "experience", "hospital", "avatar", "specializations", "ratings"})
 public class DoctorFullResponse {
     @JsonProperty("doctor_id")
     private Long doctorId;
@@ -25,6 +29,7 @@ public class DoctorFullResponse {
     private String hospital;
     private String avatar;
     private List<Specialization> specializations;
+    private List<Rating> ratings;
 
     public static DoctorFullResponse fromDoctorFull(DoctorFull doctorFull){
         return DoctorFullResponse.builder()
@@ -35,6 +40,7 @@ public class DoctorFullResponse {
                 .hospital(doctorFull.getHospital())
                 .avatar(doctorFull.getAvatar())
                 .specializations(doctorFull.getSpecializations())
+                .ratings(doctorFull.getRatings())
                 .build();
     }
 }

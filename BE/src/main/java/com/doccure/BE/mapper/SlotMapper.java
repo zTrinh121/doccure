@@ -2,6 +2,8 @@ package com.doccure.BE.mapper;
 
 import java.util.List;
 
+import com.doccure.BE.model.Slot;
+import com.doccure.BE.model.SlotExample;
 import org.apache.ibatis.annotations.Param;
 
 public interface SlotMapper {

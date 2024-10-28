@@ -23,4 +23,5 @@ public class DoctorFull {
     // private Long specializationId;
     // private String specializationName;
     private List<Specialization> specializations;
+    private List<Rating> ratings;
 }

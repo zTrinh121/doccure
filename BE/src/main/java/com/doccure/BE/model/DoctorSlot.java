@@ -15,12 +15,10 @@ import lombok.Setter;
 @Builder
 public class DoctorSlot {
     private Long doctorId;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private Long experience;
     private String hospital;
     private String avatar;
     private List<Specialization> specializations;
     private List<SlotAppointment> slots;
-    // private SlotAppointment appointment;
 }

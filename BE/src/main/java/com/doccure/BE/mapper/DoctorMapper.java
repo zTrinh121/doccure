@@ -9,6 +9,7 @@ import com.doccure.BE.model.DoctorSlot;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 public interface DoctorMapper {
     long countByExample(DoctorExample example);
@@ -38,6 +39,7 @@ public interface DoctorMapper {
     DoctorFull getDoctorFullById(Long doctorId);
 
     List<DoctorRating> getAllDoctorRatings();
+    List<DoctorRating> getAllDoctorRatings(RowBounds rowBounds);
 
     DoctorRating getDoctorRatingsById(Long doctorId);
 
@@ -45,6 +47,6 @@ public interface DoctorMapper {
 
     DoctorSlot getDoctorSlotsById(Long doctorId);
 
-
+    List<DoctorFull> getDoctorFullByKeyword(String keyword);
 
 }

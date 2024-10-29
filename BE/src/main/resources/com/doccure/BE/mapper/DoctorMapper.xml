@@ -228,8 +228,7 @@
 
   <resultMap id="BaseResultMapFull" type="com.doccure.BE.model.DoctorFull">
     <id column="DOCTOR_ID" jdbcType="NUMERIC" property="doctorId" />
-    <result column="FIRST_NAME" jdbcType="VARCHAR" property="firstName" />
-    <result column="LAST_NAME" jdbcType="VARCHAR" property="lastName" />
+    <result column="FULL_NAME" jdbcType="VARCHAR" property="fullName" />
     <result column="EXPERIENCE" jdbcType="NUMERIC" property="experience" />
     <result column="HOSPITAL" jdbcType="VARCHAR" property="hospital" />
     <result column="AVATAR" jdbcType="VARCHAR" property="avatar" />
@@ -241,25 +240,43 @@
   </resultMap>
 
   <select id="getAllDoctorFulls" resultMap="BaseResultMapFull">
-    SELECT d.*, s.*
-    FROM doctor d  
-    JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id  
-    JOIN specialization s ON ds.specialization_id = s.specialization_id
-    
+   SELECT d.doctor_id,
+      d.first_name || ' '||last_name as FULL_NAME,
+      d.experience, d.hospital, d.avatar,
+      s.*
+  FROM doctor d  
+  JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id  
+  JOIN specialization s ON ds.specialization_id = s.specialization_id
   </select>
 
   <select id="getDoctorFullById" resultMap="BaseResultMapFull" parameterType="java.lang.Long">
-      SELECT d.*, s.*
+    SELECT d.doctor_id,
+      d.first_name || ' '||last_name as FULL_NAME,
+      d.experience, d.hospital, d.avatar,
+      s.*
+    FROM doctor d  
+    JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id  
+    JOIN specialization s ON ds.specialization_id = s.specialization_id
+    WHERE d.doctor_id = #{doctorId,jdbcType=NUMERIC}
+  </select>
+
+  <select id="getDoctorFullByKeyword" resultMap="BaseResultMapFull" parameterType="java.lang.String">
+      SELECT d.doctor_id,
+        d.first_name || ' '||last_name as FULL_NAME,
+        d.experience, d.hospital, d.avatar,
+        s.*
       FROM doctor d  
       JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id  
       JOIN specialization s ON ds.specialization_id = s.specialization_id
-        WHERE d.doctor_id = #{doctorId,jdbcType=NUMERIC}
+      WHERE UPPER(s.SPECIALIZATION_NAME) LIKE '%' ||  UPPER(#{keyword,jdbcType=VARCHAR}) || '%'
+      OR UPPER(d.first_name) LIKE '%' ||  UPPER(#{keyword,jdbcType=VARCHAR}) || '%'
+      OR UPPER(d.last_name) LIKE '%' ||  UPPER(#{keyword,jdbcType=VARCHAR}) || '%'
+      OR UPPER(d.hospital) LIKE '%' ||  UPPER(#{keyword,jdbcType=VARCHAR}) || '%'
   </select>
 
   <resultMap id="BaseResultMapRating" type="com.doccure.BE.model.DoctorRating">
     <id column="DOCTOR_ID" jdbcType="NUMERIC" property="doctorId" />
-    <result column="FIRST_NAME" jdbcType="VARCHAR" property="firstName" />
-    <result column="LAST_NAME" jdbcType="VARCHAR" property="lastName" />
+    <result column="FULL_NAME" jdbcType="VARCHAR" property="fullName" />
     <result column="EXPERIENCE" jdbcType="NUMERIC" property="experience" />
     <result column="HOSPITAL" jdbcType="VARCHAR" property="hospital" />
     <result column="AVATAR" jdbcType="VARCHAR" property="avatar" />
@@ -276,7 +293,9 @@
   </resultMap>
 
   <select id="getAllDoctorRatings" resultMap="BaseResultMapRating">
-   SELECT d.doctor_id, d.first_name, d.last_name, d.experience, d.hospital, d.avatar, 
+   SELECT d.doctor_id,
+          d.first_name || ' '||last_name as FULL_NAME,
+          d.experience, d.hospital, d.avatar, 
           s.specialization_id, s.specialization_name, 
           r.appointment_id, r.rating_id, r.rating, r.comment_rating, r.created_at
     FROM doctor d  
@@ -288,7 +307,9 @@
   </select>
 
   <select id="getDoctorRatingsById" resultMap="BaseResultMapRating" parameterType="java.lang.Long">
-    SELECT d.doctor_id, d.first_name, d.last_name, d.experience, d.hospital, d.avatar, 
+    SELECT d.doctor_id,
+          d.first_name || ' '||last_name as FULL_NAME,
+          d.experience, d.hospital, d.avatar, 
           s.specialization_id, s.specialization_name,
           r.appointment_id, r.rating_id, r.rating, r.comment_rating, r.created_at
     FROM doctor d  
@@ -301,8 +322,7 @@
 
   <resultMap id="BaseResultMapSlot" type="com.doccure.BE.model.DoctorSlot">
     <id column="DOCTOR_ID" jdbcType="NUMERIC" property="doctorId" />
-    <result column="FIRST_NAME" jdbcType="VARCHAR" property="firstName" />
-    <result column="LAST_NAME" jdbcType="VARCHAR" property="lastName" />
+   <result column="FULL_NAME" jdbcType="VARCHAR" property="fullName" />
     <result column="EXPERIENCE" jdbcType="NUMERIC" property="experience" />
     <result column="HOSPITAL" jdbcType="VARCHAR" property="hospital" />
     <result column="AVATAR" jdbcType="VARCHAR" property="avatar" />
@@ -314,8 +334,9 @@
 
     <collection property="slots" javaType="List" ofType="com.doccure.BE.model.SlotAppointment">
         <id column="SLOT_ID" jdbcType="NUMERIC" property="slotId" />
-        <result column="START_DATETIME" jdbcType="TIMESTAMP" property="startDatetime" />
-        <result column="END_DATETIME" jdbcType="TIMESTAMP" property="endDatetime" />
+        <result column="DATE_SLOT" jdbcType="TIMESTAMP" property="dateSlot" />
+        <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="END_TIME" jdbcType="TIMESTAMP" property="endTime" />
         <result column="PRICE" jdbcType="NUMERIC" property="price" />
          <result column="STATUS" jdbcType="VARCHAR" property="status" />
     </collection>
@@ -326,13 +347,13 @@
     <select id="getAllDoctorSlots" resultMap="BaseResultMapSlot">
     SELECT
       d.DOCTOR_ID,
-      d.FIRST_NAME,
-      d.LAST_NAME,
+      d.first_name || ' '||last_name as FULL_NAME,
       d.EXPERIENCE,
       d.HOSPITAL,
       s.SLOT_ID,
-      s.START_DATETIME,
-      s.END_DATETIME,
+      s.START_DATETIME as DATE_SLOT,
+      s.START_DATETIME as START_TIME,
+      s.END_DATETIME as END_TIME,
       s.PRICE,
       a.APPOINTMENT_ID,
       a.STATUS AS STATUS,
@@ -348,18 +369,19 @@
         DOCTOR_SPECIALIZATION ds ON a.DOCTOR_SPECIALIZATION_ID = ds.DOCTOR_SPECIALIZATION_ID
     LEFT JOIN
         SPECIALIZATION sp ON ds.SPECIALIZATION_ID = sp.SPECIALIZATION_ID
+      ORDER BY s.START_DATETIME
     </select>
 
   <select id="getDoctorSlotsById" resultMap="BaseResultMapSlot" parameterType="java.lang.Long">
     SELECT
       d.DOCTOR_ID,
-      d.FIRST_NAME,
-      d.LAST_NAME,
+      d.first_name || ' '||last_name as FULL_NAME,
       d.EXPERIENCE,
       d.HOSPITAL,
       s.SLOT_ID,
-      s.START_DATETIME,
-      s.END_DATETIME,
+       s.START_DATETIME as DATE_SLOT,
+      s.START_DATETIME as START_TIME,
+      s.END_DATETIME as END_TIME,
       s.PRICE,
       a.APPOINTMENT_ID,
       a.STATUS AS STATUS,
@@ -376,5 +398,6 @@
     LEFT JOIN
         SPECIALIZATION sp ON ds.SPECIALIZATION_ID = sp.SPECIALIZATION_ID
     WHERE d.doctor_id = #{doctorId,jdbcType=NUMERIC}
+    ORDER BY s.START_DATETIME
   </select>
 </mapper>

@@ -2,6 +2,10 @@ package com.doccure.BE.model;
 
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,9 +30,15 @@ public class RatingSpecialization {
     private Long rating;
 
     @JsonProperty("created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @JsonProperty("appointment_id")
     private Long appointmentId;
+
+    public void setCreatedAtFromOffsetDateTime(OffsetDateTime offsetDateTime) {
+        this.createdAt = offsetDateTime
+                .withOffsetSameInstant(ZoneOffset.ofHours(7))
+                .toLocalDateTime();
+    }
 
 }

@@ -16,16 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonPropertyOrder({"doctorId", "firstName", "lastName", "experience", "hospital", "avatar", "ratings"})
+@JsonPropertyOrder({"doctorId", "fullName", "experience", "hospital", "avatar", "countRatings", "avgRating", "percentRating", "ratings"})
 public class DoctorRatingResponse {
     @JsonProperty("doctor_id")
     private Long doctorId;
 
-    @JsonProperty("first_name")
-    private String firstName;
-
-    @JsonProperty("last_name")
-    private String lastName;
+    @JsonProperty("full_name")
+    private String fullName;
     private Long experience;
     private String hospital;
     private String avatar;
@@ -39,13 +36,11 @@ public class DoctorRatingResponse {
 
     @JsonProperty("percent_rating")
     private float percentRating;
-//    private List<Rating> ratings;
 
     public static DoctorRatingResponse fromDoctorRating(DoctorRating doctor){
         return DoctorRatingResponse.builder()
                 .doctorId(doctor.getDoctorId())
-                .firstName(doctor.getFirstName())
-                .lastName(doctor.getLastName())
+                .fullName(doctor.getFullName())
                 .experience(doctor.getExperience())
                 .hospital(doctor.getHospital())
                 .avatar(doctor.getAvatar())

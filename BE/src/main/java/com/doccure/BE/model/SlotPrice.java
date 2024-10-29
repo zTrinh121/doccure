@@ -1,26 +1,26 @@
 package com.doccure.BE.model;
 
-import java.util.List;
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class DoctorFull {
+@AllArgsConstructor
+public class SlotPrice {
+    @JsonProperty("doctor_id")
     private Long doctorId;
-    private String fullName;
-    private Long experience;
-    private String hospital;
-    private String avatar;
+
+    @JsonProperty("max_price")
     private BigDecimal maxPrice;
+
+    @JsonProperty("min_price")
     private BigDecimal minPrice;
-    private List<Specialization> specializations;
+
 }

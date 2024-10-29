@@ -15,19 +15,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonPropertyOrder({"doctorId", "firstName", "lastName", "experience", "hospital", "avatar", "specializations", "slots"})
+@JsonPropertyOrder({"doctorId", "fullName", "experience", "hospital", "avatar", "booked_appointments", "specializations", "slots"})
 public class DoctorSlotResponse {
     @JsonProperty("doctor_id")
     private Long doctorId;
 
-    @JsonProperty("first_name")
-    private String firstName;
+    @JsonProperty("full_name")
+    private String fullName;
 
     @JsonProperty("last_name")
     private String lastName;
     private Long experience;
     private String hospital;
     private String avatar;
+
+    @JsonProperty("booked_appointments")
+    private int bookedAppoinments;
+
     private List<Specialization> specializations;
     private List<SlotAppointment> slots;
     // private SlotAppointment appointment;
@@ -35,8 +39,7 @@ public class DoctorSlotResponse {
     public static DoctorSlotResponse fromDoctorSlot(DoctorSlot doctor){
         return DoctorSlotResponse.builder()
                 .doctorId(doctor.getDoctorId())
-                .firstName(doctor.getFirstName())
-                .lastName(doctor.getLastName())
+                .fullName(doctor.getFullName())
                 .experience(doctor.getExperience())
                 .hospital(doctor.getHospital())
                 .avatar(doctor.getAvatar())

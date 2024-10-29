@@ -11,8 +11,7 @@ import java.util.List;
 @Builder
 public class DoctorRating {
     private Long doctorId;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private Long experience;
     private String hospital;
     private String avatar;

@@ -5,30 +5,25 @@ import { useEffect } from 'react';
 import { getNewAccessToken } from '../lib/auth';
 import { getActions, useAccessToken, useIsLoading } from '../stores/authStore';
 import { Spin } from 'antd';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ConfigProvider } from 'antd';
 
 function App() {
+  const queryClient = new QueryClient();
   const accessToken = useAccessToken();
-  //temp
-  function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-      if (new Date().getTime() - start > milliseconds) {
-        break;
-      }
-    }
-  }
 
   const isLoading = useIsLoading();
   const { setIsLoading } = getActions();
 
   useEffect(() => {
+    //todos:implement check for expire at value in return body of login request
     const abortController = new AbortController();
 
     const fetchAccessToken = async () => {
       try {
-          setIsLoading(true); // Start loading
-          await getNewAccessToken(abortController);
-        
+        setIsLoading(true); // Start loading
+        await getNewAccessToken(abortController);
       } catch (error) {
         console.log(error);
       } finally {
@@ -52,7 +47,20 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
+      <ConfigProvider
+        theme={{
+          components: {
+            Layout: {
+              siderBg: '#f5f5f5',
+            },
+          },
+        }}
+      >
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </ConfigProvider>
     </>
   );
 }

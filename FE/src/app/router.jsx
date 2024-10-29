@@ -14,6 +14,8 @@ import ChangePasswordPage from './routes/app/ChangePasswordPage';
 import ForgotPasswordPage from './routes/auth/ForgotPasswordPage';
 import OtpPage from './routes/auth/OtpPage';
 import ResetPasswordPage from './routes/auth/ResetPasswordPage';
+import DashboardLayout from '../components/layouts/DashboardLayout';
+import ChangeProfilePage from './routes/app/user/ChangeProfilePage';
 
 const router = createBrowserRouter([
   {
@@ -50,28 +52,36 @@ const router = createBrowserRouter([
         path: '/resetPassword',
         element: (
           // <RequireOtpVerification resetStepName="password">
-            <ResetPasswordPage />
+          <ResetPasswordPage />
           // </RequireOtpVerification>
         ),
       },
       //end of forget pw
 
+      //user
       {
-        path: '/profile',
-        element: (
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        ),
+        path: '/user',
+        element: <DashboardLayout />,
+        children: [
+          {
+            path: 'profile',
+            element: (
+              <ProtectedRoute>
+                <ChangeProfilePage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'changePassword',
+            element: (
+              <ProtectedRoute>
+                <ChangePasswordPage />
+              </ProtectedRoute>
+            ),
+          },
+        ],
       },
-      {
-        path: '/changePassword',
-        element: (
-          <ProtectedRoute>
-            <ChangePasswordPage />
-          </ProtectedRoute>
-        ),
-      },
+
       {
         path: '*',
         lazy: async () => {

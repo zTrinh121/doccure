@@ -14,8 +14,13 @@ export const login = async (data) => {
   return axiosInstance.post('/auth/login', data);
 };
 
-export const logout = async () => {
+export const logout = async (token) => {
   clearTokens();
+  axiosInstance.get('/auth/logout', {
+    headers: {
+      Authorization: `Bearer ${token}`, // Adding the Bearer token to the request
+    },
+  });
 };
 
 export const getUsernameFromToken = (token) => {
@@ -27,24 +32,49 @@ export const getUsernameFromToken = (token) => {
 };
 
 export const changePassword = async (token, data) => {
-  //todos: extract to function for features that may try to refresh
-  data.username = getUsernameFromToken(token);
-  try {
-    const response = await axiosInstance.put('/auth/change-password', data, {
+  const putChangePassword = async (token, data) => {
+    return axiosInstance.put('/auth/change-password', data, {
       headers: {
         Authorization: `Bearer ${token}`, // Adding the Bearer token to the request
       },
     });
+  };
+  data.username = getUsernameFromToken(token);
+  try {
+    const response = await putChangePassword(token, data);
     return response;
   } catch (error) {
     try {
       console.log(error);
       let newToken = await getNewAccessToken();
-      return axiosInstance.put('/auth/change-password', data, {
-        headers: {
-          Authorization: `Bearer ${newToken}`, // Adding the Bearer token to the request
-        },
-      });
+      const retryResponse = await putChangePassword(newToken, data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+
+export const fetchProfile = async (token) => {
+  //todos:try again with new token from refresh token
+  const getProfile = async (token, username) => {
+    return axiosInstance.get(`/users?username=${username}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
+
+  const username = getUsernameFromToken(token);
+
+  try {
+    const response = await getProfile(token, username);
+    return response;
+  } catch (error) {
+    try {
+      console.log(error);
+      let newToken = await getNewAccessToken();
+      const retryResponse = await getProfile(newToken, username);
+      return retryResponse;
     } catch (error) {
       console.log(error);
     }

@@ -31,8 +31,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfiguration {
-    @Value("${apiPrefix}")
-    private String apiPrefix;
 
     private final UserDetailsServiceImp userDetailsServiceImp;
 
@@ -51,7 +49,8 @@ public class SecurityConfiguration {
                                 "/api/v1/auth/refresh_token/**",
                                 "/api/v1/auth/verify-otp/**",
                                 "/api/v1/auth/verify-mail/**",
-                                "/api/v1/auth/forgot-password/**")
+                                "/api/v1/auth/forgot-password/**",
+                                "/api/v1/doctor/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
@@ -64,7 +63,7 @@ public class SecurityConfiguration {
                                 (request, response, accessDeniedException) -> response.setStatus(403))
                                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .logout(l -> l
-                        .logoutUrl("/logout")
+                        .logoutUrl("/api/v1/auth/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler(
                                 (request, response, authentication) -> SecurityContextHolder.clearContext()))

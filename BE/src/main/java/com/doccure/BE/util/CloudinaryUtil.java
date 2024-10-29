@@ -2,7 +2,6 @@ package com.doccure.BE.util;
 
 import com.doccure.BE.exception.DataIntegrityViolationException;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DateFormat;
@@ -32,7 +31,6 @@ public class CloudinaryUtil {
         }
 
         final String fileName = file.getOriginalFilename();
-        final String extension = FilenameUtils.getExtension(fileName);
         if (!isAllowedExtension(fileName, pattern)) {
             throw new DataIntegrityViolationException("Only jpg, png, gif, bmp files are allowed");
         }

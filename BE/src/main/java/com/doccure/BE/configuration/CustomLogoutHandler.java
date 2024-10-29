@@ -1,5 +1,6 @@
 package com.doccure.BE.configuration;
 
+import com.doccure.BE.exception.DataNotFoundException;
 import com.doccure.BE.mapper.TokenMapper;
 import com.doccure.BE.model.Token;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +22,11 @@ public class CustomLogoutHandler implements LogoutHandler {
         String authHeader = request.getHeader("Authorization");
 
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return;
+            try {
+                throw new DataNotFoundException("Access token is required");
+            } catch (DataNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         String token = authHeader.substring(7);

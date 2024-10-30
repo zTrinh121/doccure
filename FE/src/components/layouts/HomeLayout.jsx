@@ -13,39 +13,44 @@ import {
 } from 'antd';
 const { Header, Content, Footer } = Layout;
 const { Paragraph } = Typography;
-import {
-  LoginOutlined,
-  UserAddOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { LoginOutlined, UserAddOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 import { useLocation, useNavigate } from 'react-router-dom';
-import { notification } from 'antd';
+import { Spin } from 'antd';
 // import { useAuthStore } from '../../stores/authStore';
 import { Popover } from 'antd';
 import { Outlet } from 'react-router-dom';
 
 import { getUsernameFromToken, logout } from '../../lib/auth';
-import { getActions, useAccessToken } from '../../stores/authStore';
+import { useAccessToken } from '../../stores/authStore';
+import { useProfileQuery } from '../../hooks/useProfileQuery';
 
 const HomeLayout = ({ children }) => {
   let location = useLocation();
   // const [username, setUsername] = useState('');
   const accessToken = useAccessToken();
-  const { setAccessToken } = getActions();
-  // const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const { data, isSuccess, isPending, error } = useProfileQuery();
+  const navigate = useNavigate();
+
+  if (isPending) {
+    return (
+      <div className="flex items-center justify-center h-screen w-screen bg-gray-100">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   let username = getUsernameFromToken(accessToken);
-
-  const navigate = useNavigate();
 
   // const logout = useLogout();
 
   const handleLogout = () => {
-    logout();
-
-    //todos:implement more here, particularly making logout request
+    try {
+      logout();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -137,7 +142,7 @@ const HomeLayout = ({ children }) => {
                         size="small"
                         type="text"
                         onClick={() => {
-                          navigate('/profile');
+                          navigate('/user/profile');
                         }}
                       >
                         Profile
@@ -153,7 +158,10 @@ const HomeLayout = ({ children }) => {
                     </>
                   }
                 >
-                  <Avatar size={30} icon={<UserOutlined />} />
+                  <Avatar
+                    size={30}
+                    src={<img src={data.data.data.avatar} alt="avatar" />}
+                  />
                 </Popover>
               )}
             </Space>

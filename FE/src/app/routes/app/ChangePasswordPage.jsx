@@ -17,73 +17,71 @@ const ChangePasswordPage = () => {
 
   return (
     <>
-      <>
-        <div>
-          <Flex justify="center" align="center">
-            <Row style={{ width: '100%' }}>
-              <Col span={6}></Col>
-              <Col span={12}>
-                <Form
-                  layout="vertical"
-                  onFinish={onFinish}
-                  name="basic"
-                  initialValues={{
-                    remember: true,
-                  }}
-                  autoComplete="off"
+      <div>
+        <Flex justify="center" align="center">
+          <Row style={{ width: '100%' }}>
+            <Col span={1}></Col>
+            <Col span={15}>
+              <Form
+                layout="vertical"
+                onFinish={onFinish}
+                name="basic"
+                initialValues={{
+                  remember: true,
+                }}
+                autoComplete="off"
+              >
+                <Form.Item
+                  label="Old Password"
+                  name="old_password"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input your username!',
+                    },
+                  ]}
                 >
-                  <Form.Item
-                    label="Old Password"
-                    name="old_password"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your username!',
-                      },
-                    ]}
-                  >
-                    <Input.Password />
-                  </Form.Item>
+                  <Input.Password />
+                </Form.Item>
 
-                  <Form.Item
-                    label="New password"
-                    name="new_password"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input your password!',
-                      },
-                    ]}
-                  >
-                    <Input.Password />
-                  </Form.Item>
+                <Form.Item
+                  label="New password"
+                  name="new_password"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input your password!',
+                    },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
 
-                  <Form.Item
-                    label="Confirm password"
-                    name="confirm_password"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please repeat your password!',
-                      },
-                    ]}
-                  >
-                    <Input.Password />
-                  </Form.Item>
+                <Form.Item
+                  label="Confirm password"
+                  name="confirm_password"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please repeat your password!',
+                    },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit" block>
-                      Submit
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Col>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit" block>
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
 
-              <Col span={6}></Col>
-            </Row>
-          </Flex>
-        </div>
-      </>
+            <Col span={8}></Col>
+          </Row>
+        </Flex>
+      </div>
     </>
   );
 };

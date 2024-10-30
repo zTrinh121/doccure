@@ -7,6 +7,7 @@ import { getActions } from '../../../stores/authStore';
 import { notification } from 'antd';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Spin } from 'antd';
 // import { useAuthStore } from '../../../stores/authStore';
 const { Meta } = Card;
 
@@ -25,7 +26,6 @@ const LoginCard = () => {
       showProgress: true,
     });
   };
-
 
   const navigate = useNavigate();
 
@@ -55,7 +55,7 @@ const LoginCard = () => {
   return (
     <>
       {contextHolder}
-      <Card loading={isLoading}>
+      <Card>
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
           <Meta title="Login Doccure" />
 
@@ -106,9 +106,11 @@ const LoginCard = () => {
               </Flex>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
-                Submit
-              </Button>
+              <Spin spinning={isLoading}>
+                <Button type="primary" htmlType="submit" block>
+                  Submit
+                </Button>
+              </Spin>
             </Form.Item>
           </Form>
         </Space>

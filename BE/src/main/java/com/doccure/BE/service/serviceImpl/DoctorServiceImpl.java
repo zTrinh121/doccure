@@ -61,6 +61,27 @@ public class DoctorServiceImpl implements DoctorService {
     public List<DoctorFullResponse> getDoctorFullByKeyword(String keyword) throws Exception {
         List<DoctorFull> doctorFulls = doctorMapper.getDoctorFullByKeyword(keyword);
         if(doctorFulls.isEmpty()) throw new DataNotFoundException("No doctor found with " + keyword + " keyword");
+        for(DoctorFull doctor: doctorFulls){
+            SlotPrice slotPrice = slotMapper.getMaxMinPriceByDoctorId(doctor.getDoctorId());
+            if(slotPrice == null) break;
+            doctor.setMaxPrice(slotPrice.getMaxPrice());
+            doctor.setMinPrice(slotPrice.getMinPrice());
+        }
+        return doctorFulls.stream()
+                .map(DoctorFullResponse::fromDoctorFull)
+                .toList();
+    }
+
+    @Override
+    public List<DoctorFullResponse> getDoctorFullBySpecialization(String specialization) throws Exception {
+        List<DoctorFull> doctorFulls = doctorMapper.getDoctorFullBySpecialization(specialization);
+        if(doctorFulls.isEmpty()) throw new DataNotFoundException("No doctor found with " + specialization + " specialization");
+        for(DoctorFull doctor: doctorFulls){
+            SlotPrice slotPrice = slotMapper.getMaxMinPriceByDoctorId(doctor.getDoctorId());
+            if(slotPrice == null) break;
+            doctor.setMaxPrice(slotPrice.getMaxPrice());
+            doctor.setMinPrice(slotPrice.getMinPrice());
+        }
         return doctorFulls.stream()
                 .map(DoctorFullResponse::fromDoctorFull)
                 .toList();
@@ -150,6 +171,12 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorRatingResponseList;
     }
 
+    @Override
+    public List<DoctorRating> getDoctorRatingsByStartEndDate(Long doctorId, LocalDate startDate, LocalDate endDate, int offset, int limit) throws Exception {
+        List<DoctorRating> doctorRatingList = doctorMapper.getDoctorRatingsByStartEndDate(doctorId, startDate, endDate, new RowBounds(offset, limit));
+        if(doctorRatingList.isEmpty()) throw new DataNotFoundException(String.format("No rating for doctor found from %s to %S", startDate, endDate));
+        return doctorRatingList;
+    }
 
 
     @Override

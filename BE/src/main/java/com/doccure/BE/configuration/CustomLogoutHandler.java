@@ -34,7 +34,7 @@ public class CustomLogoutHandler implements LogoutHandler {
 
         if(storedToken != null) {
             storedToken.setIsLoggedOut((short) 1);
-            tokenMapper.insert(storedToken);
+            tokenMapper.updateByPrimaryKey(storedToken);
         }
     }
 }

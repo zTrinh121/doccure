@@ -31,6 +31,13 @@ public class DoctorController {
                 HttpStatus.OK,
                 doctorService.getDoctorFullByKeyword(keyword));
     }
+    
+    @GetMapping("/specialization")
+    public ResponseEntity<Object> getDoctorFullBySpecialization(@RequestParam("specialization") String specialization) throws Exception {
+        return ResponseHandler.responseBuilder("List doctors in detail by specialization",
+                HttpStatus.OK,
+                doctorService.getDoctorFullByKeyword(specialization));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getDoctorById(@PathVariable("id") Long id) throws DataNotFoundException {
@@ -96,15 +103,9 @@ public class DoctorController {
     public ResponseEntity<Object> getSlotFromStartEndDate(@RequestParam("id") Long id,
                                                           @RequestParam("start_date") String startDate,
                                                           @RequestParam("end_date") String endDate) throws DataNotFoundException {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        LocalDate start;
-        LocalDate end;
-        try {
-            start = LocalDate.parse(startDate, formatter);
-            end = LocalDate.parse(endDate, formatter);
-        } catch (DateTimeParseException e) {
+        LocalDate start = parseStringToDate(startDate);
+        LocalDate end = parseStringToDate(endDate);
+        if (start == null || end == null){
             return ResponseEntity.badRequest().body("Invalid date format. Please use yyyy-MM-dd.");
         }
 
@@ -113,6 +114,32 @@ public class DoctorController {
                 doctorService.getSlotFromStartEndDate(id, start, end));
     }
 
+    @GetMapping("/rating/date")
+    public ResponseEntity<Object> getDoctorRatingsByStartEndDate(@RequestParam("id") Long id,
+                                                          @RequestParam("start_date") String startDate,
+                                                          @RequestParam("end_date") String endDate,
+                                                          @RequestParam("offset") int offset,
+                                                          @RequestParam("limit") int limit) throws Exception {
+        LocalDate start = parseStringToDate(startDate);
+        LocalDate end = parseStringToDate(endDate);
+        if (start == null || end == null){
+            return ResponseEntity.badRequest().body("Invalid date format. Please use yyyy-MM-dd.");
+        }
 
+        return ResponseHandler.responseBuilder("Availability slot for doctor detail with id = " + id ,
+                HttpStatus.OK,
+                doctorService.getDoctorRatingsByStartEndDate(id, start, end, offset, limit));
+    }
+
+
+    public LocalDate parseStringToDate(String localDateString){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            return LocalDate.parse(localDateString, formatter);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+
+    }
 
 }

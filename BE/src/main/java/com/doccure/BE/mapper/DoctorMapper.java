@@ -6,6 +6,7 @@ import com.doccure.BE.model.DoctorFull;
 import com.doccure.BE.model.DoctorRating;
 import com.doccure.BE.model.DoctorSlot;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -38,8 +39,15 @@ public interface DoctorMapper {
 
     DoctorFull getDoctorFullById(Long doctorId);
 
+    List<DoctorFull> getDoctorFullByKeyword(String keyword);
+    
+    List<DoctorFull> getDoctorFullBySpecialization(String specialization);
+
     List<DoctorRating> getAllDoctorRatings();
+   
     List<DoctorRating> getAllDoctorRatings(RowBounds rowBounds);
+
+    List<DoctorRating> getDoctorRatingsByStartEndDate(@Param("doctorId") Long doctorId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, RowBounds rowBounds);
 
     DoctorRating getDoctorRatingsById(Long doctorId);
 
@@ -47,6 +55,7 @@ public interface DoctorMapper {
 
     DoctorSlot getDoctorSlotsById(Long doctorId);
 
-    List<DoctorFull> getDoctorFullByKeyword(String keyword);
+
+    
 
 }

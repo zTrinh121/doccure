@@ -2,6 +2,7 @@ package com.doccure.BE.configuration;
 
 import com.doccure.BE.filter.JwtAuthenticationFilter;
 import com.doccure.BE.service.serviceImpl.UserDetailsServiceImp;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -66,7 +67,12 @@ public class SecurityConfiguration {
                         .logoutUrl("/api/v1/auth/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler(
-                                (request, response, authentication) -> SecurityContextHolder.clearContext()))
+                                (request, response, authentication) -> {
+                                    SecurityContextHolder.clearContext();
+                                    response.setStatus(HttpServletResponse.SC_OK);
+                                    response.getWriter().write("Logout successful");
+                                    response.getWriter().flush();
+                                }))
                 .build();
     }
 

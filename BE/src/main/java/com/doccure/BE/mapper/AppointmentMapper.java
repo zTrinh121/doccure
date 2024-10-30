@@ -35,4 +35,5 @@ public interface AppointmentMapper {
     int updateByPrimaryKey(Appointment row);
 
     List<AppointmentDetail> getSlotDetailWithStatus(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getSlotDetailWithStatusByDate(@Param("params") Map<String, Object> params, RowBounds bounds);
 }

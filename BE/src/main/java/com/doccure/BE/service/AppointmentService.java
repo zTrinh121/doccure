@@ -1,11 +1,6 @@
 package com.doccure.BE.service;
 
-import com.doccure.BE.exception.DataNotFoundException;
-import com.doccure.BE.model.DoctorRating;
 import com.doccure.BE.response.AppointmentDetailResponse;
-import com.doccure.BE.response.DoctorFullResponse;
-import com.doccure.BE.response.DoctorRatingResponse;
-import com.doccure.BE.response.DoctorSlotResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.LocalDate;
@@ -17,4 +12,11 @@ public interface AppointmentService {
                                                             int offset,
                                                             int limit,
                                                             HttpServletRequest request) throws Exception;
+
+    List<AppointmentDetailResponse> getSlotDetailWithStatusByDate(String status,
+                                                                  LocalDate startDate,
+                                                                  LocalDate endDate,
+                                                                  int offset,
+                                                                  int limit,
+                                                                  HttpServletRequest request) throws Exception;
 }

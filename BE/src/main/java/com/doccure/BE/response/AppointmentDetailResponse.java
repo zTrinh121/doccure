@@ -3,7 +3,6 @@ package com.doccure.BE.response;
 import java.math.BigDecimal;
 
 import com.doccure.BE.model.AppointmentDetail;
-import com.doccure.BE.model.Slot;
 import com.doccure.BE.model.SlotAppointment;
 import com.doccure.BE.model.Specialization;
 import com.fasterxml.jackson.annotation.JsonProperty;

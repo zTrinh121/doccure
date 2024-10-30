@@ -273,4 +273,32 @@
         a.user_id = #{params.userId, jdbcType=NUMERIC}
         AND a.status = #{params.status, jdbcType=VARCHAR}
   </select>
+
+  <select id="getSlotDetailWithStatusByDate" parameterType="map" resultMap="BaseResultMapDetail">
+      SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+              s.slot_id,s.start_datetime as DATE_SLOT, s.start_datetime, s.end_datetime,
+              d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+              sp.specialization_name, sp.specialization_id
+      FROM appointment a
+      JOIN slot s ON s.slot_id = a.slot_id
+      JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+      JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+      JOIN doctor d ON ds.doctor_id = d.doctor_id
+      WHERE 
+        a.user_id = #{params.userId, jdbcType=NUMERIC}
+        AND a.status = #{params.status, jdbcType=VARCHAR}
+        <if test="startDate != null and endDate != null">
+          AND s.start_datetime BETWEEN #{params.startDate, jdbcType=DATE} AND #{params.endDate, jdbcType=DATE}
+        </if>
+        <if test="startDate != null and endDate == null">
+          <![CDATA[
+          AND s.start_datetime >= #{params.startDate, jdbcType=DATE}
+          ]]>
+        </if>
+        <if test="startDate == null and endDate != null">
+          <![CDATA[
+          AND s.start_datetime <= #{params.endDate, jdbcType=DATE}
+          ]]>
+        </if>
+  </select>
 </mapper>

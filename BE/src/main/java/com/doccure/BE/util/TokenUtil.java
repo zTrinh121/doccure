@@ -1,4 +1,4 @@
-package com.doccure.BE.utils;
+package com.doccure.BE.util;
 
 import com.doccure.BE.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;

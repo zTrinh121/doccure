@@ -34,12 +34,7 @@ public class DoctorServiceImpl implements DoctorService {
         if (doctorFullResponseList.isEmpty())
             throw new DataNotFoundException("No doctor found in list");
 
-        for(DoctorFull doctor: doctorFullResponseList){
-            SlotPrice slotPrice = slotMapper.getMaxMinPriceByDoctorId(doctor.getDoctorId());
-            if(slotPrice == null) break;
-            doctor.setMaxPrice(slotPrice.getMaxPrice());
-            doctor.setMinPrice(slotPrice.getMinPrice());
-        }
+        doctorFullResponseList = insertMaxMinPrice(doctorFullResponseList);
         return doctorFullResponseList.stream()
                 .map(DoctorFullResponse::fromDoctorFull)
                 .toList();
@@ -61,12 +56,7 @@ public class DoctorServiceImpl implements DoctorService {
     public List<DoctorFullResponse> getDoctorFullByKeyword(String keyword) throws Exception {
         List<DoctorFull> doctorFulls = doctorMapper.getDoctorFullByKeyword(keyword);
         if(doctorFulls.isEmpty()) throw new DataNotFoundException("No doctor found with " + keyword + " keyword");
-        for(DoctorFull doctor: doctorFulls){
-            SlotPrice slotPrice = slotMapper.getMaxMinPriceByDoctorId(doctor.getDoctorId());
-            if(slotPrice == null) break;
-            doctor.setMaxPrice(slotPrice.getMaxPrice());
-            doctor.setMinPrice(slotPrice.getMinPrice());
-        }
+        doctorFulls = insertMaxMinPrice(doctorFulls);
         return doctorFulls.stream()
                 .map(DoctorFullResponse::fromDoctorFull)
                 .toList();
@@ -76,39 +66,25 @@ public class DoctorServiceImpl implements DoctorService {
     public List<DoctorFullResponse> getDoctorFullBySpecialization(String specialization) throws Exception {
         List<DoctorFull> doctorFulls = doctorMapper.getDoctorFullBySpecialization(specialization);
         if(doctorFulls.isEmpty()) throw new DataNotFoundException("No doctor found with " + specialization + " specialization");
-        for(DoctorFull doctor: doctorFulls){
-            SlotPrice slotPrice = slotMapper.getMaxMinPriceByDoctorId(doctor.getDoctorId());
-            if(slotPrice == null) break;
-            doctor.setMaxPrice(slotPrice.getMaxPrice());
-            doctor.setMinPrice(slotPrice.getMinPrice());
-        }
+        doctorFulls = insertMaxMinPrice(doctorFulls);
         return doctorFulls.stream()
                 .map(DoctorFullResponse::fromDoctorFull)
                 .toList();
     }
 
     @Override
-    public List<DoctorRatingResponse> getAllDoctorRatings() throws DataNotFoundException {
+    public List<DoctorRatingResponse> getAllDoctorRatings() throws Exception {
         List<DoctorRating> doctorRatingList = doctorMapper.getAllDoctorRatings();
-        if (doctorRatingList.isEmpty())
-            throw new DataNotFoundException("No ratings for any doctors found in list");
-        List<DoctorRatingResponse> doctorRatingResponses = doctorRatingList.stream()
-                .map(DoctorRatingResponse::fromDoctorRating)
-                .toList();
-        for (DoctorRatingResponse drp : doctorRatingResponses) {
-            drp.setCountRatings(drp.getRatings().size());
-            drp.setAvgRating((float) drp.getRatings().stream()
-                    .mapToDouble(RatingSpecialization::getRating)
-                    .average()
-                    .orElse(0.0));
-            drp.setPercentRating((drp.getAvgRating() / MAX_RATING) * 100);
-        }
-        return doctorRatingResponses;
+        return insertAvgSumRating(doctorRatingList);
     }
 
     @Override
-    public List<DoctorRatingResponse> getAllDoctorRatingsPagination(int offset, int limit) throws DataNotFoundException {
+    public List<DoctorRatingResponse> getAllDoctorRatingsPagination(int offset, int limit) throws Exception {
         List<DoctorRating> doctorRatingList = doctorMapper.getAllDoctorRatings(new RowBounds(offset, limit));
+        return insertAvgSumRating(doctorRatingList);
+    }
+
+    public List<DoctorRatingResponse> insertAvgSumRating(List<DoctorRating> doctorRatingList) throws Exception {
         if (doctorRatingList.isEmpty())
             throw new DataNotFoundException("No ratings for any doctors found in list");
         List<DoctorRatingResponse> doctorRatingResponses = doctorRatingList.stream()
@@ -246,6 +222,16 @@ public class DoctorServiceImpl implements DoctorService {
         doctorSlotResponse.setSlots(filteredSlots);
 
         return doctorSlotResponse;
+    }
+
+    public List<DoctorFull> insertMaxMinPrice(List<DoctorFull> doctorFulls){
+        for(DoctorFull doctor: doctorFulls){
+            SlotPrice slotPrice = slotMapper.getMaxMinPriceByDoctorId(doctor.getDoctorId());
+            if(slotPrice == null) break;
+            doctor.setMaxPrice(slotPrice.getMaxPrice());
+            doctor.setMinPrice(slotPrice.getMinPrice());
+        }
+        return doctorFulls;
     }
 
 }

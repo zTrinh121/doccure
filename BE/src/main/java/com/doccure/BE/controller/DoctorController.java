@@ -3,6 +3,8 @@ package com.doccure.BE.controller;
 import com.doccure.BE.exception.DataNotFoundException;
 import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.DoctorService;
+import com.doccure.BE.util.DateFormatUtil;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.time.format.DateTimeParseException;
 @RequiredArgsConstructor
 public class DoctorController {
     private final DoctorService doctorService;
+
 
     //Doctors with specialization
     @GetMapping("/all")
@@ -40,7 +43,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getDoctorById(@PathVariable("id") Long id) throws DataNotFoundException {
+    public ResponseEntity<Object> getDoctorById(@PathVariable("id") Long id) throws Exception {
         return ResponseHandler.responseBuilder("Requested doctor detail with id = " + id ,
                 HttpStatus.OK,
                 doctorService.getDoctorById(id));
@@ -48,7 +51,7 @@ public class DoctorController {
 
     // Rating for doctors
     @GetMapping("/rating/all")
-    public ResponseEntity<Object> getAllDoctorRatings() throws DataNotFoundException {
+    public ResponseEntity<Object> getAllDoctorRatings() throws Exception {
         return ResponseHandler.responseBuilder("List rating doctors in detail",
                 HttpStatus.OK,
                 doctorService.getAllDoctorRatings());
@@ -56,7 +59,7 @@ public class DoctorController {
 
     @GetMapping("/rating/all/pagination")
     public ResponseEntity<Object> getAllDoctorRatingsPagination(@RequestParam("offset") int offset,
-                                                                @RequestParam("limit") int limit) throws DataNotFoundException {
+                                                                @RequestParam("limit") int limit) throws Exception {
         return ResponseHandler.responseBuilder(String.format("List rating doctor with pagination offset = %d and limit = %d", offset, limit),
                 HttpStatus.OK,
                 doctorService.getAllDoctorRatingsPagination(offset, limit));
@@ -103,8 +106,8 @@ public class DoctorController {
     public ResponseEntity<Object> getSlotFromStartEndDate(@RequestParam("id") Long id,
                                                           @RequestParam("start_date") String startDate,
                                                           @RequestParam("end_date") String endDate) throws DataNotFoundException {
-        LocalDate start = parseStringToDate(startDate);
-        LocalDate end = parseStringToDate(endDate);
+        LocalDate start = DateFormatUtil.parseStringToDate(startDate);
+        LocalDate end = DateFormatUtil.parseStringToDate(endDate);
         if (start == null || end == null){
             return ResponseEntity.badRequest().body("Invalid date format. Please use yyyy-MM-dd.");
         }
@@ -120,8 +123,8 @@ public class DoctorController {
                                                           @RequestParam("end_date") String endDate,
                                                           @RequestParam("offset") int offset,
                                                           @RequestParam("limit") int limit) throws Exception {
-        LocalDate start = parseStringToDate(startDate);
-        LocalDate end = parseStringToDate(endDate);
+        LocalDate start = DateFormatUtil.parseStringToDate(startDate);
+        LocalDate end = DateFormatUtil.parseStringToDate(endDate);
         if (start == null || end == null){
             return ResponseEntity.badRequest().body("Invalid date format. Please use yyyy-MM-dd.");
         }
@@ -131,15 +134,5 @@ public class DoctorController {
                 doctorService.getDoctorRatingsByStartEndDate(id, start, end, offset, limit));
     }
 
-
-    public LocalDate parseStringToDate(String localDateString){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        try {
-            return LocalDate.parse(localDateString, formatter);
-        } catch (DateTimeParseException e) {
-            return null;
-        }
-
-    }
 
 }

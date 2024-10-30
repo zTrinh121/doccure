@@ -51,7 +51,8 @@ public class SecurityConfiguration {
                                 "/api/v1/auth/verify-otp/**",
                                 "/api/v1/auth/verify-mail/**",
                                 "/api/v1/auth/forgot-password/**",
-                                "/api/v1/doctor/**")
+                                "/api/v1/doctor/**",
+                                "/api/v1/specialization/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())

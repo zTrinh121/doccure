@@ -1,19 +1,21 @@
 import { Button, Card, Form, Input, Space } from 'antd';
 import { forgotPassword } from '../../../lib/auth';
-import { useResetEmail } from '../../../stores/authStore';
+import { getActions, useResetEmail } from '../../../stores/authStore';
+import { useNavigate } from 'react-router-dom';
 const { Meta } = Card;
 
 const ResetPasswordCard = () => {
   const email = useResetEmail();
+  const navigate = useNavigate();
   const { setResetStep, setResetEmail } = getActions();
 
   const onFinish = async (values) => {
-
     try {
       let response = await forgotPassword({ values, email });
-   
+
       setResetStep('');
       setResetEmail('');
+      navigate('/');
     } catch (error) {
       console.log(error);
     }

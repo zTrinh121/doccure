@@ -5,6 +5,9 @@ import DoctorCard from '../../../features/doctors/components/DoctorCard';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useAccessToken } from '../../../stores/authStore';
+import { useState } from 'react';
+import { Form } from 'antd';
+import { searchDoctors } from '../../../lib/doctor';
 
 // import { useAuthStore } from '../../../stores/authStore';
 
@@ -18,14 +21,16 @@ const HomePage = () => {
     background: '#364d79',
   };
 
-  const onChange = (currentSlide) => {
-    
-  };
+  const onChange = (currentSlide) => {};
+  const [input, setInput] = useState('');
 
   // const username = useAuthStore((state) => state.username);
 
   const accessToken = useAccessToken();
 
+  const onFinish = async (values) => {
+    searchDoctors(values.search);
+  };
 
   return (
     <>
@@ -41,7 +46,11 @@ const HomePage = () => {
         }}
       >
         <Space>
-          <Input prefix={<SearchOutlined />}></Input>
+          <Form onFinish={onFinish} autoComplete="off">
+            <Form.Item name="search">
+              <Input prefix={<SearchOutlined />}></Input>
+            </Form.Item>
+          </Form>
         </Space>
       </Flex>
 
@@ -145,7 +154,6 @@ const HomePage = () => {
           <DoctorCard name="Dr. Michael Brown" specialty="Orthopedics" />
         </Carousel>
       </div>
-  
     </>
   );
 };

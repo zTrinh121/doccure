@@ -16,6 +16,8 @@ import OtpPage from './routes/auth/OtpPage';
 import ResetPasswordPage from './routes/auth/ResetPasswordPage';
 import DashboardLayout from '../components/layouts/DashboardLayout';
 import ChangeProfilePage from './routes/app/user/ChangeProfilePage';
+import SearchResultPage from './routes/app/SearchResultPage';
+import DoctorPage from './routes/app/doctor/DoctorPage';
 
 const router = createBrowserRouter([
   {
@@ -34,7 +36,10 @@ const router = createBrowserRouter([
         path: '/register',
         element: <RegisterPage />,
       },
-
+      {
+        path: '/search',
+        element: <SearchResultPage />,
+      },
       //forget password
       {
         path: '/forgotPassword',
@@ -78,6 +83,16 @@ const router = createBrowserRouter([
                 <ChangePasswordPage />
               </ProtectedRoute>
             ),
+          },
+        ],
+      },
+      {
+        path: '/doctor',
+        // element: <DashboardLayout />,
+        children: [
+          {
+            path: ':doctorId',
+            element: <DoctorPage />,
           },
         ],
       },

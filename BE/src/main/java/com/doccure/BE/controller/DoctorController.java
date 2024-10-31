@@ -105,7 +105,7 @@ public class DoctorController {
     @GetMapping("/slot/date")
     public ResponseEntity<Object> getSlotFromStartEndDate(@RequestParam("id") Long id,
                                                           @RequestParam("start_date") String startDate,
-                                                          @RequestParam("end_date") String endDate) throws DataNotFoundException {
+                                                          @RequestParam("end_date") String endDate) throws Exception {
         LocalDate start = DateFormatUtil.parseStringToDate(startDate);
         LocalDate end = DateFormatUtil.parseStringToDate(endDate);
         if (start == null || end == null){

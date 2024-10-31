@@ -3,6 +3,7 @@ package com.doccure.BE.response;
 import java.math.BigDecimal;
 
 import com.doccure.BE.model.AppointmentDetail;
+import com.doccure.BE.model.Invoice;
 import com.doccure.BE.model.SlotAppointment;
 import com.doccure.BE.model.Specialization;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -42,6 +43,7 @@ public class AppointmentDetailResponse {
     private DoctorResponse doctor;
     private SlotAppointment slot;
     private Specialization specialization;
+    private Invoice invoice;
 
     public static AppointmentDetailResponse fromAppointmentDetail(AppointmentDetail appointmentDetail){
         return AppointmentDetailResponse.builder()
@@ -54,6 +56,7 @@ public class AppointmentDetailResponse {
                 .doctor(DoctorResponse.fromDoctor(appointmentDetail.getDoctor()))
                 .slot(appointmentDetail.getSlot())
                 .specialization(appointmentDetail.getSpecialization())
+                .invoice(appointmentDetail.getInvoice())
                 .build();
     }
     

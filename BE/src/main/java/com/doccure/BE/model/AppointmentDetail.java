@@ -25,5 +25,6 @@ public class AppointmentDetail {
     private Doctor doctor;
     private SlotAppointment slot;
     private Specialization specialization;
+    private Invoice invoice;
     
 }

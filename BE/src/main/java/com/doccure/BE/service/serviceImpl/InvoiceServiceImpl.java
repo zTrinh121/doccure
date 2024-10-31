@@ -3,16 +3,21 @@ package com.doccure.BE.service.serviceImpl;
 import com.doccure.BE.exception.DataNotFoundException;
 import com.doccure.BE.mapper.InvoiceMapper;
 import com.doccure.BE.mapper.TokenMapper;
+import com.doccure.BE.mapper.UsersMapper;
 import com.doccure.BE.model.InvoiceDetail;
 import com.doccure.BE.model.Token;
+import com.doccure.BE.model.Users;
 import com.doccure.BE.response.InvoiceDetailResponse;
 import com.doccure.BE.service.InvoiceService;
+import com.doccure.BE.util.PdfUtil;
 import com.doccure.BE.util.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +27,7 @@ import java.util.Map;
 public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceMapper invoiceMapper;
     private final TokenMapper tokenMapper;
+    private final UsersMapper usersMapper;
     @Override
     public List<InvoiceDetailResponse> getAllInvoices(int offset, int limit, HttpServletRequest request) throws Exception {
         String token = TokenUtil.checkToken(request);
@@ -36,11 +42,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public InvoiceDetailResponse getInvoiceById(Long invoiceId, HttpServletRequest request) throws Exception {
-        String token = TokenUtil.checkToken(request);
-        Token accessTokenUser = tokenMapper.findByAccessToken(token);
-        InvoiceDetail invoiceDetail = invoiceMapper.getInvoiceDetailById(accessTokenUser.getUserId(), invoiceId);
-        if(invoiceDetail == null) throw new DataNotFoundException("Not found invoice with ID = " + invoiceId);
-        return InvoiceDetailResponse.fromInvoiceDetail(invoiceDetail);
+        return InvoiceDetailResponse.fromInvoiceDetail(getInvoiceDetailById(invoiceId, request));
     }
 
     @Override
@@ -57,4 +59,26 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .map(InvoiceDetailResponse::fromInvoiceDetail)
                 .toList();
     }
+
+    @Override
+    public ByteArrayInputStream downloadPdfInvoice(Long invoiceId, HttpServletRequest request) throws Exception {
+        String token = TokenUtil.checkToken(request);
+        Token accessTokenUser = tokenMapper.findByAccessToken(token);
+        Users user = usersMapper.findUserById(accessTokenUser.getUserId());
+        InvoiceDetail invoiceDetail = invoiceMapper.getInvoiceDetailById(accessTokenUser.getUserId(), invoiceId);
+        if(invoiceDetail == null) throw new DataNotFoundException("Not found invoice with ID = " + invoiceId);
+
+        ByteArrayInputStream bis = PdfUtil.invoicePDFReport(invoiceDetail, user);
+        return bis;
+    }
+
+    public InvoiceDetail getInvoiceDetailById(Long invoiceId, HttpServletRequest request) throws Exception{
+        String token = TokenUtil.checkToken(request);
+        Token accessTokenUser = tokenMapper.findByAccessToken(token);
+        InvoiceDetail invoiceDetail = invoiceMapper.getInvoiceDetailById(accessTokenUser.getUserId(), invoiceId);
+        if(invoiceDetail == null) throw new DataNotFoundException("Not found invoice with ID = " + invoiceId);
+        return invoiceDetail;
+    }
+
+
 }

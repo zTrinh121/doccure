@@ -4,9 +4,12 @@ import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.InvoiceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("${apiPrefix}/invoice")
@@ -39,5 +42,14 @@ public class InvoiceController {
         return ResponseHandler.responseBuilder("List invoices in detail with keyword = " + keyword,
                 HttpStatus.OK,
                 invoiceService.searchInvoices(keyword, offset, limit, request));
+    }
+
+    @GetMapping(value = "/pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> invoicePdf(@PathVariable("id") Long invoiceId,
+                                                          HttpServletRequest request) throws Exception {
+
+
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(invoiceService.downloadPdfInvoice(invoiceId, request)));
     }
 }

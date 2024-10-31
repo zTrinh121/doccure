@@ -30,6 +30,7 @@ public interface UsersMapper {
     int updateByPrimaryKey(Users row);
 
     Users findUserByUserName(String username);
+    Users findUserById(Long userId);
 
     List<Users> findUserDifferentByUserName(@Param("userId") Long userId, @Param("username") String username);
 

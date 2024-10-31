@@ -8,6 +8,7 @@ import { notification } from 'antd';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Spin } from 'antd';
+import { useQueryClient } from '@tanstack/react-query';
 // import { useAuthStore } from '../../../stores/authStore';
 const { Meta } = Card;
 
@@ -18,6 +19,7 @@ const LoginCard = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [api, contextHolder] = notification.useNotification();
+  const queryClient = useQueryClient();
   // const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const openNotification = (description) => {
     api.error({
@@ -40,6 +42,8 @@ const LoginCard = () => {
       const response = await login(values);
 
       setAccessToken(response.data.data.access_token);
+      console.log(response.data.data.access_token);
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
 
       navigate('/');
     } catch (error) {

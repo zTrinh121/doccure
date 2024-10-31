@@ -4,13 +4,17 @@ const { Meta } = Card;
 import { useNavigate } from 'react-router-dom';
 import { sendResetEmail } from '../../../lib/auth';
 import { getActions } from '../../../stores/authStore';
+import { Spin } from 'antd';
+import { useState } from 'react';
 //todos:notification,disabled button
 
 const ForgotPasswordEmailCard = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setResetStep, setResetEmail } = getActions();
 
   const onFinish = async (values) => {
+    setLoading(true);
     try {
       const response = await sendResetEmail({ email: values.email });
       setResetStep('otp');
@@ -18,6 +22,8 @@ const ForgotPasswordEmailCard = () => {
       navigate('/otp');
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,9 +55,11 @@ const ForgotPasswordEmailCard = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Submit
-            </Button>
+            <Spin spinning={loading}>
+              <Button type="primary" htmlType="submit" block>
+                Submit
+              </Button>
+            </Spin>
           </Form.Item>
         </Form>
       </Space>

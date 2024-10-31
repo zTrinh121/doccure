@@ -2,7 +2,12 @@ import { Navigate } from 'react-router-dom';
 import { axiosInstance } from './apiClient';
 import { useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { getActions, useAccessToken, useResetStep } from '../stores/authStore';
+import {
+  getAccessToken,
+  getActions,
+  useAccessToken,
+  useResetStep,
+} from '../stores/authStore';
 
 const { setAccessToken, clearTokens } = getActions();
 
@@ -15,12 +20,13 @@ export const login = async (data) => {
 };
 
 export const logout = async (token) => {
-  clearTokens();
-  axiosInstance.get('/auth/logout', {
+  //todos:check invalid token
+  await axiosInstance.get('/auth/logout', {
     headers: {
       Authorization: `Bearer ${token}`, // Adding the Bearer token to the request
     },
   });
+  clearTokens();
 };
 
 export const getUsernameFromToken = (token) => {
@@ -56,6 +62,8 @@ export const changePassword = async (token, data) => {
 
 export const fetchProfile = async (token) => {
   //todos:try again with new token from refresh token
+
+  const username = getUsernameFromToken(getAccessToken());
   const getProfile = async (token, username) => {
     return axiosInstance.get(`/users?username=${username}`, {
       headers: {
@@ -63,8 +71,6 @@ export const fetchProfile = async (token) => {
       },
     });
   };
-
-  const username = getUsernameFromToken(token);
 
   try {
     const response = await getProfile(token, username);
@@ -88,7 +94,7 @@ export const getNewAccessToken = async () => {
     return response.data.data.access_token;
   } catch (error) {
     console.log(error);
-    return undefined;
+    // return undefined;
   }
 };
 

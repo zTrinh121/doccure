@@ -45,9 +45,9 @@ const HomeLayout = ({ children }) => {
 
   // const logout = useLogout();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
-      logout();
+      logout(accessToken);
     } catch (error) {
       console.log(error);
     }

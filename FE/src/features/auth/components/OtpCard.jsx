@@ -4,8 +4,11 @@ const { Meta } = Card;
 import { useNavigate } from 'react-router-dom';
 import { sendResetEmail, verifyOtp } from '../../../lib/auth';
 import { getActions, useResetEmail } from '../../../stores/authStore';
+import { Spin } from 'antd';
+import { useState } from 'react';
 
 const OtpCard = () => {
+  const [loading, setLoading] = useState(false);
   const { setResetStep } = getActions();
   const resetEmail = useResetEmail();
   const [form] = Form.useForm();
@@ -16,14 +19,15 @@ const OtpCard = () => {
   };
 
   const onFinish = async (values) => {
-
+    setLoading(true);
     try {
       const response = await verifyOtp({ otp: values.otp, email: resetEmail });
       setResetStep('password');
       navigate('/resetPassword');
-
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,9 +64,11 @@ const OtpCard = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Submit
-            </Button>
+            <Spin spinning={loading}>
+              <Button type="primary" htmlType="submit" block>
+                Submit
+              </Button>
+            </Spin>
           </Form.Item>
         </Form>
       </Space>

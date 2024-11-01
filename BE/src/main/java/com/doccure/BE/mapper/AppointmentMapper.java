@@ -18,11 +18,14 @@ public interface AppointmentMapper {
 
     int deleteByPrimaryKey(Long appointmentId);
 
+    int deleteBySlotId(Long slotId);
+
     int insert(Appointment row);
 
     int insertSelective(Appointment row);
 
     List<Appointment> selectByExample(AppointmentExample example);
+    List<Appointment> selectBySlotId(Long slotId);
 
     Appointment selectByPrimaryKey(Long appointmentId);
 
@@ -31,14 +34,22 @@ public interface AppointmentMapper {
     int updateByExample(@Param("row") Appointment row, @Param("example") AppointmentExample example);
 
     int updateByPrimaryKeySelective(Appointment row);
+    
+    int updateStatusById(@Param("status") String status, @Param("appointmentId") Long appointmentId);
 
     int updateByPrimaryKey(Appointment row);
 
     List<AppointmentDetail> getAppointmentDetailWithStatus(@Param("params") Map<String, Object> params, RowBounds bounds);
+
     List<AppointmentDetail> getUpcomingAppointmentDetails(@Param("userId") Long userId, RowBounds bounds);
+
     List<AppointmentDetail> getAppointmentDetailWithStatusByDate(@Param("params") Map<String, Object> params, RowBounds bounds);
+
     List<AppointmentDetail> getUpcomingAppointmentDetailWithStatusByDate(@Param("userId") Long userId, RowBounds bounds);
+
     List<AppointmentDetail> getAppointmentDetailWithStatusByKeyword(@Param("params") Map<String, Object> params, RowBounds bounds);
+
     List<AppointmentDetail> getUpcomingAppointmentDetailWithStatusByKeyword(@Param("params") Map<String, Object> params, RowBounds bounds);
+
     AppointmentDetail getAppointmentDetailById(@Param("params") Map<String, Object> params);
 }

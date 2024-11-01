@@ -7,6 +7,7 @@
     <result column="END_DATETIME" jdbcType="TIMESTAMP" property="endDatetime" />
     <result column="DOCTOR_ID" jdbcType="NUMERIC" property="doctorId" />
     <result column="PRICE" jdbcType="NUMERIC" property="price" />
+
   </resultMap>
  
   <sql id="Example_Where_Clause">

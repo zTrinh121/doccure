@@ -3,6 +3,9 @@ package com.doccure.BE.mapper;
 import com.doccure.BE.model.Invoice;
 import com.doccure.BE.model.InvoiceDetail;
 import com.doccure.BE.model.InvoiceExample;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +25,8 @@ public interface InvoiceMapper {
 
     List<Invoice> selectByExample(InvoiceExample example);
 
+    Invoice selectByAppointmentId(Long appointmentId);
+
     Invoice selectByPrimaryKey(Long invoiceId);
 
     int updateByExampleSelective(@Param("row") Invoice row, @Param("example") InvoiceExample example);
@@ -32,7 +37,11 @@ public interface InvoiceMapper {
 
     int updateByPrimaryKey(Invoice row);
 
+    int updateStatusByInvoiceId(@Param("status") String status, @Param("invoiceId") Long invoiceId);
+
     List<InvoiceDetail> getInvoiceDetails(Long userId, RowBounds row);
+
     InvoiceDetail getInvoiceDetailById(@Param("userId") Long userId, @Param("invoiceId") Long invoiceId);
+
     List<InvoiceDetail> getInvoiceDetailByKeyword (@Param("params") Map<String, Object> params, RowBounds row);
 }

@@ -87,6 +87,15 @@
     from DOCTOR_SPECIALIZATION
     where DOCTOR_SPECIALIZATION_ID = #{doctorSpecializationId,jdbcType=NUMERIC}
   </select>
+
+   <select id="selectByDoctorAndSpecId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from DOCTOR_SPECIALIZATION
+    where DOCTOR_ID = #{doctorId,jdbcType=NUMERIC}
+    AND SPECIALIZATION_ID = #{specializationId,jdbcType=NUMERIC}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from DOCTOR_SPECIALIZATION
     where DOCTOR_SPECIALIZATION_ID = #{doctorSpecializationId,jdbcType=NUMERIC}

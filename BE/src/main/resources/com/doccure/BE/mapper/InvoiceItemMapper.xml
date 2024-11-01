@@ -99,10 +99,11 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.doccure.BE.model.InvoiceItem">
-    insert into INVOICE_ITEM (ITEM_ID, ITEM_NAME, QUANTITY, 
+  <insert id="insert" parameterType="com.doccure.BE.model.InvoiceItem"
+  useGeneratedKeys="true" keyProperty="itemId" keyColumn="ITEM_ID">
+    insert into INVOICE_ITEM ( ITEM_NAME, QUANTITY, 
       PRICE, INVOICE_ID)
-    values (#{itemId,jdbcType=NUMERIC}, #{itemName,jdbcType=VARCHAR}, #{quantity,jdbcType=NUMERIC}, 
+    values ( #{itemName,jdbcType=VARCHAR}, #{quantity,jdbcType=NUMERIC}, 
       #{price,jdbcType=NUMERIC}, #{invoiceId,jdbcType=NUMERIC})
   </insert>
   <insert id="insertSelective" parameterType="com.doccure.BE.model.InvoiceItem">

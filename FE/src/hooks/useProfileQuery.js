@@ -13,11 +13,7 @@ export const useProfileQuery = () => {
     queryKey: ["profile"],
     queryFn: async () => { return fetchProfile(accessToken) },
 
-    // ...queryConfig
-    //move to query config
-    gcTime: 15 * 60 * 60,
-    staleTime: 5 * 60 * 60,
-    // enabled: Boolean(accessToken),
+
   });
   return { data, isSuccess, isPending, error }
 }

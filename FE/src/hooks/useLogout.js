@@ -1,8 +1,8 @@
-import { getActions } from "../stores/authStore";
+// import { getActions } from "../stores/authStore";
 
-const { setAccessToken } = getActions();
+// const { setAccessToken } = getActions();
 
-export const useLogout = () => {
+// export const useLogout = () => {
 
-  return () => { setAccessToken('') }
-}
+//   return () => { setAccessToken('') }
+// }

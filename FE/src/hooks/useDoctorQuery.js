@@ -8,10 +8,7 @@ export const useDoctorQuery = (id) => {
     queryKey: ["doctor", id],
     queryFn: async () => { return getDoctor(id) },
 
-    // ...queryConfig
-    //move to query config
-    gcTime: 15 * 60 * 60,
-    staleTime: 5 * 60 * 60,
+
     // enabled: Boolean(accessToken),
   });
   return { data, isSuccess, isPending, error }

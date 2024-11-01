@@ -7,11 +7,6 @@ export const useSearchQuery = (input) => {
     queryKey: ['search', input],
     queryFn: async () => { return searchDoctors(input) },
 
-    // ...queryConfig
-    //move to query config
-    gcTime: 15 * 60 * 60,
-    staleTime: 5 * 60 * 60,
-    // enabled: Boolean(accessToken),
   });
   return { data, isSuccess, isPending, error }
 }

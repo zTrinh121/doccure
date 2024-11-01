@@ -120,6 +120,7 @@ export const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+//Can change to custom prop route to allow reuse
 export function RequireOtpVerification({ children, resetStepName }) {
   const resetStep = useResetStep();
   return resetStep === resetStepName ? (

@@ -24,3 +24,8 @@ export const searchDoctors = async (input) => {
 export const getDoctor = async (id) => {
   return axiosInstance.get(`/doctor/${id}`)
 }
+
+export const getDoctorSlots = async(startDate,endDate,doctorId) =>{
+  //yyyy-mm-dd
+  return axiosInstance.get(`doctor/slot/date?id=${doctorId}&start_date=${startDate}&end_date=${endDate}`)
+}

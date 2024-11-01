@@ -18,6 +18,7 @@ import DashboardLayout from '../components/layouts/DashboardLayout';
 import ChangeProfilePage from './routes/app/user/ChangeProfilePage';
 import SearchResultPage from './routes/app/SearchResultPage';
 import DoctorPage from './routes/app/doctor/DoctorPage';
+import DoctorBookingPage from './routes/app/doctor/DoctorBookingPage';
 
 const router = createBrowserRouter([
   {
@@ -93,6 +94,10 @@ const router = createBrowserRouter([
           {
             path: ':doctorId',
             element: <DoctorPage />,
+          },
+          {
+            path: ':doctorId/booking',
+            element: <DoctorBookingPage />,
           },
         ],
       },

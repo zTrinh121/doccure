@@ -1,118 +1,141 @@
 import { useParams } from 'react-router-dom';
-import { useDoctorSlotsQuery } from '../../../../hooks/useSlotsQuery';
+import { useDoctorSlotsQuery } from '../../../../hooks/useDoctorSlotsQuery';
 import { useState } from 'react';
-import { DatePicker, Col, Carousel, Typography, Card } from 'antd';
+import {
+  DatePicker,
+  Col,
+  Carousel,
+  Typography,
+  Card,
+  Button,
+  Row,
+  Flex,
+} from 'antd';
 const { Title } = Typography;
 import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
+import { dayNames } from '../../../../utils/constants';
+import { getDateArr, getKebabDateString } from '../../../../utils/dateUtils';
+import dayjs from 'dayjs';
+import { useRef } from 'react';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
 const { RangePicker } = DatePicker;
 
 const DoctorBookingPage = () => {
   const { doctorId } = useParams(); //for getting doctor id from url param
-  const date = new Date();
-  console.log(date);
-  let day = date.getDate().toString().padStart(2, '0');
-  let month = (date.getMonth() + 1).toString().padStart(2, '0');
-  let year = date.getFullYear();
 
+  //todo: handle both pending and error within the component rather than on the whole page
   // This arrangement can be altered based on how we want the date's format to appear.
-  let currentDate = `${year}-${month}-${day}`;
 
-  const [startDate, setStartDate] = useState(currentDate);
-  const [endDate, setEndDate] = useState(currentDate);
-  const [dateArr, setDateArr] = useState([date]);
-  const [map, setMap] = useState(new Map());
-  const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  const [startDate, setStartDate] = useState(getKebabDateString(new Date()));
+  const [endDate, setEndDate] = useState(getKebabDateString(new Date()));
+  const [range, setRange] = useState([new dayjs(), new dayjs()]);
+  const [dateArr, setDateArr] = useState([new Date()]);
+  const [select, setSelect] = useState('');
+  const carouselRef = useRef(null);
 
-  const incrementDate = (date) => {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-  };
-
-  const getDateArr = (start, end) => {
-    console.log('start', start);
-    let result = [];
-    // result.push(start);
-    let tempStart = start;
-    do {
-      console.log(1, tempStart);
-      result.push(tempStart);
-      tempStart = incrementDate(tempStart);
-    } while (tempStart < end);
-    return result;
-  };
-
-  const onChange = (date, dateString) => {
-    console.log(date, dateString);
+  const onChange = (dates, dateString) => {
+    console.log(dates);
+    console.log(dates[0].$d, dateString);
+    setRange([dates[0], dates[1]]);
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);
 
     setDateArr(getDateArr(new Date(dateString[0]), new Date(dateString[1])));
   };
 
-  const addSlot = (slot) => {
-    setMap((prevMap) => {
-      const newMap = new Map(prevMap);
-      const slots = newMap.get(date) || [];
-      newMap.set(slot.date_slot, [...slots, slot]);
-      return newMap;
-    });
-  };
-
-  const { data, isSuccess, isPending, error } = useDoctorSlotsQuery({
+  const { isPending, isError, data, error } = useDoctorSlotsQuery({
     startDate: startDate,
     endDate: endDate,
     doctorId: doctorId,
   });
+
   //todo: implement error screen, loading screen
   if (isPending) {
     return <IsPendingSpin />;
   }
-  const responseData = data.data.data;
+  const responseData = data?.data.data;
   const tempMap = new Map();
-  var slots = [];
-  responseData.slots.forEach((slot) => {
-    slots = tempMap.get(slot.date_slot) || [];
+  // var slots = [];
+  responseData?.slots.forEach((slot) => {
+    let slots = tempMap.get(slot.date_slot) || [];
     tempMap.set(slot.date_slot, [...slots, slot]);
   });
-  console.log(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`);
 
   return (
-    <div>
-      DoctorBookingPage {doctorId}
-      <div>
-        <RangePicker onChange={onChange} />
+    <Flex justify="center" align="center">
+      <Row style={{ width: '100%' }}>
+        <Col span={2}></Col>
+        <Col span={20}>
+          <div>
+            <DoctorPanel doctorId={doctorId} showBottomSection={false} />
 
-        <Carousel
-          infinite={false}
-          slidesToShow={dateArr.length < 7 ? dateArr.length : 7}
-          arrows
-        >
-          {dateArr.map((date) => (
-            <Col className="text-center" key={date.toString()}>
-              <Title level={5}>{dayNames[date.getDay()]}</Title>
-              <div key={date.toString()}>
-                {date.toLocaleDateString('en-GB')}
-                {(
-                  tempMap.get(
-                    `${date.getFullYear()}-${date.getMonth() + 1}-${date
-                      .getDate()
-                      .toString()
-                      .padStart(2, '0')}`,
-                  ) || []
-                ).map((slot) => (
-                  <Card
-                    className="mx-0.5 my-1 "
-                    size="small"
-                    key={slot.slot_id}
-                  >
-                    {slot.start_time}
-                  </Card>
-                ))}
-              </div>
-            </Col>
-          ))}
-        </Carousel>
-      </div>
-    </div>
+            <div>
+              <RangePicker className="my-5" onChange={onChange} value={range} />
+
+              <Card>
+                <div className="flex items-start justify-center max-w-full overflow-hidden">
+                  {isError ? (
+                    <>No slots available</>
+                  ) : (
+                    <>
+                      <LeftOutlined
+                        className="mt-5"
+                        onClick={() => carouselRef.current.prev()}
+                      />
+                      <div className="w-[80%] max-w-[800px] mx-2">
+                        {/* Width control */}
+                        <Carousel
+                          centerPadding="60px"
+                          ref={carouselRef}
+                          draggable
+                          infinite={false}
+                          slidesToShow={dateArr.length < 7 ? dateArr.length : 7}
+                          arrows={false}
+                          dots={false}
+                        >
+                          {dateArr.map((date) => (
+                            <Col className="text-center" key={date.toString()}>
+                              <Title level={5}>{dayNames[date.getDay()]}</Title>
+
+                              {date.toLocaleDateString('en-GB')}
+                              {(
+                                tempMap.get(getKebabDateString(date)) || []
+                              ).map((slot) => (
+                                <Button
+                                  type={
+                                    select === slot.slot_id ? 'primary' : ''
+                                  }
+                                  block
+                                  className=" my-1 "
+                                  size="small"
+                                  key={slot.slot_id}
+                                  onClick={() => {
+                                    setSelect(slot.slot_id);
+                                  }}
+                                >
+                                  {slot.start_time}
+                                </Button>
+                              ))}
+                            </Col>
+                          ))}
+                        </Carousel>
+                      </div>
+                      <RightOutlined
+                        className="mt-5"
+                        onClick={() => carouselRef.current.next()}
+                      />
+                    </>
+                  )}
+                </div>
+              </Card>
+            </div>
+          </div>
+        </Col>
+
+        <Col span={2}></Col>
+      </Row>
+    </Flex>
   );
 };
 

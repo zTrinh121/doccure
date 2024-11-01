@@ -1,44 +1,47 @@
 import { useState } from 'react';
 import { useSearchQuery } from '../../../hooks/useSearchQuery';
-import { Form, Input } from 'antd';
+import { Form, Input, Flex, Row, Col } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import DoctorPanel from './../../../features/doctors/components/DoctorPanel';
 
 const SearchResultPage = () => {
+  //todo:encode uri
   const query = new URLSearchParams(location.search).get('query');
   const [search, setSearch] = useState(query);
   const onFinish = async (values) => {
     setSearch(values.search);
   };
   const { data = [], isSuccess, isPending, error } = useSearchQuery(search);
-  //another useQuery for spec?
-  console.log(data);
+
   return (
     <div>
-      <Form onFinish={onFinish} autoComplete="off">
-        <Form.Item name="search">
-          <Input prefix={<SearchOutlined />}></Input>
-        </Form.Item>
-      </Form>
-      {JSON.stringify(data)}
-      Results
-      <div>
-        {data.length > 0
-          ? data.map((item) => (
-              <div key={item.doctor_id}>
-                {/* <p>Name: {item.full_name}</p>
-                <p>Experience: {item.experience} years</p>
-                <p>Hospital: {item.hospital}</p>
-                <p>
-                  Price Range: ${item.min_price} - ${item.max_price}
-                </p>
-                <p>Specializations: {item.specializations.join(', ')}</p>
-                Render other properties as needed */}
-                <Link to={`/doctor/${item.doctor_id}`}>{item.doctor_id}</Link>
-              </div>
-            ))
-          : 'No results found.'}
-      </div>
+      <Flex justify="center" align="center">
+        <Row style={{ width: '100%' }}>
+          <Col span={2}></Col>
+          <Col span={20}>
+            <Form onFinish={onFinish} autoComplete="off">
+              <Form.Item name="search">
+                <Input prefix={<SearchOutlined />}></Input>
+              </Form.Item>
+            </Form>
+
+            <div>
+              {data.length > 0
+                ? data.map((item) => (
+                    <div key={item.doctor_id}>
+                      <DoctorPanel
+                        doctorId={item.doctor_id}
+                        viewProfile={true}
+                      />
+                    </div>
+                  ))
+                : 'No results found.'}
+            </div>
+          </Col>
+
+          <Col span={2}></Col>
+        </Row>
+      </Flex>
     </div>
   );
 };

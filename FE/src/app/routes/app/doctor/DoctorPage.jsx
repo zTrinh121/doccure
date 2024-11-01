@@ -7,18 +7,18 @@ import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
 
 const DoctorPage = () => {
   const { doctorId } = useParams(); //for getting doctor id from url param
-  const { data, isSuccess, isPending, error } = useDoctorQuery(doctorId);
-  if (isPending) {
-    return <IsPendingSpin />;
-  }
-  const responseData = data.data.data;
+  // const { data, isSuccess, isPending, error } = useDoctorQuery(doctorId);
+  // if (isPending) {
+  //   return <IsPendingSpin />;
+  // }
+  // const responseData = data.data.data;
   return (
     <div>
       <Row>
         <Col span={4}></Col>
 
         <Col span={16}>
-          <DoctorPanel responseData={responseData} />
+          <DoctorPanel doctorId={doctorId} />
         </Col>
         <Col span={4}></Col>
       </Row>

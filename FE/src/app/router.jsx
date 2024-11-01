@@ -49,17 +49,17 @@ const router = createBrowserRouter([
       {
         path: '/otp',
         element: (
-          // <RequireOtpVerification resetStepName='otp'>
+          <RequireOtpVerification resetStepName='otp'>
           <OtpPage />
-          // </RequireOtpVerification>
+          </RequireOtpVerification>
         ),
       },
       {
         path: '/resetPassword',
         element: (
-          // <RequireOtpVerification resetStepName="password">
+          <RequireOtpVerification resetStepName="password">
           <ResetPasswordPage />
-          // </RequireOtpVerification>
+          </RequireOtpVerification>
         ),
       },
       //end of forget pw

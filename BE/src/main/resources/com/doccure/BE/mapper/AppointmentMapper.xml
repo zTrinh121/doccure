@@ -90,9 +90,19 @@
     from APPOINTMENT
     where APPOINTMENT_ID = #{appointmentId,jdbcType=NUMERIC}
   </select>
+  <select id="selectBySlotId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from APPOINTMENT
+    where SLOT_ID = #{slotId,jdbcType=NUMERIC}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from APPOINTMENT
     where APPOINTMENT_ID = #{appointmentId,jdbcType=NUMERIC}
+  </delete>
+    <delete id="deleteBySlotId" parameterType="java.lang.Long">
+    delete from APPOINTMENT
+    where SLOT_ID = #{slotId,jdbcType=NUMERIC}
   </delete>
   <delete id="deleteByExample" parameterType="com.doccure.BE.model.AppointmentExample">
     delete from APPOINTMENT
@@ -100,11 +110,12 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.doccure.BE.model.Appointment">
-    insert into APPOINTMENT (APPOINTMENT_ID, STATUS, PRICE, 
+  <insert id="insert" parameterType="com.doccure.BE.model.Appointment"
+  useGeneratedKeys="true" keyProperty="appointmentId" keyColumn="APPOINTMENT_ID">
+    insert into APPOINTMENT ( STATUS, PRICE, 
       SLOT_ID, DOCTOR_SPECIALIZATION_ID, USER_ID
       )
-    values (#{appointmentId,jdbcType=NUMERIC}, #{status,jdbcType=VARCHAR}, #{price,jdbcType=NUMERIC}, 
+    values ( 'PENDING_PAYMENT', #{price,jdbcType=NUMERIC}, 
       #{slotId,jdbcType=NUMERIC}, #{doctorSpecializationId,jdbcType=NUMERIC}, #{userId,jdbcType=NUMERIC}
       )
   </insert>
@@ -183,6 +194,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+
+<update id="updateStatusById" parameterType="map">
+    update APPOINTMENT
+    set 
+      STATUS = #{status,jdbcType=VARCHAR}
+   WHERE APPOINTMENT_ID = #{appointmentId,jdbcType=NUMERIC}
+  </update>
+
   <update id="updateByExample" parameterType="map">
     update APPOINTMENT
     set APPOINTMENT_ID = #{row.appointmentId,jdbcType=NUMERIC},
@@ -433,4 +452,6 @@
         a.user_id = #{params.userId, jdbcType=NUMERIC}
         AND a.appointment_id = #{params.appointmentId, jdbcType=VARCHAR}
   </select>
+
+  <!-- Appointment general -->
 </mapper>

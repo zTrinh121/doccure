@@ -90,6 +90,14 @@
     from INVOICE
     where INVOICE_ID = #{invoiceId,jdbcType=NUMERIC}
   </select>
+
+  <select id="selectByAppointmentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from INVOICE
+    where APPOINTMENT_ID = #{appointmentId,jdbcType=NUMERIC}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from INVOICE
     where INVOICE_ID = #{invoiceId,jdbcType=NUMERIC}
@@ -100,12 +108,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.doccure.BE.model.Invoice">
-    insert into INVOICE (INVOICE_ID, INVOICE_NAME, CREATED_AT, 
-      STATUS, APPOINTMENT_ID, UPDATED_AT
+  <insert id="insert" parameterType="com.doccure.BE.model.Invoice"
+  useGeneratedKeys="true" keyProperty="appointmentId" keyColumn="APPOINTMENT_ID">
+    insert into INVOICE ( INVOICE_NAME, CREATED_AT, 
+      STATUS, APPOINTMENT_ID
       )
-    values (#{invoiceId,jdbcType=NUMERIC}, #{invoiceName,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=VARCHAR}, #{appointmentId,jdbcType=NUMERIC}, #{updatedAt,jdbcType=TIMESTAMP}
+    values ( #{invoiceName,jdbcType=VARCHAR}, SYSTIMESTAMP, 
+      'PENDING', #{appointmentId,jdbcType=NUMERIC}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.doccure.BE.model.Invoice">
@@ -183,6 +192,15 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+
+<update id="updateStatusByInvoiceId">
+    update INVOICE
+    set 
+      STATUS = #{status,jdbcType=VARCHAR},
+      UPDATED_AT = SYSTIMESTAMP
+    WHERE INVOICE_ID = #{invoiceId,jdbcType=NUMERIC}
+  </update>
+
   <update id="updateByExample" parameterType="map">
     update INVOICE
     set INVOICE_ID = #{row.invoiceId,jdbcType=NUMERIC},

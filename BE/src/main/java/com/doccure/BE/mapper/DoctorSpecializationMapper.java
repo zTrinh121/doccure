@@ -19,6 +19,9 @@ public interface DoctorSpecializationMapper {
 
     List<DoctorSpecialization> selectByExample(DoctorSpecializationExample example);
 
+    DoctorSpecialization selectByDoctorAndSpecId(@Param("doctorId") Long doctorId,
+     @Param("specializationId") Long specializationId);
+
     DoctorSpecialization selectByPrimaryKey(Long doctorSpecializationId);
 
     int updateByExampleSelective(@Param("row") DoctorSpecialization row, @Param("example") DoctorSpecializationExample example);

@@ -23,8 +23,6 @@ public class DoctorSlotResponse {
     @JsonProperty("full_name")
     private String fullName;
 
-    @JsonProperty("last_name")
-    private String lastName;
     private Long experience;
     private String hospital;
     private String avatar;

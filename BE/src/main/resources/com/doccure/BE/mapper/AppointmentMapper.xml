@@ -257,48 +257,180 @@
         <id column="SPECIALIZATION_ID" jdbcType="NUMERIC" property="specializationId" />
       <result column="SPECIALIZATION_NAME" jdbcType="VARCHAR" property="specializationName" />
     </association>
+
+     <association property="invoice" javaType="com.doccure.BE.model.Invoice">
+      <id column="INVOICE_ID" jdbcType="NUMERIC" property="invoiceId" />
+      <result column="INVOICE_NAME" jdbcType="VARCHAR" property="invoiceName" />
+      <result column="CREATED_AT" jdbcType="TIMESTAMP" property="createdAt" />
+      <result column="invoice_status" jdbcType="VARCHAR" property="status" />
+      <result column="APPOINTMENT_ID" jdbcType="NUMERIC" property="appointmentId" />
+      <result column="UPDATED_AT" jdbcType="TIMESTAMP" property="updatedAt" />
+     </association>
   </resultMap>
 
-    <select id="getSlotDetailWithStatus" parameterType="map" resultMap="BaseResultMapDetail">
+  <select id="getAppointmentDetailWithStatus" parameterType="map" resultMap="BaseResultMapDetail">
       SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
-              s.slot_id,s.start_datetime as DATE_SLOT, s.start_datetime, s.end_datetime,
+              s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
               d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
-              sp.specialization_name, sp.specialization_id
+              sp.specialization_name, sp.specialization_id,
+              i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT
       FROM appointment a
       JOIN slot s ON s.slot_id = a.slot_id
       JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
       JOIN specialization sp ON ds.specialization_id = sp.specialization_id
       JOIN doctor d ON ds.doctor_id = d.doctor_id
+      JOIN invoice i ON i.appointment_id = a.appointment_id
       WHERE 
         a.user_id = #{params.userId, jdbcType=NUMERIC}
         AND a.status = #{params.status, jdbcType=VARCHAR}
   </select>
 
-  <select id="getSlotDetailWithStatusByDate" parameterType="map" resultMap="BaseResultMapDetail">
+   <select id="getUpcomingAppointmentDetails" parameterType="Long" resultMap="BaseResultMapDetail">
       SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
-              s.slot_id,s.start_datetime as DATE_SLOT, s.start_datetime, s.end_datetime,
+              s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
               d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
-              sp.specialization_name, sp.specialization_id
+              sp.specialization_name, sp.specialization_id,
+              i.invoice_id, i.invoice_name, i.status as invoice_status
       FROM appointment a
       JOIN slot s ON s.slot_id = a.slot_id
       JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
       JOIN specialization sp ON ds.specialization_id = sp.specialization_id
       JOIN doctor d ON ds.doctor_id = d.doctor_id
+      JOIN invoice i ON i.appointment_id = a.appointment_id
+      WHERE 
+        a.user_id = #{userId, jdbcType=NUMERIC}
+        AND a.status = 'BOOKED'
+        <![CDATA[
+          AND s.start_datetime >= SYSTIMESTAMP
+        ]]>
+  </select>
+
+  <select id="getAppointmentDetailWithStatusByDate" parameterType="map" resultMap="BaseResultMapDetail">
+      SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+              s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
+              d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+              sp.specialization_name, sp.specialization_id,
+              i.invoice_id, i.invoice_name, i.status as invoice_status
+      FROM appointment a
+      JOIN slot s ON s.slot_id = a.slot_id
+      JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+      JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+      JOIN doctor d ON ds.doctor_id = d.doctor_id
+      JOIN invoice i ON i.appointment_id = a.appointment_id
       WHERE 
         a.user_id = #{params.userId, jdbcType=NUMERIC}
         AND a.status = #{params.status, jdbcType=VARCHAR}
-        <if test="startDate != null and endDate != null">
+        <if test="params.startDate != null and params.endDate != null">
           AND s.start_datetime BETWEEN #{params.startDate, jdbcType=DATE} AND #{params.endDate, jdbcType=DATE}
         </if>
-        <if test="startDate != null and endDate == null">
+        <if test="params.startDate != null and params.endDate == null">
           <![CDATA[
           AND s.start_datetime >= #{params.startDate, jdbcType=DATE}
           ]]>
         </if>
-        <if test="startDate == null and endDate != null">
+        <if test="params.startDate == null and params.endDate != null">
           <![CDATA[
           AND s.start_datetime <= #{params.endDate, jdbcType=DATE}
           ]]>
         </if>
+  </select>
+
+<select id="getUpcomingAppointmentDetailWithStatusByDate" parameterType="Long" resultMap="BaseResultMapDetail">
+      SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+              s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
+              d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+              sp.specialization_name, sp.specialization_id,
+              i.invoice_id, i.invoice_name, i.status as invoice_status
+      FROM appointment a
+      JOIN slot s ON s.slot_id = a.slot_id
+      JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+      JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+      JOIN doctor d ON ds.doctor_id = d.doctor_id
+      JOIN invoice i ON i.appointment_id = a.appointment_id
+      WHERE 
+        a.user_id = #{userId, jdbcType=NUMERIC}
+        AND a.status = 'BOOKED'
+        <if test="params.startDate != null and params.endDate != null">
+          AND s.start_datetime BETWEEN #{params.startDate, jdbcType=DATE} AND #{params.endDate, jdbcType=DATE}
+        </if>
+        <if test="params.startDate != null and params.endDate == null">
+          <![CDATA[
+          AND s.start_datetime >= #{params.startDate, jdbcType=DATE}
+          ]]>
+        </if>
+        <if test="params.startDate == null and params.endDate != null">
+          <![CDATA[
+          AND s.start_datetime <= #{params.endDate, jdbcType=DATE}
+          ]]>
+        </if>
+        <![CDATA[
+          AND s.start_datetime >= SYSTIMESTAMP
+        ]]>
+  </select>
+
+  <select id="getAppointmentDetailWithStatusByKeyword" parameterType="map" resultMap="BaseResultMapDetail">
+      SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+              s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
+              d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+              sp.specialization_name, sp.specialization_id,
+              i.invoice_id, i.invoice_name, i.status as invoice_status
+      FROM appointment a
+      JOIN slot s ON s.slot_id = a.slot_id
+      JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+      JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+      JOIN doctor d ON ds.doctor_id = d.doctor_id
+      JOIN invoice i ON i.appointment_id = a.appointment_id
+      WHERE 
+        a.user_id = #{params.userId, jdbcType=NUMERIC}
+        AND a.status = #{params.status, jdbcType=VARCHAR}
+        AND (
+            UPPER(d.first_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+            OR UPPER(d.last_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+            OR UPPER(d.hospital) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+            OR UPPER(sp.specialization_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+        )
+  </select>
+
+  <select id="getUpcomingAppointmentDetailWithStatusByKeyword" parameterType="map" resultMap="BaseResultMapDetail">
+      SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+              s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
+              d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+              sp.specialization_name, sp.specialization_id,
+              i.invoice_id, i.invoice_name, i.status as invoice_status
+      FROM appointment a
+      JOIN slot s ON s.slot_id = a.slot_id
+      JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+      JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+      JOIN doctor d ON ds.doctor_id = d.doctor_id
+      JOIN invoice i ON i.appointment_id = a.appointment_id
+      WHERE 
+        a.user_id = #{params.userId, jdbcType=NUMERIC}
+        AND a.status = #{params.status, jdbcType=VARCHAR}
+        AND (
+            UPPER(d.first_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+            OR UPPER(d.last_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+            OR UPPER(d.hospital) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+            OR UPPER(sp.specialization_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+        )
+        <![CDATA[
+          AND s.start_datetime >= SYSTIMESTAMP
+        ]]>
+  </select>
+
+  <select id="getAppointmentDetailById" parameterType="map" resultMap="BaseResultMapDetail">
+      SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+              s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
+              d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+              sp.specialization_name, sp.specialization_id,
+              i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT
+      FROM appointment a
+      JOIN slot s ON s.slot_id = a.slot_id
+      JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+      JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+      JOIN doctor d ON ds.doctor_id = d.doctor_id
+      JOIN invoice i ON i.appointment_id = a.appointment_id
+      WHERE 
+        a.user_id = #{params.userId, jdbcType=NUMERIC}
+        AND a.appointment_id = #{params.appointmentId, jdbcType=VARCHAR}
   </select>
 </mapper>

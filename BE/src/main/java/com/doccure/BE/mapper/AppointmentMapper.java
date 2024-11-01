@@ -34,6 +34,11 @@ public interface AppointmentMapper {
 
     int updateByPrimaryKey(Appointment row);
 
-    List<AppointmentDetail> getSlotDetailWithStatus(@Param("params") Map<String, Object> params, RowBounds bounds);
-    List<AppointmentDetail> getSlotDetailWithStatusByDate(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getAppointmentDetailWithStatus(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getUpcomingAppointmentDetails(@Param("userId") Long userId, RowBounds bounds);
+    List<AppointmentDetail> getAppointmentDetailWithStatusByDate(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getUpcomingAppointmentDetailWithStatusByDate(@Param("userId") Long userId, RowBounds bounds);
+    List<AppointmentDetail> getAppointmentDetailWithStatusByKeyword(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getUpcomingAppointmentDetailWithStatusByKeyword(@Param("params") Map<String, Object> params, RowBounds bounds);
+    AppointmentDetail getAppointmentDetailById(@Param("params") Map<String, Object> params);
 }

@@ -4,7 +4,6 @@ import com.doccure.BE.filter.JwtAuthenticationFilter;
 import com.doccure.BE.service.serviceImpl.UserDetailsServiceImp;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -52,7 +51,7 @@ public class SecurityConfiguration {
                                 "/api/v1/auth/verify-mail/**",
                                 "/api/v1/auth/forgot-password/**",
                                 "/api/v1/doctor/**",
-                                "/api/v1/specialization/**")
+                                "/api/v1/specialization/**"    )
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())

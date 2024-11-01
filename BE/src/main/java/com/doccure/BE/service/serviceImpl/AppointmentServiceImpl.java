@@ -25,16 +25,21 @@ import java.util.Map;
 public class AppointmentServiceImpl  implements AppointmentService {
     private final AppointmentMapper appointmentMapper;
     private final TokenMapper tokenMapper;
+
     @Override
-    public List<AppointmentDetailResponse> getSlotDetailWithStatus(String status, int offset, int limit, HttpServletRequest request) throws Exception {
+    public List<AppointmentDetailResponse> getAppointmentDetailWithStatus(String status, int offset, int limit, HttpServletRequest request) throws Exception {
         StatusAppointmentType statusAppointmentType = getStatusAppointmentFromString(status);
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("userId", accessTokenUser.getUserId());
-        params.put("status", statusAppointmentType.name());
-        List<AppointmentDetail> appointmentDetails = appointmentMapper.getSlotDetailWithStatus(params, new RowBounds(offset, limit));
+        List<AppointmentDetail> appointmentDetails;
+        if(statusAppointmentType.name().equals("Upcoming")){
+            appointmentDetails = appointmentMapper.getUpcomingAppointmentDetails(accessTokenUser.getUserId(), new RowBounds(offset, limit));
+        }else{
+            Map<String, Object> params = new HashMap<>();
+            params.put("userId", accessTokenUser.getUserId());
+            params.put("status", statusAppointmentType.name());
+            appointmentDetails = appointmentMapper.getAppointmentDetailWithStatus(params, new RowBounds(offset, limit));
+        }
 
         if(appointmentDetails.isEmpty()) throw new DataNotFoundException("No appointment detail found for user ID = " + accessTokenUser.getUserId());
         return appointmentDetails
@@ -44,31 +49,80 @@ public class AppointmentServiceImpl  implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentDetailResponse> getSlotDetailWithStatusByDate(String status, LocalDate startDate, LocalDate endDate, int offset, int limit, HttpServletRequest request) throws Exception {
+    public List<AppointmentDetailResponse> getAppointmentDetailWithStatusByDate(String status, LocalDate startDate, LocalDate endDate, int offset, int limit, HttpServletRequest request) throws Exception {
         StatusAppointmentType statusAppointmentType = getStatusAppointmentFromString(status);
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
+        List<AppointmentDetail> appointmentDetails;
+        if(statusAppointmentType.name().equals("Upcoming")){
+            appointmentDetails = appointmentMapper.getUpcomingAppointmentDetailWithStatusByDate(accessTokenUser.getUserId(), new RowBounds(offset, limit));
+        }else{
+            Map<String, Object> params = new HashMap<>();
+            params.put("userId", accessTokenUser.getUserId());
+            params.put("status", statusAppointmentType.name());
+            params.put("startDate", startDate);
+            params.put("endDate", endDate);
+            appointmentDetails = appointmentMapper.getAppointmentDetailWithStatusByDate(params, new RowBounds(offset, limit));
+        }
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("userId", accessTokenUser.getUserId());
-        params.put("status", statusAppointmentType.name());
-        params.put("startDate", startDate);
-        params.put("endDate", endDate);
-        List<AppointmentDetail> appointmentDetails = appointmentMapper.getSlotDetailWithStatus(params, new RowBounds(offset, limit));
-
-        if(appointmentDetails.isEmpty()) throw new DataNotFoundException("No appointment detail found for user ID = " + accessTokenUser.getUserId());
+        if(appointmentDetails.isEmpty()) throw new DataNotFoundException(
+                String.format("No appointment found for user ID = %d in range from %s to %s",
+                accessTokenUser.getUserId(),
+                startDate,
+                endDate)
+        );
         return appointmentDetails
                 .stream()
                 .map(AppointmentDetailResponse::fromAppointmentDetail)
                 .toList();
 
+    }
+
+    @Override
+    public List<AppointmentDetailResponse> getAppointmentDetailWithStatusByKeyword(String status, String keyword, int offset, int limit, HttpServletRequest request) throws Exception {
+        StatusAppointmentType statusAppointmentType = getStatusAppointmentFromString(status);
+        String token = TokenUtil.checkToken(request);
+        Token accessTokenUser = tokenMapper.findByAccessToken(token);
+        List<AppointmentDetail> appointmentDetails;
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", accessTokenUser.getUserId());
+        params.put("status", statusAppointmentType.name());
+        params.put("keyword", keyword);
+        if(statusAppointmentType.name().equals("Upcoming")){
+            appointmentDetails = appointmentMapper.getUpcomingAppointmentDetailWithStatusByKeyword(params, new RowBounds(offset, limit));
+        }else{
+            appointmentDetails = appointmentMapper.getAppointmentDetailWithStatusByKeyword(params, new RowBounds(offset, limit));
+        }
+
+        if(appointmentDetails.isEmpty()) throw new DataNotFoundException(
+                String.format("No appointment found for user ID = %d with keyword = %s",
+                        accessTokenUser.getUserId(),
+                        keyword)
+        );
+        return appointmentDetails
+                .stream()
+                .map(AppointmentDetailResponse::fromAppointmentDetail)
+                .toList();
+    }
+
+    @Override
+    public AppointmentDetailResponse getAppointmentDetailById(Long appointmentId, HttpServletRequest request) throws Exception {
+        String token = TokenUtil.checkToken(request);
+        Token accessTokenUser = tokenMapper.findByAccessToken(token);
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", accessTokenUser.getUserId());
+        params.put("appointmentId", appointmentId);
+        AppointmentDetail appointmentDetail = appointmentMapper.getAppointmentDetailById(params);
+        if(appointmentDetail == null) throw new DataNotFoundException("No appointment detail found with ID = " + appointmentId);
+        return AppointmentDetailResponse.fromAppointmentDetail(appointmentDetail);
     }
 
     public StatusAppointmentType getStatusAppointmentFromString(String status) throws Exception {
         try {
             return StatusAppointmentType.fromString(status);
         } catch (IllegalArgumentException e) {
-            throw new DataNotFoundException("Invalid status parameter.Type value (booked, canceled, pendingPayment).");
+            throw new DataNotFoundException("Invalid status parameter.Type value (booked, canceled, pendingPayment, upcoming).");
         }
 
     }

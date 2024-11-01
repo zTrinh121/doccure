@@ -87,3 +87,22 @@ INSERT INTO RATING (COMMENT_RATING, RATING, CREATED_AT, APPOINTMENT_ID)
 VALUES ('Doctor was helpful but waited too long', 4, SYSTIMESTAMP, 4);
 INSERT INTO RATING (COMMENT_RATING, RATING, CREATED_AT, APPOINTMENT_ID) 
 VALUES ('Satisfied with the consultation', 4, SYSTIMESTAMP, 5);
+
+
+INSERT INTO invoice (invoice_name, created_at, status, APPOINTMENT_ID)
+VALUES('Invoice 1', SYSTIMESTAMP, 'SUCCESS', 1);
+INSERT INTO invoice (invoice_name, created_at, status, APPOINTMENT_ID)
+VALUES('Invoice 2', SYSTIMESTAMP, 'FAIL', 2);
+INSERT INTO invoice (invoice_name, created_at, status, APPOINTMENT_ID)
+VALUES('Invoice 3', SYSTIMESTAMP, 'PENDING', 3);
+INSERT INTO invoice (invoice_name, created_at, status, APPOINTMENT_ID)
+VALUES('Invoice 4', SYSTIMESTAMP, 'SUCCESS', 4);
+INSERT INTO invoice (invoice_name, created_at, status, APPOINTMENT_ID)
+VALUES('Invoice 5', SYSTIMESTAMP, 'SUCCESS', 5);
+
+INSERT INTO invoice_item (item_name, quantity, price, Invoice_id)
+VALUES('Appoinment 1 hour for doctor', 1, 500, 1);
+INSERT INTO invoice_item (item_name, quantity, price, Invoice_id)
+VALUES('Appoinment 1 hour for doctor', 1, 200, 2);
+INSERT INTO invoice_item (item_name, quantity, price, Invoice_id)
+VALUES('Extra fee for medicine', 1, 200, 2);

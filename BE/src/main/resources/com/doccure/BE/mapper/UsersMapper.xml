@@ -399,6 +399,12 @@
     WHERE USER_NAME = #{userName,jdbcType=VARCHAR}
   </select>
 
+  <select id="findUserById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT *
+    FROM USERS
+    WHERE USER_ID = #{userId,jdbcType=NUMERIC}
+  </select>
+
   <select id="findUserDifferentByUserName" resultMap="BaseResultMap">
     SELECT *
     FROM USERS

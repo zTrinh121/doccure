@@ -3,7 +3,8 @@ package com.doccure.BE.enums;
 public enum StatusAppointmentType {
     BOOKED("booked"),
     CANCELED("canceled"),
-    PENDING_PAYMENT("pendingPayment");
+    PENDING_PAYMENT("pendingPayment"),
+    UPCOMING("upcoming");
 
     private final String type;
 

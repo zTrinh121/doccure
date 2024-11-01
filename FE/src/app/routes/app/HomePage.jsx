@@ -8,10 +8,12 @@ import { useAccessToken } from '../../../stores/authStore';
 import { useState } from 'react';
 import { Form } from 'antd';
 import { searchDoctors } from '../../../lib/doctor';
+import { useNavigate } from 'react-router-dom';
 
 // import { useAuthStore } from '../../../stores/authStore';
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const contentStyle = {
     margin: 0,
     height: '160px',
@@ -30,6 +32,9 @@ const HomePage = () => {
 
   const onFinish = async (values) => {
     searchDoctors(values.search);
+    if (values.search.trim()) {
+      navigate(`/search?query=${encodeURIComponent(values.search)}`);
+    }
   };
 
   return (
@@ -63,22 +68,6 @@ const HomePage = () => {
           <CircleCard
             title="General Consultation"
             description="Comprehensive health checks for all ages."
-          />
-          <CircleCard
-            title="Pediatrics"
-            description="Specialized care for infants and children."
-          />
-          <CircleCard
-            title="Dermatology"
-            description="Expert skin care and treatment."
-          />
-          <CircleCard
-            title="Cardiology"
-            description="Advanced heart health services."
-          />
-          <CircleCard
-            title="Orthopedics"
-            description="Bone and joint care solutions."
           />
         </Carousel>
       </div>

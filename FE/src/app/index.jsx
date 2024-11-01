@@ -56,10 +56,9 @@ function App() {
           },
         }}
       >
-        <QueryClientProvider client={queryClient}>
+ 
           <RouterProvider router={router} />
           <ReactQueryDevtools />
-        </QueryClientProvider>
       </ConfigProvider>
     </>
   );

@@ -13,7 +13,11 @@ import {
 } from 'antd';
 const { Header, Content, Footer } = Layout;
 const { Paragraph } = Typography;
-import { LoginOutlined, UserAddOutlined } from '@ant-design/icons';
+import {
+  LoginOutlined,
+  UserAddOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -40,10 +44,14 @@ const HomeLayout = ({ children }) => {
       </div>
     );
   }
+  let username;
+  if (accessToken) {
+    username = getUsernameFromToken(accessToken);
+  }
 
-  let username = getUsernameFromToken(accessToken);
-
-  // const logout = useLogout();
+  const onClick = ({ key }) => {
+    navigate(`${key}`);
+  };
 
   const handleLogout = async () => {
     try {
@@ -67,6 +75,7 @@ const HomeLayout = ({ children }) => {
         }}
       >
         <Row
+          align="center"
           style={{
             width: '100vw',
           }}
@@ -85,16 +94,17 @@ const HomeLayout = ({ children }) => {
           </Col>
           <Col span={14}>
             <Menu
+              onClick={onClick}
               style={{
                 backgroundColor: '#E2E8F0',
                 flex: 1,
                 minWidth: 0,
               }}
               mode="horizontal"
-              defaultSelectedKeys={['2']}
+              defaultSelectedKeys={['']}
               items={[
-                { key: 'home', label: 'Home' },
-                { key: 'home2', label: 'Home2' },
+                { key: '', label: 'Home' },
+                { key: 'search', label: 'Search' },
               ]}
             />
           </Col>
@@ -160,7 +170,8 @@ const HomeLayout = ({ children }) => {
                 >
                   <Avatar
                     size={30}
-                    src={<img src={data.data.data.avatar} alt="avatar" />}
+                    icon={<UserOutlined />}
+                    src={data.data.data.avatar}
                   />
                 </Popover>
               )}

@@ -23,4 +23,6 @@ public class DoctorFull {
     private BigDecimal maxPrice;
     private BigDecimal minPrice;
     private List<Specialization> specializations;
+
+
 }

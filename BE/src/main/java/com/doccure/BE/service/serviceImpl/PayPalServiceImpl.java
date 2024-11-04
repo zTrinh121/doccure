@@ -6,6 +6,7 @@ import com.doccure.BE.mapper.*;
 import com.doccure.BE.model.*;
 import com.doccure.BE.model.Invoice;
 import com.doccure.BE.model.InvoiceItem;
+import com.doccure.BE.service.PayPalService;
 import com.doccure.BE.util.TokenUtil;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
@@ -20,7 +21,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class PayPalServiceImpl {
+public class PayPalServiceImpl implements PayPalService {
     private final APIContext apiContext;
     private final AppointmentMapper appointmentMapper;
     private final TokenMapper tokenMapper;
@@ -30,6 +31,7 @@ public class PayPalServiceImpl {
     private final InvoiceMapper invoiceMapper;
     private final InvoiceItemMapper invoiceItemMapper;
 
+    @Override
     public Payment createPayment(
             Long slotId,
             Long specializationId,
@@ -37,7 +39,7 @@ public class PayPalServiceImpl {
         Slot slot = slotMapper.selectByPrimaryKey(slotId);
         Appointment appointment = manageSlotForAppointment(slot.getDoctorId(), slotId, specializationId, request);
         Invoice invoice = insertInvoiceAfterAppointment(appointment.getAppointmentId());
-        Double total = appointment.getPrice().doubleValue();
+        double total = appointment.getPrice().doubleValue();
         String description = "Invoice for appointment " + appointment.getAppointmentId();
 
         String currency = "THB";
@@ -59,10 +61,10 @@ public class PayPalServiceImpl {
         transactions.add(transaction);
 
         Payer payer = new Payer();
-        payer.setPaymentMethod(method.toString());
+        payer.setPaymentMethod(method);
 
         Payment payment = new Payment();
-        payment.setIntent(intent.toString());
+        payment.setIntent(intent);
         payment.setPayer(payer);
         payment.setTransactions(transactions);
         RedirectUrls redirectUrls = new RedirectUrls();
@@ -73,6 +75,7 @@ public class PayPalServiceImpl {
         return payment.create(apiContext);
     }
 
+    @Override
     public Payment executePayment(String paymentId, String payerId) throws PayPalRESTException{
         Payment payment = new Payment();
         payment.setId(paymentId);
@@ -136,20 +139,23 @@ public class PayPalServiceImpl {
         return appointment;
     }
 
+    @Override
     public com.doccure.BE.model.Invoice insertInvoiceAfterAppointment(Long appointmentId){
         com.doccure.BE.model.Invoice invoice = new Invoice();
-        invoice.setInvoiceName("Invoice of appoinment = " + appointmentId);
+        invoice.setInvoiceName("Invoice of appointment = " + appointmentId);
         invoice.setAppointmentId(appointmentId);
         invoiceMapper.insert(invoice);
         invoice = invoiceMapper.selectByAppointmentId(appointmentId);
         return invoice;
     }
 
+    @Override
     public void cancelPayment(Long appointmentId, Long invoiceId){
         appointmentMapper.deleteByPrimaryKey(appointmentId);
         invoiceMapper.deleteByPrimaryKey(invoiceId);
     }
 
+    @Override
     public AppointmentDetail successPayment(Long appointmentId, Long invoiceId, Long slotId, Long userId){
         appointmentMapper.updateStatusById("BOOKED", appointmentId);
         invoiceMapper.updateStatusByInvoiceId("SUCCESS", invoiceId);

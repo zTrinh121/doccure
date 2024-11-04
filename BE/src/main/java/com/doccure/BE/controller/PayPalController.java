@@ -2,7 +2,7 @@ package com.doccure.BE.controller;
 
 import com.doccure.BE.model.AppointmentDetail;
 import com.doccure.BE.response.ResponseHandler;
-import com.doccure.BE.service.serviceImpl.PayPalServiceImpl;
+import com.doccure.BE.service.PayPalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("${apiPrefix}/paypal")
 @RequiredArgsConstructor
 public class PayPalController {
-    private final PayPalServiceImpl payPalService;
+    private final PayPalService payPalService;
 
     public static final String SUCCESS_URL = "/pay/success";
     public static final String CANCEL_URL = "/pay/cancel";

@@ -100,11 +100,11 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.doccure.BE.model.Doctor">
-    insert into DOCTOR (DOCTOR_ID, FIRST_NAME, LAST_NAME, 
-      EXPERIENCE, HOSPITAL, AVATAR
+  <insert id="insert" parameterType="com.doccure.BE.model.Doctor"
+  useGeneratedKeys="true" keyProperty="doctorId" keyColumn="DOCTOR_ID">
+    insert into DOCTOR (FIRST_NAME, LAST_NAME, EXPERIENCE, HOSPITAL, AVATAR
       )
-    values (#{doctorId,jdbcType=NUMERIC}, #{firstName,jdbcType=VARCHAR}, #{lastName,jdbcType=VARCHAR}, 
+    values (#{firstName,jdbcType=VARCHAR}, #{lastName,jdbcType=VARCHAR}, 
       #{experience,jdbcType=NUMERIC}, #{hospital,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}
       )
   </insert>

@@ -52,6 +52,7 @@ public class SecurityConfiguration {
                                 "/api/v1/auth/forgot-password/**",
                                 "/api/v1/doctor/**",
                                 "/api/v1/specialization/**" ,
+                                "/api/v1/slot/**",
                                 "/api/v1/paypal/pay/**" )
                                 .permitAll()
                                 .anyRequest()

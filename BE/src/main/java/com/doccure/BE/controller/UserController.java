@@ -4,6 +4,7 @@ import com.doccure.BE.model.Users;
 import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.UsersService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<Object> updateUser(
-            @RequestBody Users updateUser,
+            @RequestBody @Valid Users updateUser,
             @PathVariable("userId") Long userId,
             BindingResult result) throws Exception {
          if (result.hasErrors()) {

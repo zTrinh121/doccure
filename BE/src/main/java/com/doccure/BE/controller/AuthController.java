@@ -10,6 +10,7 @@ import com.doccure.BE.service.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class AuthController {
     }
 
     @PutMapping("/change-password")
-    public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordResquest changePassword,
+    public ResponseEntity<Object> changePassword(@RequestBody @Valid ChangePasswordResquest changePassword,
                                                  BindingResult result,
                                                  HttpServletRequest request) throws Exception {
         if (result.hasErrors()) {

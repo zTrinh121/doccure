@@ -1,24 +1,78 @@
 package com.doccure.BE.controller;
 
 import com.doccure.BE.exception.DataNotFoundException;
+import com.doccure.BE.model.Doctor;
+import com.doccure.BE.request.DoctorInsertRequest;
 import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.DoctorService;
 import com.doccure.BE.util.DateFormatUtil;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping("${apiPrefix}/doctor")
 @RequiredArgsConstructor
 public class DoctorController {
     private final DoctorService doctorService;
+
+    @PostMapping("/insert")
+    public ResponseEntity<Object> insertDoctorWithSpecialization(@RequestBody @Valid DoctorInsertRequest doctorInsertRequest,
+                                                       BindingResult result) throws Exception {
+        if(result.hasErrors()){
+            List<String> errorMessages =  result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+
+            return ResponseHandler.responseBuilder("There some errors while inputting data",
+                    HttpStatus.BAD_REQUEST,
+                    errorMessages);
+        }
+        return ResponseHandler.responseBuilder("Insert successfully",
+                HttpStatus.OK,
+                doctorService.insert(doctorInsertRequest));
+    }
+
+    @PutMapping("/avatar/{doctorId}")
+    public ResponseEntity<Object> updateAvatar(@PathVariable("doctorId") Long doctorId,
+                                             @RequestPart final MultipartFile file
+    ) throws Exception {
+
+        return ResponseHandler.responseBuilder("Update avatar successfully for doctor id = " + doctorId,
+                HttpStatus.OK,
+                doctorService.updateAvatar( doctorId, file));
+    }
+
+    @PutMapping("/update/{doctorId}")
+    public ResponseEntity<Object> update(@RequestBody @Valid DoctorInsertRequest doctor,
+                                               @PathVariable("doctorId") Long doctorId,
+                                               BindingResult result
+                                               ) throws Exception {
+        if(result.hasErrors()){
+            List<String> errorMessages =  result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+
+            return ResponseHandler.responseBuilder("There some errors while inputting data",
+                    HttpStatus.BAD_REQUEST,
+                    errorMessages);
+        }
+
+        return ResponseHandler.responseBuilder("Update doctor successfully for doctor id = " + doctorId,
+                HttpStatus.OK,
+                doctorService.update(doctor, doctorId));
+    }
 
 
     //Doctors with specialization

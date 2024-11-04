@@ -3,6 +3,7 @@ import java.math.BigDecimal;
 
 import com.doccure.BE.model.DoctorFull;
 import com.doccure.BE.model.Specialization;
+import com.doccure.BE.request.DoctorInsertRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -19,19 +20,15 @@ import java.util.List;
 public class DoctorFullResponse {
     @JsonProperty("doctor_id")
     private Long doctorId;
-
     @JsonProperty("full_name")
     private String fullName;
-
     private Long experience;
     private String hospital;
     private String avatar;
     @JsonProperty("max_price")
     private BigDecimal maxPrice;
-
     @JsonProperty("min_price")
     private BigDecimal minPrice;
-
 
     private List<Specialization> specializations;
 
@@ -48,4 +45,7 @@ public class DoctorFullResponse {
                 .specializations(doctorFull.getSpecializations())
                 .build();
     }
+
+
+
 }

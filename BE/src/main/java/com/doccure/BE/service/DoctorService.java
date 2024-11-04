@@ -1,16 +1,24 @@
 package com.doccure.BE.service;
 
 import com.doccure.BE.exception.DataNotFoundException;
+import com.doccure.BE.model.Doctor;
 import com.doccure.BE.model.DoctorRating;
+import com.doccure.BE.request.DoctorInsertRequest;
 import com.doccure.BE.response.DoctorFullResponse;
+import com.doccure.BE.response.DoctorInsertResponse;
 import com.doccure.BE.response.DoctorRatingResponse;
 import com.doccure.BE.response.DoctorSlotResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
 
 
 public interface DoctorService {
+    DoctorInsertResponse insert(DoctorInsertRequest doctorInsertRequest);
+    DoctorInsertResponse update(DoctorInsertRequest doctorInsertRequest,Long doctorId) throws Exception;
+    Doctor updateAvatar(Long doctorId, MultipartFile file) throws Exception;
+
     //Doctor with specializations
     List<DoctorFullResponse> getAllDoctor() throws DataNotFoundException;
     DoctorFullResponse getDoctorById(Long doctorId) throws DataNotFoundException;

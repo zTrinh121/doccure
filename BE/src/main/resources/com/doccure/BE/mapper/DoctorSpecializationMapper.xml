@@ -106,11 +106,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.doccure.BE.model.DoctorSpecialization">
-    insert into DOCTOR_SPECIALIZATION (DOCTOR_SPECIALIZATION_ID, DOCTOR_ID, 
-      SPECIALIZATION_ID)
-    values (#{doctorSpecializationId,jdbcType=NUMERIC}, #{doctorId,jdbcType=NUMERIC}, 
-      #{specializationId,jdbcType=NUMERIC})
+  <insert id="insert" parameterType="com.doccure.BE.model.DoctorSpecialization"
+  useGeneratedKeys="true" keyProperty="doctorSpecializationId" keyColumn="DOCTOR_SPECIALIZATION_ID">
+    insert into DOCTOR_SPECIALIZATION (DOCTOR_ID, SPECIALIZATION_ID)
+    values (#{doctorId,jdbcType=NUMERIC}, #{specializationId,jdbcType=NUMERIC})
   </insert>
   <insert id="insertSelective" parameterType="com.doccure.BE.model.DoctorSpecialization">
     insert into DOCTOR_SPECIALIZATION

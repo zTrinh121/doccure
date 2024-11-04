@@ -1,7 +1,14 @@
 package com.doccure.BE.model;
 
+import com.doccure.BE.request.SpecializationRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Specialization {
     @JsonProperty("specialization_id")
     private Long specializationId;
@@ -9,19 +16,8 @@ public class Specialization {
     @JsonProperty("specialization_name")
     private String specializationName;
 
-    public Long getSpecializationId() {
-        return specializationId;
-    }
 
-    public void setSpecializationId(Long specializationId) {
-        this.specializationId = specializationId;
-    }
-
-    public String getSpecializationName() {
-        return specializationName;
-    }
-
-    public void setSpecializationName(String specializationName) {
-        this.specializationName = specializationName == null ? null : specializationName.trim();
+    public static Specialization fromSpecializationRequest(SpecializationRequest specializationRequest){
+        return Specialization.builder().specializationName(specializationRequest.getSpecializationName()).build();
     }
 }

@@ -1,24 +1,28 @@
 package com.doccure.BE.service.serviceImpl;
 
+import com.cloudinary.Cloudinary;
 import com.doccure.BE.enums.OrderType;
 import com.doccure.BE.enums.RatingType;
 import com.doccure.BE.exception.DataIntegrityViolationException;
 import com.doccure.BE.exception.DataNotFoundException;
 import com.doccure.BE.mapper.DoctorMapper;
+import com.doccure.BE.mapper.DoctorSpecializationMapper;
 import com.doccure.BE.mapper.SlotMapper;
+import com.doccure.BE.mapper.SpecializationMapper;
 import com.doccure.BE.model.*;
-import com.doccure.BE.response.DoctorFullResponse;
-import com.doccure.BE.response.DoctorRatingResponse;
-import com.doccure.BE.response.DoctorSlotResponse;
+import com.doccure.BE.request.DoctorInsertRequest;
+import com.doccure.BE.request.DoctorSpecializationRequest;
+import com.doccure.BE.response.*;
 import com.doccure.BE.service.DoctorService;
+import com.doccure.BE.util.CloudinaryUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +30,44 @@ import java.util.stream.Collectors;
 public class DoctorServiceImpl implements DoctorService {
     private final DoctorMapper doctorMapper;
     private final SlotMapper slotMapper;
+    private  final DoctorSpecializationMapper doctorSpecializationMapper;
+    private final SpecializationMapper specializationMapper;
+    private final Cloudinary cloudinary;
     private final float MAX_RATING = 5;
+
+    @Override
+    public DoctorInsertResponse insert(DoctorInsertRequest doctorInsertRequest) {
+        Doctor doctor = Doctor.fromDoctorInsertRequest(doctorInsertRequest);
+        doctorMapper.insert(doctor);
+
+        DoctorSpecializationRequest doctorSpecializationRequest = new DoctorSpecializationRequest(
+                doctor.getDoctorId(),
+                doctorInsertRequest.getSpecializationId());
+        doctorSpecializationMapper.insert(DoctorSpecialization.fromDoctorSpecialization(doctorSpecializationRequest));
+        Specialization specialization = specializationMapper.selectByPrimaryKey(doctorInsertRequest.getSpecializationId());
+
+        return DoctorInsertResponse.fromDoctorInsertRequest(doctor, specialization);
+    }
+
+    public DoctorInsertResponse update(DoctorInsertRequest doctorInsertRequest, Long doctorId) throws Exception{
+        Doctor doctor = doctorMapper.selectByPrimaryKey(doctorId);
+        if(doctor == null) throw new DataNotFoundException("No doctor found with doctor ID = " + doctorId);
+
+        doctor.setFirstName(doctorInsertRequest.getFirstName());
+        doctor.setLastName(doctorInsertRequest.getLastName());
+        doctor.setHospital(doctorInsertRequest.getHospital());
+        doctor.setExperience(doctorInsertRequest.getExperience());
+        doctor.setAvatar(doctorInsertRequest.getAvatar());
+        doctorMapper.updateByPrimaryKey(doctor);
+
+        DoctorSpecializationRequest doctorSpecializationRequest = new DoctorSpecializationRequest(
+                doctor.getDoctorId(),
+                doctorInsertRequest.getSpecializationId());
+        doctorSpecializationMapper.updateByPrimaryKeySelective(DoctorSpecialization.fromDoctorSpecialization(doctorSpecializationRequest));
+        Specialization specialization = specializationMapper.selectByPrimaryKey(doctorInsertRequest.getSpecializationId());
+
+        return DoctorInsertResponse.fromDoctorInsertRequest(doctor, specialization);
+    }
 
     @Override
     public List<DoctorFullResponse> getAllDoctor() throws DataNotFoundException {
@@ -234,4 +275,40 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorFulls;
     }
 
+    @Override
+    public Doctor updateAvatar(Long doctorId, MultipartFile file) throws Exception {
+        Doctor doctor = doctorMapper.selectByPrimaryKey(doctorId);
+        if(doctor == null){
+            throw new DataNotFoundException("No doctor found with id = " + doctorId);
+        }
+        //Handle avatar
+        if(!file.isEmpty()){
+            CloudinaryUtil.assertAllowed(file, CloudinaryUtil.IMAGE_PATTERN);
+            final String fileName = CloudinaryUtil.getFileName(file.getOriginalFilename());
+            Map<String, String> responseFileMap = uploadFile(file, fileName);
+            doctor.setAvatar(responseFileMap.get("url"));
+        }
+
+//        user.setUserId(userId);
+        doctorMapper.updateByPrimaryKeySelective(doctor);
+        return doctor;
+    }
+
+    @Transactional
+    public Map<String, String> uploadFile(final MultipartFile file, final String fileName) throws Exception {
+        try {
+            final Map result   = this.cloudinary.uploader()
+                    .upload(file.getBytes(),
+                            Map.of("public_id",
+                                    "doctor/ava/"
+                                            + fileName));
+            final String url = (String) result.get("url");
+            Map<String, String> fileMap = new HashMap<>();
+            fileMap.put("url", url);
+            return fileMap;
+
+        } catch (final Exception e) {
+            throw new DataIntegrityViolationException("Failed to upload file");
+        }
+    }
 }

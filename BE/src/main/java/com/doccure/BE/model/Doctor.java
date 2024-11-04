@@ -1,6 +1,16 @@
 package com.doccure.BE.model;
 
 
+import com.doccure.BE.request.DoctorInsertRequest;
+import lombok.*;
+
+import javax.print.Doc;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Doctor {
     private Long doctorId;
     private String firstName;
@@ -9,46 +19,14 @@ public class Doctor {
     private String hospital;
     private String avatar;
 
-    public Long getDoctorId() {
-        return doctorId;
+    public static Doctor fromDoctorInsertRequest(DoctorInsertRequest doctorInsertRequest){
+        return Doctor.builder()
+                .firstName(doctorInsertRequest.getFirstName())
+                .lastName(doctorInsertRequest.getLastName())
+                .experience(doctorInsertRequest.getExperience())
+                .hospital(doctorInsertRequest.getHospital())
+                .avatar(doctorInsertRequest.getAvatar())
+                .build();
     }
 
-    public void setDoctorId(Long doctorId) {
-        this.doctorId = doctorId;
-    }
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName == null ? null : firstName.trim();
-    }
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName == null ? null : lastName.trim();
-    }
-    public Long getExperience() {
-        return experience;
-    }
-
-    public void setExperience(Long experience) {
-        this.experience = experience;
-    }
-
-    public String getHospital() {
-        return hospital;
-    }
-
-    public void setHospital(String hospital) {
-        this.hospital = hospital == null ? null : hospital.trim();
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar == null ? null : avatar.trim();
-    }
 }

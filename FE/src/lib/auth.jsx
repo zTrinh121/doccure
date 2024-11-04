@@ -66,30 +66,8 @@ export const changePassword = async (token, data) => {
 };
 
 export const fetchProfile = async (token) => {
-  //todos:try again with new token from refresh token
-
   const username = getUsernameFromToken(getAccessToken());
-  const getProfile = async (token, username) => {
-    return authAxiosInstance.get(`/users?username=${username}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  };
-
-  try {
-    const response = await getProfile(token, username);
-    return response;
-  } catch (error) {
-    try {
-      console.log(error);
-      let newToken = await getNewAccessToken();
-      const retryResponse = await getProfile(newToken, username);
-      return retryResponse;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  return authAxiosInstance.get(`/users?username=${username}`);
 };
 
 // export const getNewAccessToken = async () => {
@@ -112,6 +90,7 @@ export const ProtectedRoute = ({ children }) => {
   const accessToken = useAccessToken();
 
   if (!accessToken) {
+    //todo:implement request for checking token
     return <Navigate to={`/login`} replace />;
   }
 

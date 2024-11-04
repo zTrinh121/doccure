@@ -20,6 +20,7 @@ import { useRef } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
 import { useNavigate } from 'react-router-dom';
+import { postPayment } from '../../../../lib/payment';
 const { RangePicker } = DatePicker;
 
 const DoctorBookingPage = () => {
@@ -33,6 +34,7 @@ const DoctorBookingPage = () => {
   const [range, setRange] = useState([new dayjs(), new dayjs()]);
   const [dateArr, setDateArr] = useState([new Date()]);
   const [select, setSelect] = useState('');
+  const [spec, setSpec] = useState('');
   const carouselRef = useRef(null);
 
   const { isPending, isError, data, error } = useDoctorSlotsQuery({
@@ -63,8 +65,13 @@ const DoctorBookingPage = () => {
     setDateArr(getDateArr(new Date(dateString[0]), new Date(dateString[1])));
   };
 
-  const onClickPay = () => {
-    navigate(`/slot/${select}`);
+  const onClickPay = async () => {
+    // navigate(`/slot/${select}`);
+    const response = await postPayment({ slotId: select, specId: spec });
+    console.log(response);
+    console.log(response.data);
+    console.log(response.data.slice(9));
+    window.location.href = response.data.slice(9);
   };
 
   return (
@@ -139,8 +146,26 @@ const DoctorBookingPage = () => {
                   )}
                 </div>
               </Card>
+              <Card>
+                {responseData.specializations.map((item) => (
+                  <Button
+                    className="mx-2"
+                    key={spec.specialization_id}
+                    type={item.specialization_id === spec ? 'primary' : ''}
+                    onClick={() => {
+                      setSpec(item.specialization_id);
+                    }}
+                  >
+                    {item.specialization_name}
+                  </Button>
+                ))}
+              </Card>
               <div className="flex justify-end">
-                <Button onClick={onClickPay} className="my-2">
+                <Button
+                  disabled={select && spec ? false : true}
+                  onClick={onClickPay}
+                  className="my-2"
+                >
                   Proceed to pay
                 </Button>
               </div>

@@ -20,6 +20,8 @@ import SearchResultPage from './routes/app/SearchResultPage';
 import DoctorPage from './routes/app/doctor/DoctorPage';
 import DoctorBookingPage from './routes/app/doctor/DoctorBookingPage';
 import SlotPage from './routes/app/slot/SlotPage';
+import SuccessPage from './routes/app/pay/SuccessPage';
+import CancelPage from './routes/app/pay/CancelPage';
 
 const router = createBrowserRouter([
   {
@@ -51,7 +53,7 @@ const router = createBrowserRouter([
       {
         path: '/otp',
         element: (
-          <RequireOtpVerification allowedSteps ={['otp', 'password']}>
+          <RequireOtpVerification allowedSteps={['otp', 'password']}>
             <OtpPage />
           </RequireOtpVerification>
         ),
@@ -59,7 +61,7 @@ const router = createBrowserRouter([
       {
         path: '/resetPassword',
         element: (
-          <RequireOtpVerification  allowedSteps ={[ 'password']}>
+          <RequireOtpVerification allowedSteps={['password']}>
             <ResetPasswordPage />
           </RequireOtpVerification>
         ),
@@ -96,8 +98,24 @@ const router = createBrowserRouter([
         children: [
           {
             path: ':slotId',
-            element: < SlotPage/>,
-          }
+            element: <SlotPage />,
+          },
+        ],
+      },
+      //payment
+
+      {
+        path: '/pay',
+        // element: <DashboardLayout />,
+        children: [
+          {
+            path: 'success',
+            element: <SuccessPage />,
+          },
+          {
+            path: 'cancel',
+            element: <CancelPage />,
+          },
         ],
       },
       //doctor
@@ -110,6 +128,7 @@ const router = createBrowserRouter([
             element: <DoctorPage />,
           },
           {
+            //todo: flag as protected or handle unlogged in attempts
             path: ':doctorId/booking',
             element: <DoctorBookingPage />,
           },

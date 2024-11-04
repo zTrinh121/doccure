@@ -1,5 +1,9 @@
 import { Navigate } from 'react-router-dom';
-import { axiosInstance, getNewAccessToken } from './apiClient';
+import {
+  authAxiosInstance,
+  getNewAccessToken,
+  publicAxiosInstance,
+} from './apiClient';
 import { useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import {
@@ -12,16 +16,16 @@ import {
 const { setAccessToken, clearTokens } = getActions();
 
 export const registerWithEmailAndPassword = async (data) => {
-  return axiosInstance.post('/auth/register', data);
+  return publicAxiosInstance.post('/auth/register', data);
 };
 
 export const login = async (data) => {
-  return axiosInstance.post('/auth/login', data);
+  return publicAxiosInstance.post('/auth/login', data);
 };
 
 export const logout = async (token) => {
   //todos:check invalid token
-  await axiosInstance.get('/auth/logout', {
+  await authAxiosInstance.get('/auth/logout', {
     headers: {
       Authorization: `Bearer ${token}`, // Adding the Bearer token to the request
     },
@@ -39,7 +43,7 @@ export const getUsernameFromToken = (token) => {
 
 export const changePassword = async (token, data) => {
   const putChangePassword = async (token, data) => {
-    return axiosInstance.put('/auth/change-password', data, {
+    return authAxiosInstance.put('/auth/change-password', data, {
       headers: {
         Authorization: `Bearer ${token}`, // Adding the Bearer token to the request
       },
@@ -54,6 +58,7 @@ export const changePassword = async (token, data) => {
       console.log(error);
       let newToken = await getNewAccessToken();
       const retryResponse = await putChangePassword(newToken, data);
+      return retryResponse;
     } catch (error) {
       console.log(error);
     }
@@ -65,7 +70,7 @@ export const fetchProfile = async (token) => {
 
   const username = getUsernameFromToken(getAccessToken());
   const getProfile = async (token, username) => {
-    return axiosInstance.get(`/users?username=${username}`, {
+    return authAxiosInstance.get(`/users?username=${username}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -92,15 +97,15 @@ export const fetchProfile = async (token) => {
 // };
 
 export const sendResetEmail = async ({ email }) => {
-  return axiosInstance.post(`auth/verify-mail/${email}`);
+  return publicAxiosInstance.post(`auth/verify-mail/${email}`);
 };
 
 export const verifyOtp = async ({ otp, email }) => {
-  return axiosInstance.post(`auth/verify-otp/${otp}/${email}`);
+  return publicAxiosInstance.post(`auth/verify-otp/${otp}/${email}`);
 };
 
 export const forgotPassword = async ({ values, email }) => {
-  return axiosInstance.post(`auth/forgot-password/${email}`, values);
+  return publicAxiosInstance.post(`auth/forgot-password/${email}`, values);
 };
 
 export const ProtectedRoute = ({ children }) => {
@@ -114,9 +119,10 @@ export const ProtectedRoute = ({ children }) => {
 };
 
 //Can change to custom prop route to allow reuse
-export function RequireOtpVerification({ children, resetStepName }) {
+export function RequireOtpVerification({ children, allowedSteps }) {
   const resetStep = useResetStep();
-  return resetStep === resetStepName ? (
+  console.log('resetStep', resetStep, allowedSteps);
+  return allowedSteps.includes(resetStep) ? (
     children
   ) : (
     <Navigate to="/forgotPassword" replace />

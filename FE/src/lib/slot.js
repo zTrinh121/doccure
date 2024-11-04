@@ -1,6 +1,6 @@
-import { axiosInstance } from "./apiClient"
+import { publicAxiosInstance } from "./apiClient"
 const slotPrefix = '/slot'
 
 export const getSlot = async (id) => {
-  return axiosInstance.get(`${slotPrefix}/${id}`)
+  return publicAxiosInstance.get(`${slotPrefix}/${id}`)
 }

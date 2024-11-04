@@ -6,8 +6,12 @@ import {
 const { setAccessToken, clearTokens } = getActions();
 const apiUrl = import.meta.env.VITE_API_URL;
 
+export const publicAxiosInstance = axios.create({
+  baseURL: apiUrl,
+  withCredentials: true,//redundant?
+})
 
-export const axiosInstance = axios.create({
+export const authAxiosInstance = axios.create({
   baseURL: apiUrl,
   withCredentials: true,
 
@@ -17,7 +21,7 @@ export const axiosInstance = axios.create({
 //!apparently appending to every request, making server check for jwt everytime, either figure out how to conditionally include accessToken or tell back end about it >:)
 //Fucks with login too:)
 //todo:solution: have individual instances for requests demanding authentication and those that don't:)
-axiosInstance.interceptors.request.use(request => {
+authAxiosInstance.interceptors.request.use(request => {
   const accessToken = getAccessToken();
   if (accessToken) {
     request.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -42,7 +46,7 @@ export const getNewAccessToken = async () => {
 // refresh token handling
 //todo : handle outdated token (refresh fail)
 //!bugs out if attempting to refresh for search, search requests with outdated tokens are resent and return nothing or something, attempt to recreate later
-axiosInstance.interceptors.response.use(
+authAxiosInstance.interceptors.response.use(
   response => response, // Directly return successful responses.
   async error => {
     const originalRequest = error.config;
@@ -54,9 +58,9 @@ axiosInstance.interceptors.response.use(
         const accessToken = response;
         setAccessToken(accessToken);
 
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        authAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         console.log("retry", originalRequest._retry)
-        return axiosInstance(originalRequest); // Retry the original request with the new access token.
+        return authAxiosInstance(originalRequest); // Retry the original request with the new access token.
       } catch (refreshError) {
         // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
         console.error('Token refresh failed:', refreshError);

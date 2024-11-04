@@ -2,10 +2,15 @@ import { Button, Card, Form, Input, Space } from 'antd';
 const { Meta } = Card;
 
 import { useNavigate } from 'react-router-dom';
-import { sendResetEmail, verifyOtp } from '../../../lib/auth';
-import { getActions, useResetEmail } from '../../../stores/authStore';
+import { verifyOtp } from '../../../lib/auth';
+import {
+  getActions,
+  useResetEmail,
+  useResetStep,
+} from '../../../stores/authStore';
 import { Spin } from 'antd';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 const OtpCard = () => {
   const [loading, setLoading] = useState(false);
@@ -13,6 +18,7 @@ const OtpCard = () => {
   const resetEmail = useResetEmail();
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const resetStep = useResetStep();
 
   const onChange = async () => {
     form.submit();
@@ -23,13 +29,18 @@ const OtpCard = () => {
     try {
       const response = await verifyOtp({ otp: values.otp, email: resetEmail });
       setResetStep('password');
-      navigate('/resetPassword');
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (resetStep === 'password') {
+      navigate('/resetPassword');
+    }
+  }, [resetStep, navigate]);
 
   return (
     <Card>

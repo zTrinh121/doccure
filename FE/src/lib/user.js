@@ -1,11 +1,11 @@
-import { axiosInstance, getNewAccessToken } from "./apiClient";
+import { authAxiosInstance, getNewAccessToken } from "./apiClient";
 
 export const changeAvatar = async ({ userId, file, token }) => {
   const formData = new FormData();
   formData.append('file', file);
 
   const putChangeAvatar = async (userId, file, token) => {
-    return axiosInstance.put(`users/avatar/${userId}`, formData, {
+    return authAxiosInstance.put(`users/avatar/${userId}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -32,7 +32,7 @@ export const changeAvatar = async ({ userId, file, token }) => {
 export const changeProfile = async ({ userId, values, token }) => {
   const putChangeProfile = async (userId, values, token) => {
 
-    return axiosInstance.put(`users/${userId}`, values, {
+    return authAxiosInstance.put(`users/${userId}`, values, {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -40,17 +40,8 @@ export const changeProfile = async ({ userId, values, token }) => {
     )
   }
 
-  // try {
+
   const response = await putChangeProfile(userId, values, token);
   return response;
-  // } catch (error) {
-  //   try {
-  //     console.log(error);
-  //     let newToken = await getNewAccessToken();
-  //     const retryResponse = await putChangeProfile(userId, values, newToken);
-  //     return retryResponse
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+
 }

@@ -51,7 +51,7 @@ const router = createBrowserRouter([
       {
         path: '/otp',
         element: (
-          <RequireOtpVerification resetStepName="otp">
+          <RequireOtpVerification allowedSteps ={['otp', 'password']}>
             <OtpPage />
           </RequireOtpVerification>
         ),
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
       {
         path: '/resetPassword',
         element: (
-          <RequireOtpVerification resetStepName="password">
+          <RequireOtpVerification  allowedSteps ={[ 'password']}>
             <ResetPasswordPage />
           </RequireOtpVerification>
         ),

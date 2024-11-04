@@ -1,4 +1,4 @@
-import { axiosInstance } from "./apiClient";
+import { publicAxiosInstance } from "./apiClient";
 
 export const searchDoctors = async (input) => {
   const checkDupe = (array, doctor) => {
@@ -10,7 +10,7 @@ export const searchDoctors = async (input) => {
 
   for (const element of arr) {
     try {
-      const response = await axiosInstance.get(`/doctor?keyword=${element}`);
+      const response = await publicAxiosInstance.get(`/doctor?keyword=${element}`);
       response.data.data.forEach(element => {
         if (!checkDupe(resultArr, element)) resultArr.push(element)
       })
@@ -22,10 +22,10 @@ export const searchDoctors = async (input) => {
 }
 
 export const getDoctor = async (id) => {
-  return axiosInstance.get(`/doctor/${id}`)
+  return publicAxiosInstance.get(`/doctor/${id}`)
 }
 
 export const getDoctorSlots = async(startDate,endDate,doctorId) =>{
   //yyyy-mm-dd
-  return axiosInstance.get(`doctor/slot/date?id=${doctorId}&start_date=${startDate}&end_date=${endDate}`)
+  return publicAxiosInstance.get(`doctor/slot/date?id=${doctorId}&start_date=${startDate}&end_date=${endDate}`)
 }

@@ -1,13 +1,14 @@
-import { RouterProvider } from 'react-router-dom';
-import router from './router';
 import '../index.css';
-import { useEffect } from 'react';
-import { getNewAccessToken } from '../lib/auth';
-import { getActions, useAccessToken, useIsLoading } from '../stores/authStore';
+import { RouterProvider } from 'react-router-dom';
 import { Spin } from 'antd';
+import { ConfigProvider } from 'antd';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ConfigProvider } from 'antd';
+
+import router from './router';
+import { getNewAccessToken } from '../lib/apiClient';
+import { useEffect } from 'react';
+import { getActions, useAccessToken, useIsLoading } from '../stores/authStore';
 
 function App() {
   const queryClient = new QueryClient();
@@ -56,9 +57,8 @@ function App() {
           },
         }}
       >
- 
-          <RouterProvider router={router} />
-          <ReactQueryDevtools />
+        <RouterProvider router={router} />
+        <ReactQueryDevtools />
       </ConfigProvider>
     </>
   );

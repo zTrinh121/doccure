@@ -15,13 +15,28 @@ import {
   TrophyOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 
-const DoctorPanel = ({ responseData }) => {
+const DoctorPanel = ({
+  doctorId,
+  showBottomSection = true,
+  viewProfile = false,
+}) => {
   const navigate = useNavigate();
+  const { data, isSuccess, isPending, error } = useDoctorQuery(doctorId);
+  if (isPending) {
+    return <IsPendingSpin />;
+  }
+  const responseData = data.data.data;
+
   const onClickBooking = () => {
     navigate(`/doctor/${responseData.doctor_id}/booking`);
   };
-  // const { data, isSuccess, isPending, error } = useDoctorQuery(doctorId);
+
+  const onClickProfile = () => {
+    navigate(`/doctor/${responseData.doctor_id}`);
+  };
+
   return (
     <Card className="p-4 shadow-lg border rounded-lg max-w-4xl">
       <div className="flex">
@@ -57,31 +72,40 @@ const DoctorPanel = ({ responseData }) => {
 
         {/* Right Section with Additional Info */}
       </div>
-
       {/* Bottom Section with Stats and Action */}
-      <div className="mt-4 border-t pt-4 flex justify-between">
-        <div className="flex space-x-4">
-          <div className="flex items-center">
-            <CalendarOutlined className="mr-2 text-blue-500" />
-            <Typography.Text>number of appointments</Typography.Text>
+      {showBottomSection && (
+        <div className="mt-4 border-t pt-4 flex justify-between">
+          <div className="flex space-x-4">
+            <div className="flex items-center">
+              <CalendarOutlined className="mr-2 text-blue-500" />
+              <Typography.Text>number of appointments</Typography.Text>
+            </div>
+            <div className="flex items-center">
+              <ClockCircleOutlined className="mr-2 text-blue-500" />
+              <Typography.Text>
+                In Practice for {responseData.experience} Years
+              </Typography.Text>
+            </div>
           </div>
-          <div className="flex items-center">
-            <ClockCircleOutlined className="mr-2 text-blue-500" />
+          <div className="flex items-center space-x-2">
             <Typography.Text>
-              In Practice for {responseData.experience} Years
+              Price: ${responseData.min_price} - ${responseData.max_price} per
+              Session
             </Typography.Text>
+            <Col>
+              {viewProfile && (
+                <Button className="px-1" onClick={onClickProfile}>
+                  View profile
+                </Button>
+              )}
+
+              <Button className="px-1" type="primary" onClick={onClickBooking}>
+                Book Appointment
+              </Button>
+            </Col>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Typography.Text>
-            Price: ${responseData.min_price} - ${responseData.max_price} per
-            Session
-          </Typography.Text>
-          <Button type="primary" onClick={onClickBooking}>
-            Book Appointment
-          </Button>
-        </div>
-      </div>
+      )}
     </Card>
   );
 };

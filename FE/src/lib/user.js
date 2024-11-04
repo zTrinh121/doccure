@@ -1,5 +1,4 @@
-import { axiosInstance } from "./apiClient";
-import { getNewAccessToken } from "./auth";
+import { axiosInstance, getNewAccessToken } from "./apiClient";
 
 export const changeAvatar = async ({ userId, file, token }) => {
   const formData = new FormData();

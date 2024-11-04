@@ -7,11 +7,9 @@ export const incrementDate = (date) => {
 };
 
 export const getDateArr = (start, end) => {
-  console.log('start', start);
   let result = [];
   let tempStart = start;
   do {
-    console.log(1, tempStart);
     result.push(tempStart);
     tempStart = incrementDate(tempStart);
   } while (tempStart < end);

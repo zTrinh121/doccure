@@ -42,7 +42,6 @@ const LoginCard = () => {
       const response = await login(values);
 
       setAccessToken(response.data.data.access_token);
-      console.log(response.data.data.access_token);
       queryClient.invalidateQueries({ queryKey: ['profile'] });
 
       navigate('/');

@@ -35,8 +35,6 @@ const DoctorBookingPage = () => {
   const carouselRef = useRef(null);
 
   const onChange = (dates, dateString) => {
-    console.log(dates);
-    console.log(dates[0].$d, dateString);
     setRange([dates[0], dates[1]]);
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);

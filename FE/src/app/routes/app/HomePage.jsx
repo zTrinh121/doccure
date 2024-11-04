@@ -1,12 +1,10 @@
 import background from '../../../assets/background.png';
-import { Flex, Input, Space, Carousel, Button } from 'antd';
+import { Flex, Input, Space, Carousel, Button, Form } from 'antd';
 import CircleCard from '../../../components/ui/circleCard';
 import DoctorCard from '../../../features/doctors/components/DoctorCard';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { useAccessToken } from '../../../stores/authStore';
-import { useState } from 'react';
-import { Form } from 'antd';
+
 import { searchDoctors } from '../../../lib/doctor';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,21 +12,6 @@ import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const contentStyle = {
-    margin: 0,
-    height: '160px',
-    color: '#fff',
-    lineHeight: '160px',
-    textAlign: 'center',
-    background: '#364d79',
-  };
-
-  const onChange = (currentSlide) => {};
-  const [input, setInput] = useState('');
-
-  // const username = useAuthStore((state) => state.username);
-
-  const accessToken = useAccessToken();
 
   const onFinish = async (values) => {
     searchDoctors(values.search);

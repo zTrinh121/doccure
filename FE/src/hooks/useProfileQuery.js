@@ -8,7 +8,6 @@ export const useProfileQuery = () => {
 
 
   const accessToken = useAccessToken();
-  console.log(accessToken);
   const { data, isSuccess, isPending, error } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => { return fetchProfile(accessToken) },

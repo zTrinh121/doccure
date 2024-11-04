@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { axiosInstance } from './apiClient';
+import { axiosInstance, getNewAccessToken } from './apiClient';
 import { useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import {
@@ -87,16 +87,9 @@ export const fetchProfile = async (token) => {
   }
 };
 
-export const getNewAccessToken = async () => {
-  try {
-    const response = await axiosInstance.post('auth/refresh_token');
-    setAccessToken(response.data.data.access_token);
-    return response.data.data.access_token;
-  } catch (error) {
-    console.log(error);
-    // return undefined;
-  }
-};
+// export const getNewAccessToken = async () => {
+//   return axiosInstance.post('auth/refresh_token');
+// };
 
 export const sendResetEmail = async ({ email }) => {
   return axiosInstance.post(`auth/verify-mail/${email}`);

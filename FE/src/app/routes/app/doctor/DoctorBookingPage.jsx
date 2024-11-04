@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import { useRef } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
+import { useNavigate } from 'react-router-dom';
 const { RangePicker } = DatePicker;
 
 const DoctorBookingPage = () => {
@@ -34,6 +35,26 @@ const DoctorBookingPage = () => {
   const [select, setSelect] = useState('');
   const carouselRef = useRef(null);
 
+  const { isPending, isError, data, error } = useDoctorSlotsQuery({
+    startDate: startDate,
+    endDate: endDate,
+    doctorId: doctorId,
+  });
+
+  const navigate = useNavigate();
+
+  //todo: implement error screen, loading screen
+  if (isPending) {
+    return <IsPendingSpin />;
+  }
+
+  const responseData = data?.data.data;
+  const tempMap = new Map();
+  responseData?.slots.forEach((slot) => {
+    let slots = tempMap.get(slot.date_slot) || [];
+    tempMap.set(slot.date_slot, [...slots, slot]);
+  });
+
   const onChange = (dates, dateString) => {
     setRange([dates[0], dates[1]]);
     setStartDate(dateString[0]);
@@ -42,23 +63,9 @@ const DoctorBookingPage = () => {
     setDateArr(getDateArr(new Date(dateString[0]), new Date(dateString[1])));
   };
 
-  const { isPending, isError, data, error } = useDoctorSlotsQuery({
-    startDate: startDate,
-    endDate: endDate,
-    doctorId: doctorId,
-  });
-
-  //todo: implement error screen, loading screen
-  if (isPending) {
-    return <IsPendingSpin />;
-  }
-  const responseData = data?.data.data;
-  const tempMap = new Map();
-  // var slots = [];
-  responseData?.slots.forEach((slot) => {
-    let slots = tempMap.get(slot.date_slot) || [];
-    tempMap.set(slot.date_slot, [...slots, slot]);
-  });
+  const onClickPay = () => {
+    navigate(`/slot/${select}`);
+  };
 
   return (
     <Flex justify="center" align="center">
@@ -101,6 +108,11 @@ const DoctorBookingPage = () => {
                                 tempMap.get(getKebabDateString(date)) || []
                               ).map((slot) => (
                                 <Button
+                                  disabled={
+                                    !slot.status || slot.status === 'CANCELED'
+                                      ? false
+                                      : true
+                                  }
                                   type={
                                     select === slot.slot_id ? 'primary' : ''
                                   }
@@ -127,6 +139,11 @@ const DoctorBookingPage = () => {
                   )}
                 </div>
               </Card>
+              <div className="flex justify-end">
+                <Button onClick={onClickPay} className="my-2">
+                  Proceed to pay
+                </Button>
+              </div>
             </div>
           </div>
         </Col>

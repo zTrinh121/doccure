@@ -14,6 +14,9 @@ export const axiosInstance = axios.create({
 });
 
 //injects Token for every request
+//!apparently appending to every request, making server check for jwt everytime, either figure out how to conditionally include accessToken or tell back end about it >:)
+//Fucks with login too:)
+//todo:solution: have individual instances for requests demanding authentication and those that don't:)
 axiosInstance.interceptors.request.use(request => {
   const accessToken = getAccessToken();
   if (accessToken) {
@@ -38,6 +41,7 @@ export const getNewAccessToken = async () => {
 
 // refresh token handling
 //todo : handle outdated token (refresh fail)
+//!bugs out if attempting to refresh for search, search requests with outdated tokens are resent and return nothing or something, attempt to recreate later
 axiosInstance.interceptors.response.use(
   response => response, // Directly return successful responses.
   async error => {
@@ -51,6 +55,7 @@ axiosInstance.interceptors.response.use(
         setAccessToken(accessToken);
 
         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        console.log("retry", originalRequest._retry)
         return axiosInstance(originalRequest); // Retry the original request with the new access token.
       } catch (refreshError) {
         // Handle refresh token errors by clearing stored tokens and redirecting to the login page.

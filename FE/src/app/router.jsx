@@ -19,6 +19,7 @@ import ChangeProfilePage from './routes/app/user/ChangeProfilePage';
 import SearchResultPage from './routes/app/SearchResultPage';
 import DoctorPage from './routes/app/doctor/DoctorPage';
 import DoctorBookingPage from './routes/app/doctor/DoctorBookingPage';
+import SlotPage from './routes/app/slot/SlotPage';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
         path: '/search',
         element: <SearchResultPage />,
       },
+
       //forget password
       {
         path: '/forgotPassword',
@@ -49,8 +51,8 @@ const router = createBrowserRouter([
       {
         path: '/otp',
         element: (
-          <RequireOtpVerification resetStepName='otp'>
-          <OtpPage />
+          <RequireOtpVerification resetStepName="otp">
+            <OtpPage />
           </RequireOtpVerification>
         ),
       },
@@ -58,7 +60,7 @@ const router = createBrowserRouter([
         path: '/resetPassword',
         element: (
           <RequireOtpVerification resetStepName="password">
-          <ResetPasswordPage />
+            <ResetPasswordPage />
           </RequireOtpVerification>
         ),
       },
@@ -87,6 +89,18 @@ const router = createBrowserRouter([
           },
         ],
       },
+      //slot
+      {
+        path: '/slot',
+        // element: <DashboardLayout />,
+        children: [
+          {
+            path: ':slotId',
+            element: < SlotPage/>,
+          }
+        ],
+      },
+      //doctor
       {
         path: '/doctor',
         // element: <DashboardLayout />,

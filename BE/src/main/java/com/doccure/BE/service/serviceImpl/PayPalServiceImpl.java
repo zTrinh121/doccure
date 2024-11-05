@@ -45,8 +45,8 @@ public class PayPalServiceImpl implements PayPalService {
         String currency = "THB";
         String method = "paypal";
         String intent = "sale";
-        String cancelUrl= "http://localhost:8080/api/v1/paypal/pay/cancel?appointment_id="+appointment.getAppointmentId()+"&invoice_id="+invoice.getInvoiceId()+"&slot_id="+slotId;
-        String successUrl= "http://localhost:8080/api/v1/paypal/pay/success?appointment_id="+appointment.getAppointmentId()+"&invoice_id="+invoice.getInvoiceId()+"&slot_id="+slotId+"&user_id="+appointment.getUserId();
+        String cancelUrl= "http://localhost:5173/pay/cancel?appointment_id="+appointment.getAppointmentId()+"&invoice_id="+invoice.getInvoiceId()+"&slot_id="+slotId;
+        String successUrl= "http://localhost:5173/pay/success?appointment_id="+appointment.getAppointmentId()+"&invoice_id="+invoice.getInvoiceId()+"&slot_id="+slotId+"&user_id="+appointment.getUserId();
 
         Amount amount = new Amount();
         amount.setCurrency(currency);

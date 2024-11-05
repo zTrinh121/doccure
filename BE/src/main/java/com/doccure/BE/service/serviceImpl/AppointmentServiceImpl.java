@@ -28,20 +28,26 @@ public class AppointmentServiceImpl  implements AppointmentService {
 
     @Override
     public List<AppointmentDetailResponse> getAppointmentDetailWithStatus(String status, int offset, int limit, HttpServletRequest request) throws Exception {
-        StatusAppointmentType statusAppointmentType = getStatusAppointmentFromString(status);
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
         List<AppointmentDetail> appointmentDetails;
-        if(statusAppointmentType.name().equals("Upcoming")){
-            appointmentDetails = appointmentMapper.getUpcomingAppointmentDetails(accessTokenUser.getUserId(), new RowBounds(offset, limit));
-        }else{
-            Map<String, Object> params = new HashMap<>();
-            params.put("userId", accessTokenUser.getUserId());
-            params.put("status", statusAppointmentType.name());
-            appointmentDetails = appointmentMapper.getAppointmentDetailWithStatus(params, new RowBounds(offset, limit));
+
+        if (status == null) {
+            appointmentDetails = appointmentMapper.getAllAppointmentDetail(accessTokenUser.getUserId(), new RowBounds(offset, limit));
+        } else {
+            StatusAppointmentType statusAppointmentType = getStatusAppointmentFromString(status);
+
+            if (statusAppointmentType.name().equals("Upcoming")) {
+                appointmentDetails = appointmentMapper.getUpcomingAppointmentDetails(accessTokenUser.getUserId(), new RowBounds(offset, limit));
+            } else {
+                Map<String, Object> params = new HashMap<>();
+                params.put("userId", accessTokenUser.getUserId());
+                params.put("status", statusAppointmentType.name());
+                appointmentDetails = appointmentMapper.getAppointmentDetailWithStatus(params, new RowBounds(offset, limit));
+            }
         }
 
-        if(appointmentDetails.isEmpty()) throw new DataNotFoundException("No appointment detail found for user ID = " + accessTokenUser.getUserId());
+        if (appointmentDetails.isEmpty()) throw new DataNotFoundException("No appointment detail found for user ID = " + accessTokenUser.getUserId());
         return appointmentDetails
                 .stream()
                 .map(AppointmentDetailResponse::fromAppointmentDetail)

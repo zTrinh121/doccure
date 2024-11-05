@@ -288,21 +288,40 @@
   </resultMap>
 
   <select id="getAppointmentDetailWithStatus" parameterType="map" resultMap="BaseResultMapDetail">
-      SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
-              s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
-              d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
-              sp.specialization_name, sp.specialization_id,
-              i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT
-      FROM appointment a
-      JOIN slot s ON s.slot_id = a.slot_id
-      JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
-      JOIN specialization sp ON ds.specialization_id = sp.specialization_id
-      JOIN doctor d ON ds.doctor_id = d.doctor_id
-      JOIN invoice i ON i.appointment_id = a.appointment_id
-      WHERE 
+    SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+           s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
+           d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+           sp.specialization_name, sp.specialization_id,
+           i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT
+    FROM appointment a
+    JOIN slot s ON s.slot_id = a.slot_id
+    JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+    JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+    JOIN doctor d ON ds.doctor_id = d.doctor_id
+    JOIN invoice i ON i.appointment_id = a.appointment_id
+    WHERE 
         a.user_id = #{params.userId, jdbcType=NUMERIC}
-        AND a.status = #{params.status, jdbcType=VARCHAR}
-  </select>
+            AND a.status = #{params.status, jdbcType=VARCHAR}
+        
+</select>
+
+<select id="getAllAppointmentDetail" parameterType="Long" resultMap="BaseResultMapDetail">
+    SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+           s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
+           d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+           sp.specialization_name, sp.specialization_id,
+           i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT
+    FROM appointment a
+    JOIN slot s ON s.slot_id = a.slot_id
+    JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+    JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+    JOIN doctor d ON ds.doctor_id = d.doctor_id
+    JOIN invoice i ON i.appointment_id = a.appointment_id
+    WHERE 
+        a.user_id = #{userId, jdbcType=NUMERIC}
+        
+</select>
+
 
    <select id="getUpcomingAppointmentDetails" parameterType="Long" resultMap="BaseResultMapDetail">
       SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,

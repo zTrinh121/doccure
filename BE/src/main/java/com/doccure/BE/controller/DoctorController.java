@@ -53,9 +53,10 @@ public class DoctorController {
                 doctorService.updateAvatar( doctorId, file));
     }
 
-    @PutMapping("/update/{doctorId}")
+    @PutMapping("/update")
     public ResponseEntity<Object> update(@RequestBody @Valid DoctorInsertRequest doctor,
-                                               @PathVariable("doctorId") Long doctorId,
+                                         @RequestParam("doctor_id") Long doctorId,
+                                         @RequestParam("old_specialization_id") Long oldSpecializationId,
                                                BindingResult result
                                                ) throws Exception {
         if(result.hasErrors()){
@@ -71,7 +72,7 @@ public class DoctorController {
 
         return ResponseHandler.responseBuilder("Update doctor successfully for doctor id = " + doctorId,
                 HttpStatus.OK,
-                doctorService.update(doctor, doctorId));
+                doctorService.update(doctor, doctorId, oldSpecializationId));
     }
 
 

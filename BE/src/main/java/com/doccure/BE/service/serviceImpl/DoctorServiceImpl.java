@@ -49,7 +49,7 @@ public class DoctorServiceImpl implements DoctorService {
         return DoctorInsertResponse.fromDoctorInsertRequest(doctor, specialization);
     }
 
-    public DoctorInsertResponse update(DoctorInsertRequest doctorInsertRequest, Long doctorId) throws Exception{
+    public DoctorInsertResponse update(DoctorInsertRequest doctorInsertRequest, Long doctorId, Long oldSpecialization) throws Exception{
         Doctor doctor = doctorMapper.selectByPrimaryKey(doctorId);
         if(doctor == null) throw new DataNotFoundException("No doctor found with doctor ID = " + doctorId);
 
@@ -59,13 +59,16 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setExperience(doctorInsertRequest.getExperience());
         doctor.setAvatar(doctorInsertRequest.getAvatar());
         doctorMapper.updateByPrimaryKey(doctor);
-
-        DoctorSpecializationRequest doctorSpecializationRequest = new DoctorSpecializationRequest(
+        DoctorSpecialization doctorSpecialization = doctorSpecializationMapper.selectByDoctorAndSpecId(
                 doctor.getDoctorId(),
-                doctorInsertRequest.getSpecializationId());
-        doctorSpecializationMapper.updateByPrimaryKeySelective(DoctorSpecialization.fromDoctorSpecialization(doctorSpecializationRequest));
+                oldSpecialization
+        );
+        if(doctorSpecialization == null) throw new DataNotFoundException("Not found doctor match with specialization");
+
         Specialization specialization = specializationMapper.selectByPrimaryKey(doctorInsertRequest.getSpecializationId());
 
+        doctorSpecialization.setSpecializationId(specialization.getSpecializationId());
+        doctorSpecializationMapper.updateByPrimaryKey(doctorSpecialization);
         return DoctorInsertResponse.fromDoctorInsertRequest(doctor, specialization);
     }
 

@@ -23,7 +23,7 @@ public class AppointmentController {
 
     @GetMapping("/all")
     public ResponseEntity<Object> getAllAppointmentDetails(
-            @RequestParam("status") String status,
+            @RequestParam(value = "status", required = false) String status,
             @RequestParam("offset") int offset,
             @RequestParam("limit") int limit,
             HttpServletRequest request

@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface DoctorService {
     DoctorInsertResponse insert(DoctorInsertRequest doctorInsertRequest);
-    DoctorInsertResponse update(DoctorInsertRequest doctorInsertRequest,Long doctorId) throws Exception;
+    DoctorInsertResponse update(DoctorInsertRequest doctorInsertRequest,Long doctorId, Long oldSpecialization) throws Exception;
     Doctor updateAvatar(Long doctorId, MultipartFile file) throws Exception;
 
     //Doctor with specializations

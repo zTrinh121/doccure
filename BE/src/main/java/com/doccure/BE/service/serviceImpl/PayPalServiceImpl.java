@@ -127,7 +127,7 @@ public class PayPalServiceImpl implements PayPalService {
         Specialization specialization = specializations.get(0);
         DoctorSpecialization doctorSpecialization = doctorSpecializationMapper.selectByDoctorAndSpecId(doctorId,
                 specialization.getSpecializationId());
-
+        if(doctorSpecialization == null) throw new DataNotFoundException("Not found any doctor with that specialization");
 
         Appointment appointment = new Appointment();
         appointment.setPrice(chooseSlot.getPrice());

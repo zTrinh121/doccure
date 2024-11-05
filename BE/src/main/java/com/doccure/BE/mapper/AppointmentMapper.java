@@ -40,6 +40,7 @@ public interface AppointmentMapper {
     int updateByPrimaryKey(Appointment row);
 
     List<AppointmentDetail> getAppointmentDetailWithStatus(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getAllAppointmentDetail (Long userId, RowBounds bounds);
 
     List<AppointmentDetail> getUpcomingAppointmentDetails(@Param("userId") Long userId, RowBounds bounds);
 

@@ -11,6 +11,9 @@ import {
 import { Spin } from 'antd';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { Flex } from 'antd';
+import { ClockCircleOutlined } from '@ant-design/icons';
+import Timer from '../../../components/ui/Timer';
 
 const OtpCard = () => {
   const [loading, setLoading] = useState(false);
@@ -57,22 +60,32 @@ const OtpCard = () => {
           }}
           autoComplete="off"
         >
-          <Form.Item
-            label="OTP"
-            name="otp"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your otp!',
-              },
-            ]}
-          >
-            <Input.OTP
-              formatter={(str) => str.toUpperCase()}
-              onChange={onChange}
-              onPressEnter={onChange}
-            />
-          </Form.Item>
+          <Flex vertical justify="space-around">
+            <Flex justify="center">
+              <Form.Item
+                label="OTP"
+                name="otp"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your otp!',
+                  },
+                ]}
+              >
+                <Input.OTP
+                  formatter={(str) => str.toUpperCase()}
+                  onChange={onChange}
+                  onPressEnter={onChange}
+                />
+              </Form.Item>
+            </Flex>
+            <Flex justify="flex-end" align="flex-end">
+              <div>
+                <ClockCircleOutlined />
+                {/* <Timer duration={60} /> */}
+              </div>
+            </Flex>
+          </Flex>
 
           <Form.Item>
             <Spin spinning={loading}>

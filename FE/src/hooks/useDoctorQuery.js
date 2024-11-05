@@ -8,6 +8,7 @@ export const useDoctorQuery = (id, isSlotPending = false) => {
     queryKey: ["doctor", id],
     queryFn: async () => { return getDoctor(id) },
     enabled: !isSlotPending,
+    //!temp fix, remove later
 
     // enabled: Boolean(accessToken),
   });

@@ -19,6 +19,7 @@ function App() {
 
   useEffect(() => {
     //todos:implement check for expire at value in return body of login request
+    //todo: and make reloading less obnoxios
     const abortController = new AbortController();
 
     const fetchAccessToken = async () => {
@@ -34,7 +35,7 @@ function App() {
 
     fetchAccessToken();
     return () => {
-      // abortController.abort(); //because fetching the first time invalidate current key, making subsequent requests invalid
+      //     // abortController.abort(); //because fetching the first time invalidate current key, making subsequent requests invalid
     };
   }, []);
 

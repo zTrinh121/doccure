@@ -34,6 +34,7 @@ const ForgotPasswordEmailCard = () => {
     }
   }, [resetStep, navigate]);
 
+
   return (
     <Card>
       <Space direction="vertical" size="middle" style={{ display: 'flex' }}>

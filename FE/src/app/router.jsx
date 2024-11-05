@@ -22,6 +22,7 @@ import DoctorBookingPage from './routes/app/doctor/DoctorBookingPage';
 import SlotPage from './routes/app/slot/SlotPage';
 import SuccessPage from './routes/app/pay/SuccessPage';
 import CancelPage from './routes/app/pay/CancelPage';
+import AppointmentPage from './routes/app/user/AppointmentPage';
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,19 @@ const router = createBrowserRouter([
                 <ChangePasswordPage />
               </ProtectedRoute>
             ),
+          },
+          {
+            path: 'appointment',
+            children: [
+              {
+                path: ':appointmentId',
+                element: (
+                  // <ProtectedRoute>
+                    <AppointmentPage />
+                  // </ProtectedRoute>
+                ),
+              },
+            ],
           },
         ],
       },

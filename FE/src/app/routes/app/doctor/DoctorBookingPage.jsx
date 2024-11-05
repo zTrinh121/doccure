@@ -19,6 +19,8 @@ import dayjs from 'dayjs';
 import { useRef } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
+import { useNavigate } from 'react-router-dom';
+import { postPayment } from '../../../../lib/payment';
 const { RangePicker } = DatePicker;
 
 const DoctorBookingPage = () => {
@@ -32,7 +34,28 @@ const DoctorBookingPage = () => {
   const [range, setRange] = useState([new dayjs(), new dayjs()]);
   const [dateArr, setDateArr] = useState([new Date()]);
   const [select, setSelect] = useState('');
+  const [spec, setSpec] = useState('');
   const carouselRef = useRef(null);
+
+  const { isPending, isError, data, error } = useDoctorSlotsQuery({
+    startDate: startDate,
+    endDate: endDate,
+    doctorId: doctorId,
+  });
+
+  const navigate = useNavigate();
+
+  //todo: implement error screen, loading screen
+  if (isPending) {
+    return <IsPendingSpin />;
+  }
+
+  const responseData = data?.data.data;
+  const tempMap = new Map();
+  responseData?.slots.forEach((slot) => {
+    let slots = tempMap.get(slot.date_slot) || [];
+    tempMap.set(slot.date_slot, [...slots, slot]);
+  });
 
   const onChange = (dates, dateString) => {
     setRange([dates[0], dates[1]]);
@@ -42,23 +65,14 @@ const DoctorBookingPage = () => {
     setDateArr(getDateArr(new Date(dateString[0]), new Date(dateString[1])));
   };
 
-  const { isPending, isError, data, error } = useDoctorSlotsQuery({
-    startDate: startDate,
-    endDate: endDate,
-    doctorId: doctorId,
-  });
-
-  //todo: implement error screen, loading screen
-  if (isPending) {
-    return <IsPendingSpin />;
-  }
-  const responseData = data?.data.data;
-  const tempMap = new Map();
-  // var slots = [];
-  responseData?.slots.forEach((slot) => {
-    let slots = tempMap.get(slot.date_slot) || [];
-    tempMap.set(slot.date_slot, [...slots, slot]);
-  });
+  const onClickPay = async () => {
+    // navigate(`/slot/${select}`);
+    const response = await postPayment({ slotId: select, specId: spec });
+    console.log(response);
+    console.log(response.data);
+    console.log(response.data.slice(9));
+    window.location.href = response.data.slice(9);
+  };
 
   return (
     <Flex justify="center" align="center">
@@ -101,6 +115,11 @@ const DoctorBookingPage = () => {
                                 tempMap.get(getKebabDateString(date)) || []
                               ).map((slot) => (
                                 <Button
+                                  disabled={
+                                    !slot.status || slot.status === 'CANCELED'
+                                      ? false
+                                      : true
+                                  }
                                   type={
                                     select === slot.slot_id ? 'primary' : ''
                                   }
@@ -127,6 +146,29 @@ const DoctorBookingPage = () => {
                   )}
                 </div>
               </Card>
+              <Card>
+                {responseData.specializations.map((item) => (
+                  <Button
+                    className="mx-2"
+                    key={spec.specialization_id}
+                    type={item.specialization_id === spec ? 'primary' : ''}
+                    onClick={() => {
+                      setSpec(item.specialization_id);
+                    }}
+                  >
+                    {item.specialization_name}
+                  </Button>
+                ))}
+              </Card>
+              <div className="flex justify-end">
+                <Button
+                  disabled={select && spec ? false : true}
+                  onClick={onClickPay}
+                  className="my-2"
+                >
+                  Proceed to pay
+                </Button>
+              </div>
             </div>
           </div>
         </Col>

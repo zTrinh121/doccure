@@ -3,29 +3,36 @@ const { Meta } = Card;
 
 import { useNavigate } from 'react-router-dom';
 import { sendResetEmail } from '../../../lib/auth';
-import { getActions } from '../../../stores/authStore';
+import { getActions, useResetStep } from '../../../stores/authStore';
 import { Spin } from 'antd';
 import { useState } from 'react';
+import { useEffect } from 'react';
 //todos:notification,disabled button
 
 const ForgotPasswordEmailCard = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setResetStep, setResetEmail } = getActions();
+  const resetStep = useResetStep();
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
       const response = await sendResetEmail({ email: values.email });
-      setResetStep('otp');
       setResetEmail(values.email);
-      navigate('/otp');
+      setResetStep('otp');
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (resetStep === 'otp') {
+      navigate('/otp');
+    }
+  }, [resetStep, navigate]);
 
   return (
     <Card>

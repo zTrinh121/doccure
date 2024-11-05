@@ -19,6 +19,9 @@ import ChangeProfilePage from './routes/app/user/ChangeProfilePage';
 import SearchResultPage from './routes/app/SearchResultPage';
 import DoctorPage from './routes/app/doctor/DoctorPage';
 import DoctorBookingPage from './routes/app/doctor/DoctorBookingPage';
+import SlotPage from './routes/app/slot/SlotPage';
+import SuccessPage from './routes/app/pay/SuccessPage';
+import CancelPage from './routes/app/pay/CancelPage';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +44,7 @@ const router = createBrowserRouter([
         path: '/search',
         element: <SearchResultPage />,
       },
+
       //forget password
       {
         path: '/forgotPassword',
@@ -49,16 +53,16 @@ const router = createBrowserRouter([
       {
         path: '/otp',
         element: (
-          <RequireOtpVerification resetStepName='otp'>
-          <OtpPage />
+          <RequireOtpVerification allowedSteps={['otp', 'password']}>
+            <OtpPage />
           </RequireOtpVerification>
         ),
       },
       {
         path: '/resetPassword',
         element: (
-          <RequireOtpVerification resetStepName="password">
-          <ResetPasswordPage />
+          <RequireOtpVerification allowedSteps={['password']}>
+            <ResetPasswordPage />
           </RequireOtpVerification>
         ),
       },
@@ -87,6 +91,34 @@ const router = createBrowserRouter([
           },
         ],
       },
+      //slot
+      {
+        path: '/slot',
+        // element: <DashboardLayout />,
+        children: [
+          {
+            path: ':slotId',
+            element: <SlotPage />,
+          },
+        ],
+      },
+      //payment
+
+      {
+        path: '/pay',
+        // element: <DashboardLayout />,
+        children: [
+          {
+            path: 'success',
+            element: <SuccessPage />,
+          },
+          {
+            path: 'cancel',
+            element: <CancelPage />,
+          },
+        ],
+      },
+      //doctor
       {
         path: '/doctor',
         // element: <DashboardLayout />,
@@ -96,6 +128,7 @@ const router = createBrowserRouter([
             element: <DoctorPage />,
           },
           {
+            //todo: flag as protected or handle unlogged in attempts
             path: ':doctorId/booking',
             element: <DoctorBookingPage />,
           },

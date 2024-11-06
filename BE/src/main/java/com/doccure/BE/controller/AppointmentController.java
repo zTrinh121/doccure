@@ -4,6 +4,7 @@ import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.AppointmentService;
 import com.doccure.BE.util.DateFormatUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +27,12 @@ public class AppointmentController {
             @RequestParam(value = "status", required = false) String status,
             @RequestParam("offset") int offset,
             @RequestParam("limit") int limit,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpServletResponse response
     ) throws Exception {
         return ResponseHandler.responseBuilder("List appointment in detail",
                 HttpStatus.OK,
-                appointmentService.getAppointmentDetailWithStatus(status, offset, limit, request));
+                appointmentService.getAppointmentDetailWithStatus(status, offset, limit, request, response));
     }
 
     @GetMapping("/all/date")
@@ -40,7 +42,8 @@ public class AppointmentController {
             @RequestParam("end_date") String endDate,
             @RequestParam("offset") int offset,
             @RequestParam("limit") int limit,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpServletResponse response
     ) throws Exception {
         LocalDate start = DateFormatUtil.parseStringToDate(startDate);
         LocalDate end = DateFormatUtil.parseStringToDate(endDate);
@@ -49,7 +52,7 @@ public class AppointmentController {
         }
         return ResponseHandler.responseBuilder(String.format("List appointment in detail from %s to %s", start, end),
                 HttpStatus.OK,
-                appointmentService.getAppointmentDetailWithStatusByDate(status, start, end, offset, limit, request));
+                appointmentService.getAppointmentDetailWithStatusByDate(status, start, end, offset, limit, request, response));
     }
 
     @GetMapping("/all/keyword")
@@ -58,12 +61,13 @@ public class AppointmentController {
             @RequestParam("keyword") String keyword,
             @RequestParam("offset") int offset,
             @RequestParam("limit") int limit,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpServletResponse response
     ) throws Exception {
         
         return ResponseHandler.responseBuilder(String.format("List appointment in detail with keyword = %s", keyword),
                 HttpStatus.OK,
-                appointmentService.getAppointmentDetailWithStatusByKeyword(status, keyword, offset, limit, request));
+                appointmentService.getAppointmentDetailWithStatusByKeyword(status, keyword, offset, limit, request, response));
     }
 
     @GetMapping("/{id}")

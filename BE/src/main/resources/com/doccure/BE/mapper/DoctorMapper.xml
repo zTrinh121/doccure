@@ -285,6 +285,17 @@
       WHERE UPPER(s.SPECIALIZATION_NAME) LIKE '%' ||  UPPER(#{keyword,jdbcType=VARCHAR}) || '%'
   </select>
 
+ <select id="getDoctorFullBySpecializationId" resultMap="BaseResultMapFull" parameterType="java.lang.Long">
+      SELECT d.doctor_id,
+        d.first_name || ' '||last_name as FULL_NAME,
+        d.experience, d.hospital, d.avatar,
+        s.*
+      FROM doctor d  
+      JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id  
+      JOIN specialization s ON ds.specialization_id = s.specialization_id
+      WHERE s.specialization_id = #{specializationId,jdbcType=NUMERIC}
+  </select>
+
   <resultMap id="BaseResultMapRating" type="com.doccure.BE.model.DoctorRating">
     <id column="DOCTOR_ID" jdbcType="NUMERIC" property="doctorId" />
     <result column="FULL_NAME" jdbcType="VARCHAR" property="fullName" />

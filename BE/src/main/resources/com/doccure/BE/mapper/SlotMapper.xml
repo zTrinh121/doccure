@@ -91,6 +91,15 @@
     from SLOT
     where SLOT_ID = #{slotId,jdbcType=NUMERIC}
   </select>
+
+  <select id="selectByStartEndDateAndDoctorId" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SLOT
+    where DOCTOR_ID = #{params.doctorId,jdbcType=NUMERIC}
+    AND START_DATETIME =  #{params.startDatetime,jdbcType=TIMESTAMP}
+    AND END_DATETIME = #{params.endDateTime,jdbcType=TIMESTAMP}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from SLOT
     where SLOT_ID = #{slotId,jdbcType=NUMERIC}
@@ -102,9 +111,8 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.doccure.BE.model.Slot">
-    insert into SLOT (SLOT_ID, START_DATETIME, END_DATETIME, 
-      DOCTOR_ID, PRICE)
-    values (#{slotId,jdbcType=NUMERIC}, #{startDatetime,jdbcType=TIMESTAMP}, #{endDatetime,jdbcType=TIMESTAMP}, 
+    insert into SLOT (START_DATETIME, END_DATETIME, DOCTOR_ID, PRICE)
+    values (#{startDatetime,jdbcType=TIMESTAMP}, #{endDatetime,jdbcType=TIMESTAMP}, 
       #{doctorId,jdbcType=NUMERIC}, #{price,jdbcType=NUMERIC})
   </insert>
   <insert id="insertSelective" parameterType="com.doccure.BE.model.Slot">

@@ -107,9 +107,9 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorFullResponse> getDoctorFullBySpecialization(String specialization) throws Exception {
-        List<DoctorFull> doctorFulls = doctorMapper.getDoctorFullBySpecialization(specialization);
-        if(doctorFulls.isEmpty()) throw new DataNotFoundException("No doctor found with " + specialization + " specialization");
+    public List<DoctorFullResponse> getDoctorFullBySpecializationId(Long specializationId) throws Exception {
+        List<DoctorFull> doctorFulls = doctorMapper.getDoctorFullBySpecializationId(specializationId);
+        if(doctorFulls.isEmpty()) throw new DataNotFoundException("No doctor found with " + specializationId + " specialization");
         doctorFulls = insertMaxMinPrice(doctorFulls);
         return doctorFulls.stream()
                 .map(DoctorFullResponse::fromDoctorFull)

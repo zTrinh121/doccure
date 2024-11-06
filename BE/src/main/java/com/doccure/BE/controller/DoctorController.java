@@ -91,10 +91,10 @@ public class DoctorController {
     }
     
     @GetMapping("/specialization")
-    public ResponseEntity<Object> getDoctorFullBySpecialization(@RequestParam("specialization") String specialization) throws Exception {
+    public ResponseEntity<Object> getDoctorFullBySpecialization(@RequestParam("specialization") Long specialization) throws Exception {
         return ResponseHandler.responseBuilder("List doctors in detail by specialization",
                 HttpStatus.OK,
-                doctorService.getDoctorFullByKeyword(specialization));
+                doctorService.getDoctorFullBySpecializationId(specialization));
     }
 
     @GetMapping("/{id}")

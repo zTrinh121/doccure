@@ -23,7 +23,7 @@ public interface DoctorService {
     List<DoctorFullResponse> getAllDoctor() throws DataNotFoundException;
     DoctorFullResponse getDoctorById(Long doctorId) throws DataNotFoundException;
     List<DoctorFullResponse> getDoctorFullByKeyword(String keyword) throws Exception;
-    List<DoctorFullResponse> getDoctorFullBySpecialization(String specialization) throws Exception;
+    List<DoctorFullResponse> getDoctorFullBySpecializationId(Long specializationId) throws Exception;
 
     //Doctor with rating 
     List<DoctorRatingResponse> getAllDoctorRatings() throws Exception;

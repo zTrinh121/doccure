@@ -43,6 +43,8 @@ public interface DoctorMapper {
     
     List<DoctorFull> getDoctorFullBySpecialization(String specialization);
 
+    List<DoctorFull> getDoctorFullBySpecializationId(Long specializationId);
+
     List<DoctorRating> getAllDoctorRatings();
    
     List<DoctorRating> getAllDoctorRatings(RowBounds rowBounds);

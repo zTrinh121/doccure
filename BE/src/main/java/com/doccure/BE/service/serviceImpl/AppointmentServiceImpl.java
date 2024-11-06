@@ -10,6 +10,7 @@ import com.doccure.BE.response.AppointmentDetailResponse;
 import com.doccure.BE.service.AppointmentService;
 import com.doccure.BE.util.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.ibatis.session.RowBounds;
@@ -27,7 +28,9 @@ public class AppointmentServiceImpl  implements AppointmentService {
     private final TokenMapper tokenMapper;
 
     @Override
-    public List<AppointmentDetailResponse> getAppointmentDetailWithStatus(String status, int offset, int limit, HttpServletRequest request) throws Exception {
+    public List<AppointmentDetailResponse> getAppointmentDetailWithStatus(String status, int offset, int limit,
+                                                                          HttpServletRequest request,
+                                                                          HttpServletResponse response) throws Exception {
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
         List<AppointmentDetail> appointmentDetails;
@@ -48,6 +51,7 @@ public class AppointmentServiceImpl  implements AppointmentService {
         }
 
         if (appointmentDetails.isEmpty()) throw new DataNotFoundException("No appointment detail found for user ID = " + accessTokenUser.getUserId());
+        response.setHeader("X-Total-Count", String.valueOf(appointmentDetails.size()));
         return appointmentDetails
                 .stream()
                 .map(AppointmentDetailResponse::fromAppointmentDetail)
@@ -55,7 +59,12 @@ public class AppointmentServiceImpl  implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentDetailResponse> getAppointmentDetailWithStatusByDate(String status, LocalDate startDate, LocalDate endDate, int offset, int limit, HttpServletRequest request) throws Exception {
+    public List<AppointmentDetailResponse> getAppointmentDetailWithStatusByDate(String status,
+                                                                                LocalDate startDate,
+                                                                                LocalDate endDate,
+                                                                                int offset, int limit,
+                                                                                HttpServletRequest request,
+                                                                                HttpServletResponse response) throws Exception {
         StatusAppointmentType statusAppointmentType = getStatusAppointmentFromString(status);
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
@@ -77,6 +86,7 @@ public class AppointmentServiceImpl  implements AppointmentService {
                 startDate,
                 endDate)
         );
+        response.setHeader("X-Total-Count", String.valueOf(appointmentDetails.size()));
         return appointmentDetails
                 .stream()
                 .map(AppointmentDetailResponse::fromAppointmentDetail)
@@ -85,7 +95,9 @@ public class AppointmentServiceImpl  implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentDetailResponse> getAppointmentDetailWithStatusByKeyword(String status, String keyword, int offset, int limit, HttpServletRequest request) throws Exception {
+    public List<AppointmentDetailResponse> getAppointmentDetailWithStatusByKeyword(String status, String keyword, int offset, int limit,
+                                                                                   HttpServletRequest request,
+                                                                                   HttpServletResponse response) throws Exception {
         StatusAppointmentType statusAppointmentType = getStatusAppointmentFromString(status);
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
@@ -105,6 +117,7 @@ public class AppointmentServiceImpl  implements AppointmentService {
                         accessTokenUser.getUserId(),
                         keyword)
         );
+        response.setHeader("X-Total-Count", String.valueOf(appointmentDetails.size()));
         return appointmentDetails
                 .stream()
                 .map(AppointmentDetailResponse::fromAppointmentDetail)
@@ -128,7 +141,7 @@ public class AppointmentServiceImpl  implements AppointmentService {
         try {
             return StatusAppointmentType.fromString(status);
         } catch (IllegalArgumentException e) {
-            throw new DataNotFoundException("Invalid status parameter.Type value (booked, canceled, pendingPayment, upcoming).");
+            throw new DataNotFoundException("Invalid status parameter.Type value (booked, canceled, pending_payment, upcoming).");
         }
 
     }

@@ -1,6 +1,7 @@
 package com.doccure.BE.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.doccure.BE.model.Slot;
 import com.doccure.BE.model.SlotExample;
@@ -21,6 +22,8 @@ public interface SlotMapper {
 
     List<Slot> selectByExample(SlotExample example);
 
+    Slot selectByStartEndDateAndDoctorId(@Param("params") Map<String, Object> params);
+
     Slot selectByPrimaryKey(Long slotId);
 
     int updateByExampleSelective(@Param("row") Slot row, @Param("example") SlotExample example);
@@ -32,4 +35,6 @@ public interface SlotMapper {
     int updateByPrimaryKey(Slot row);
 
     SlotPrice getMaxMinPriceByDoctorId(Long doctorId);
+
+
 }

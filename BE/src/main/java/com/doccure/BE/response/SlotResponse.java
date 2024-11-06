@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,10 +16,10 @@ public class SlotResponse {
     private Long slotId;
 
     @JsonProperty("start_date_time")
-    private Date startDatetime;
+    private LocalDateTime startDatetime;
 
     @JsonProperty("end_date_time")
-    private Date endDatetime;
+    private LocalDateTime endDatetime;
 
     @JsonProperty("doctor_id")
     private Long doctorId;

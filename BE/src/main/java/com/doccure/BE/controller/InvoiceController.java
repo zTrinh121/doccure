@@ -20,36 +20,60 @@ public class InvoiceController {
     @GetMapping("/all")
     public ResponseEntity<Object> getAllInvoices(HttpServletRequest request,
                                                  @RequestParam("offset") int offset,
-                                                 @RequestParam("limit") int limit ) throws Exception {
-        return ResponseHandler.responseBuilder("List invoices in detail",
-                HttpStatus.OK,
-                invoiceService.getAllInvoices(offset, limit, request));
+                                                 @RequestParam("limit") int limit ) {
+        try {
+            return ResponseHandler.responseBuilder("List invoices in detail",
+                    HttpStatus.OK,
+                    invoiceService.getAllInvoices(offset, limit, request));
+        } catch (Exception e) {
+            return ResponseHandler.responseBuilder("There some error happens with getting all invoices " ,
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getInvoiceByID(HttpServletRequest request,
-                                                 @PathVariable("id") Long invoiceId) throws Exception {
-        return ResponseHandler.responseBuilder("Invoice in detail with ID = " + invoiceId,
-                HttpStatus.OK,
-                invoiceService.getInvoiceById(invoiceId, request));
+                                                 @PathVariable("id") Long invoiceId){
+        try {
+            return ResponseHandler.responseBuilder("Invoice in detail with ID = " + invoiceId,
+                    HttpStatus.OK,
+                    invoiceService.getInvoiceById(invoiceId, request));
+        } catch (Exception e) {
+            return ResponseHandler.responseBuilder("There some error happens with getting invoice " ,
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
+        }
     }
 
     @GetMapping("/search")
     public ResponseEntity<Object> getInvoiceByID(HttpServletRequest request,
                                                  @RequestParam("offset") int offset,
                                                  @RequestParam("limit") int limit,
-                                                 @RequestParam("keyword") String keyword) throws Exception {
-        return ResponseHandler.responseBuilder("List invoices in detail with keyword = " + keyword,
-                HttpStatus.OK,
-                invoiceService.searchInvoices(keyword, offset, limit, request));
+                                                 @RequestParam("keyword") String keyword) {
+        try {
+            return ResponseHandler.responseBuilder("List invoices in detail with keyword = " + keyword,
+                    HttpStatus.OK,
+                    invoiceService.searchInvoices(keyword, offset, limit, request));
+        } catch (Exception e) {
+            return ResponseHandler.responseBuilder("There some error happens with keyword = " + keyword,
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
+        }
     }
 
     @GetMapping(value = "/pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> invoicePdf(@PathVariable("id") Long invoiceId,
-                                                          HttpServletRequest request) throws Exception {
+    public ResponseEntity<Object> invoicePdf(@PathVariable("id") Long invoiceId,
+                                                          HttpServletRequest request){
 
 
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(invoiceService.downloadPdfInvoice(invoiceId, request)));
+        try {
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+                    .body(new InputStreamResource(invoiceService.downloadPdfInvoice(invoiceId, request)));
+        } catch (Exception e) {
+            return ResponseHandler.responseBuilder("There some error happens with downloading invoice",
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
+        }
     }
 }

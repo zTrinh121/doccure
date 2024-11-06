@@ -22,27 +22,36 @@ public class PayPalController {
     public static final String CANCEL_URL = "/pay/cancel";
 
     @PostMapping("/pay")
-    public String payment(@RequestParam("slot_id") Long slotId,
+    public ResponseEntity<Object> payment(@RequestParam("slot_id") Long slotId,
                           @RequestParam("specialization_id") Long specializationId,
                           HttpServletRequest request) {
         try {
             Payment payment = payPalService.createPayment(slotId, specializationId, request);
             for(Links link:payment.getLinks()) {
                 if(link.getRel().equals("approval_url")) {
-                    return "redirect:"+link.getHref();
+                    return ResponseHandler.responseBuilder("Redirect link back for paypal",
+                            HttpStatus.OK,
+                            "redirect:"+link.getHref());
                 }
             }
 
         } catch (PayPalRESTException e) {
-            e.printStackTrace();
+            return ResponseHandler.responseBuilder("There some errors happen while payment",
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseHandler.responseBuilder("There some errors happen while payment",
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
         }
-        return "redirect:/";
+
+        return ResponseHandler.responseBuilder("Redirect link back for paypal",
+                HttpStatus.OK,
+                "redirect:/");
     }
 
     @GetMapping(value = CANCEL_URL)
-    public String cancelPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, @RequestParam("appointment_id") Long appointmentId,
+    public String cancelPay(@RequestParam("appointment_id") Long appointmentId,
                             @RequestParam("invoice_id") Long invoiceId) {
         payPalService.cancelPayment(appointmentId, invoiceId);
         return "cancel";
@@ -62,7 +71,9 @@ public class PayPalController {
                         appointmentDetail);
             }
         } catch (PayPalRESTException e) {
-            System.out.println(e.getMessage());
+            return ResponseHandler.responseBuilder("Something error just happen with invoice ID = " + invoiceId,
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
         }
         return ResponseHandler.responseBuilder("Invoice in detail with ID = " + invoiceId,
                 HttpStatus.OK,

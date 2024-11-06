@@ -105,15 +105,15 @@ public class PayPalServiceImpl implements PayPalService {
         }
 
         List<Appointment> appointments = appointmentMapper.selectBySlotId(slotId);
-
+        String token = TokenUtil.checkToken(request);
+        Long userId = tokenMapper.findByAccessToken(token).getUserId();
 
         Optional<Appointment> slotToProcess = appointments.stream()
                 .filter(appointment -> appointment.getSlotId().equals(slotId) &&
                         ("PENDING_PAYMENT".equals(appointment.getStatus())))
                 .findFirst();
 
-        String token = TokenUtil.checkToken(request);
-        Long userId = tokenMapper.findByAccessToken(token).getUserId();
+
 
         if (slotToProcess.isPresent()) {
             List<Appointment> existingAppointments = appointmentMapper.selectBySlotId(slotId);

@@ -21,4 +21,5 @@ public interface PayPalService {
 
     AppointmentDetail successPayment(Long appointmentId, Long invoiceId, Long slotId, Long userId);
 
+
 }

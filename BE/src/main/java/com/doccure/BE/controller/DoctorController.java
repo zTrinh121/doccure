@@ -27,7 +27,7 @@ public class DoctorController {
 
     @PostMapping("/insert")
     public ResponseEntity<Object> insertDoctorWithSpecialization(@RequestBody @Valid DoctorInsertRequest doctorInsertRequest,
-                                                       BindingResult result) throws Exception {
+                                                       BindingResult result) {
         if(result.hasErrors()){
             List<String> errorMessages =  result.getFieldErrors()
                     .stream()
@@ -91,48 +91,80 @@ public class DoctorController {
     }
     
     @GetMapping("/specialization")
-    public ResponseEntity<Object> getDoctorFullBySpecialization(@RequestParam("specialization") Long specialization) throws Exception {
-        return ResponseHandler.responseBuilder("List doctors in detail by specialization",
-                HttpStatus.OK,
-                doctorService.getDoctorFullBySpecializationId(specialization));
+    public ResponseEntity<Object> getDoctorFullBySpecialization(@RequestParam("specialization") Long specialization){
+        try {
+            return ResponseHandler.responseBuilder("List doctors in detail by specialization",
+                    HttpStatus.OK,
+                    doctorService.getDoctorFullBySpecializationId(specialization));
+        } catch (Exception e) {
+            return ResponseHandler.responseBuilder("There some error happens with getting doctor by specialization id " ,
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getDoctorById(@PathVariable("id") Long id) throws Exception {
-        return ResponseHandler.responseBuilder("Requested doctor detail with id = " + id ,
-                HttpStatus.OK,
-                doctorService.getDoctorById(id));
+    public ResponseEntity<Object> getDoctorById(@PathVariable("id") Long id)  {
+        try {
+            return ResponseHandler.responseBuilder("Requested doctor detail with id = " + id ,
+                    HttpStatus.OK,
+                    doctorService.getDoctorById(id));
+        } catch (DataNotFoundException e) {
+            return ResponseHandler.responseBuilder("There some error happens with getting doctor " ,
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
+        }
     }
 
     // Rating for doctors
     @GetMapping("/rating/all")
-    public ResponseEntity<Object> getAllDoctorRatings() throws Exception {
-        return ResponseHandler.responseBuilder("List rating doctors in detail",
-                HttpStatus.OK,
-                doctorService.getAllDoctorRatings());
+    public ResponseEntity<Object> getAllDoctorRatings() {
+        try {
+            return ResponseHandler.responseBuilder("List rating doctors in detail",
+                    HttpStatus.OK,
+                    doctorService.getAllDoctorRatings());
+        } catch (Exception e) {
+            return ResponseHandler.responseBuilder("There some error happens with getting rating of doctors " ,
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
+        }
     }
 
     @GetMapping("/rating/all/pagination")
     public ResponseEntity<Object> getAllDoctorRatingsPagination(@RequestParam("offset") int offset,
-                                                                @RequestParam("limit") int limit) throws Exception {
-        return ResponseHandler.responseBuilder(String.format("List rating doctor with pagination offset = %d and limit = %d", offset, limit),
-                HttpStatus.OK,
-                doctorService.getAllDoctorRatingsPagination(offset, limit));
+                                                                @RequestParam("limit") int limit) {
+        try {
+            return ResponseHandler.responseBuilder(String.format("List rating doctor with pagination offset = %d and limit = %d", offset, limit),
+                    HttpStatus.OK,
+                    doctorService.getAllDoctorRatingsPagination(offset, limit));
+        } catch (Exception e) {
+            return ResponseHandler.responseBuilder("There some error happens with getting rating doctor " ,
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
+        }
     }
 
     @GetMapping("/rating/{id}")
-    public ResponseEntity<Object> getRatingDoctorById(@PathVariable("id") Long id) throws DataNotFoundException {
-        return ResponseHandler.responseBuilder("Requested rating for doctor detail with id = " + id ,
-                HttpStatus.OK,
-                doctorService.getDoctorRatingByDoctorId(id));
+    public ResponseEntity<Object> getRatingDoctorById(@PathVariable("id") Long id) {
+        try {
+            return ResponseHandler.responseBuilder("Requested rating for doctor detail with id = " + id ,
+                    HttpStatus.OK,
+                    doctorService.getDoctorRatingByDoctorId(id));
+        } catch (DataNotFoundException e) {
+            return ResponseHandler.responseBuilder("There some error happens with getting doctor by id " ,
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage());
+        }
     }
 
     @GetMapping("/rating/filter")
     public ResponseEntity<Object> filterDoctorRating(@RequestParam("type") String type,
                                                      @RequestParam("order") String order) throws Exception {
-        return ResponseHandler.responseBuilder("Doctors list filter ",
-                HttpStatus.OK,
-                doctorService.filterDoctorRating(type, order));
+
+            return ResponseHandler.responseBuilder("Doctors list filter ",
+                    HttpStatus.OK,
+                    doctorService.filterDoctorRating(type, order));
+
     }
 
     // Slots for doctors

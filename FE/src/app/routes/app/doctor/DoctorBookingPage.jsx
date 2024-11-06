@@ -45,7 +45,7 @@ const DoctorBookingPage = () => {
 
   const navigate = useNavigate();
 
-  //todo: implement error screen, loading screen
+  //todo: implement error screen for empty, loading screen
   if (isPending) {
     return <IsPendingSpin />;
   }

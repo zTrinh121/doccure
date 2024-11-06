@@ -8,7 +8,7 @@ import HomePage from './routes/app/HomePage';
 import LoginPage from './routes/auth/LoginPage';
 import RegisterPage from './routes/auth/RegisterPage';
 import Profile from './routes/app/Profile';
-import { ProtectedRoute, RequireOtpVerification } from '../lib/auth';
+import RequireOtpVerification from '../features/auth/components/RequireOtpVerification';
 import HomeLayout from '../components/layouts/HomeLayout';
 import ChangePasswordPage from './routes/app/ChangePasswordPage';
 import ForgotPasswordPage from './routes/auth/ForgotPasswordPage';
@@ -22,7 +22,12 @@ import DoctorBookingPage from './routes/app/doctor/DoctorBookingPage';
 import SlotPage from './routes/app/slot/SlotPage';
 import SuccessPage from './routes/app/pay/SuccessPage';
 import CancelPage from './routes/app/pay/CancelPage';
-import AppointmentPage from './routes/app/user/AppointmentPage';
+import AppointmentPage from './routes/app/appointment/AppointmentPage';
+import PrivateRoutes from '../features/auth/components/PrivateRoutes';
+import AppointmentsPage from './routes/app/appointment/AppointmentsPage';
+import SimpleLayout from '../components/layouts/SimpleLayout';
+import ErrorPage from './routes/app/pay/ErrorPage';
+import InvoicePage from './routes/app/invoice/InvoicePage';
 
 const router = createBrowserRouter([
   {
@@ -72,36 +77,43 @@ const router = createBrowserRouter([
       //user
       {
         path: '/user',
-        element: <DashboardLayout />,
+        element: (
+          <PrivateRoutes>
+            <DashboardLayout />
+          </PrivateRoutes>
+        ),
         children: [
           {
             path: 'profile',
             element: (
-              <ProtectedRoute>
-                <ChangeProfilePage />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <ChangeProfilePage />
+              // </ProtectedRoute>
             ),
           },
           {
             path: 'changePassword',
-            element: (
-              <ProtectedRoute>
-                <ChangePasswordPage />
-              </ProtectedRoute>
-            ),
+            element: <ChangePasswordPage />,
           },
           {
             path: 'appointment',
-            children: [
-              {
-                path: ':appointmentId',
-                element: (
-                  // <ProtectedRoute>
-                    <AppointmentPage />
-                  // </ProtectedRoute>
-                ),
-              },
-            ],
+
+            element: <AppointmentsPage />,
+          },
+          {
+            path: 'appointment/:appointmentId',
+
+            element: <AppointmentPage />,
+          },
+          {
+            path: 'invoice',
+
+            // element: <AppointmentsPage />,
+          },
+          {
+            path: 'invoice/:invoiceId',
+
+            element: <InvoicePage />,
           },
         ],
       },
@@ -120,7 +132,11 @@ const router = createBrowserRouter([
 
       {
         path: '/pay',
-        // element: <DashboardLayout />,
+        element: (
+          <PrivateRoutes>
+            <SimpleLayout />
+          </PrivateRoutes>
+        ),
         children: [
           {
             path: 'success',
@@ -129,6 +145,10 @@ const router = createBrowserRouter([
           {
             path: 'cancel',
             element: <CancelPage />,
+          },
+          {
+            path: 'error',
+            element: <ErrorPage />,
           },
         ],
       },
@@ -144,7 +164,11 @@ const router = createBrowserRouter([
           {
             //todo: flag as protected or handle unlogged in attempts
             path: ':doctorId/booking',
-            element: <DoctorBookingPage />,
+            element: (
+              <PrivateRoutes>
+                <DoctorBookingPage />
+              </PrivateRoutes>
+            ),
           },
         ],
       },

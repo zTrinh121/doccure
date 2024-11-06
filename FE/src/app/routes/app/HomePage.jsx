@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 import { searchDoctors } from '../../../lib/doctor';
 import { useNavigate } from 'react-router-dom';
+import { getAppointments } from '../../../lib/appointment';
 
 // import { useAuthStore } from '../../../stores/authStore';
 
@@ -41,7 +42,13 @@ const HomePage = () => {
           </Form>
         </Space>
       </Flex>
-
+      <Button
+        onClick={async () => {
+          console.log(getAppointments({ offset: 0, limit: 10 }));
+        }}
+      >
+        Fetch
+      </Button>
       <div className="px-8 my-12">
         {/* Services Section */}
         <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">

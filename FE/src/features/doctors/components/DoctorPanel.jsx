@@ -38,7 +38,7 @@ const DoctorPanel = ({
   };
 
   return (
-    <Card className="p-4 shadow-lg border rounded-lg max-w-4xl">
+    <Card className="p-4 my-1 shadow-lg border rounded-lg max-w-4xl">
       <div className="flex">
         <div className="mr-6 flex flex-col items-center">
           <Avatar

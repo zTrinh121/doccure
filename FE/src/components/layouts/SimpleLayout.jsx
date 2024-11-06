@@ -1,16 +1,16 @@
-import React from 'react';
 import { Row, Col } from 'antd';
+import { Outlet } from 'react-router-dom';
 
-const ContentLayout = ({ children }) => {
+const SimpleLayout = () => {
   return (
     <Row>
       <Col sm={1} md={4}></Col>
       <Col sm={22} md={16}>
-        {children}
+        <Outlet />
       </Col>
       <Col sm={1} md={4}></Col>
     </Row>
   );
 };
 
-export default ContentLayout;
+export default SimpleLayout;

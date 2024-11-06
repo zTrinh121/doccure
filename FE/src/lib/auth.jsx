@@ -86,24 +86,7 @@ export const forgotPassword = async ({ values, email }) => {
   return publicAxiosInstance.post(`auth/forgot-password/${email}`, values);
 };
 
-export const ProtectedRoute = ({ children }) => {
-  const accessToken = useAccessToken();
 
-  if (!accessToken) {
-    //todo:implement request for checking token
-    return <Navigate to={`/login`} replace />;
-  }
-
-  return children;
-};
 
 //Can change to custom prop route to allow reuse
-export function RequireOtpVerification({ children, allowedSteps }) {
-  const resetStep = useResetStep();
-  console.log('resetStep', resetStep, allowedSteps);
-  return allowedSteps.includes(resetStep) ? (
-    children
-  ) : (
-    <Navigate to="/forgotPassword" replace />
-  );
-}
+

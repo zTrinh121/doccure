@@ -19,7 +19,6 @@ const DashboardLayout = () => {
     );
   }
 
-
   return (
     <Layout>
       <Sider width="25%">
@@ -54,6 +53,15 @@ const DashboardLayout = () => {
               }}
             >
               Change password
+            </Button>
+            <Button
+              block
+              type="link"
+              onClick={() => {
+                navigate('/user/appointment');
+              }}
+            >
+              View appointments
             </Button>
           </Flex>
         </Card>

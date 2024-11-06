@@ -6,6 +6,8 @@ const { Text, Link } = Typography;
 import { useAppointmentQuery } from '../../../../hooks/useAppointmentQuery';
 import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { getPaymentSuccessful } from '../../../../lib/payment';
 
 const SuccessPage = () => {
   const navigate = useNavigate();
@@ -15,6 +17,30 @@ const SuccessPage = () => {
   const invoiceId = urlParams.get('invoice_id');
   const slotId = urlParams.get('slot_id');
   const paymentId = urlParams.get('paymentId');
+  const userId = urlParams.get('user_id');
+  const token = urlParams.get('token');
+  const payerId = urlParams.get('PayerID');
+
+  // appointmentId, invoiceId, slotId, userId, paymentId, payerId
+  useEffect(() => {
+    const getPayment = async () => {
+      return await getPaymentSuccessful({
+        appointmentId,
+        invoiceId,
+        slotId,
+        userId,
+        paymentId,
+        token,
+        payerId,
+      });
+    };
+    try {
+      console.log(getPayment());
+    } catch (error) {
+      console.log(error);
+      navigate('/pay/error');
+    }
+  }, []);
 
   const { isPending, isError, data, error } =
     useAppointmentQuery(appointmentId);
@@ -22,6 +48,10 @@ const SuccessPage = () => {
   if (isPending) {
     return <IsPendingSpin></IsPendingSpin>;
   }
+
+  const onClickViewInvoice = () => {
+    navigate(`/user/appointment/${appointmentId}`);
+  };
 
   return (
     <ContentLayout>
@@ -45,11 +75,14 @@ const SuccessPage = () => {
             <Text strong>{data.doctor.full_name}</Text>
           </div>{' '}
           <div>
-            on {data.slot.date_slot} {data.slot.start_time} -{' '}
-            {data.slot.end_time}
+            on{' '}
+            <Text strong>
+              {data.slot.date_slot} {data.slot.start_time} -{' '}
+              {data.slot.end_time}
+            </Text>
           </div>
           <Button className="mt-2">View Invoice</Button>
-          <Button type="primary" className="mt-2">
+          <Button onClick={onClickViewInvoice} type="primary" className="mt-2">
             View appointment
           </Button>
           <Button

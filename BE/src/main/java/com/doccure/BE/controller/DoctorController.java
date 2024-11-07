@@ -1,12 +1,12 @@
 package com.doccure.BE.controller;
 
 import com.doccure.BE.exception.DataNotFoundException;
-import com.doccure.BE.model.Doctor;
 import com.doccure.BE.request.DoctorInsertRequest;
 import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.DoctorService;
 import com.doccure.BE.util.DateFormatUtil;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +16,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -78,10 +79,10 @@ public class DoctorController {
 
     //Doctors with specialization
     @GetMapping("/all")
-    public ResponseEntity<Object> getAllDoctorDetails() throws DataNotFoundException {
+    public ResponseEntity<Object> getAllDoctorDetails(HttpServletResponse response) throws DataNotFoundException {
         return ResponseHandler.responseBuilder("List doctors in detail",
                 HttpStatus.OK,
-                doctorService.getAllDoctor());
+                doctorService.getAllDoctor(response));
     }
     @GetMapping("")
     public ResponseEntity<Object> getDoctorFullByKeyword(@RequestParam("keyword") String keyword) throws Exception {

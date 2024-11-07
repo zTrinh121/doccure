@@ -72,10 +72,6 @@ public class PayPalServiceImpl implements PayPalService {
         redirectUrls.setReturnUrl(successUrl);
         payment.setRedirectUrls(redirectUrls);
 
-        String uniqueRequestId = UUID.randomUUID().toString();
-//        apiContext.addHeader("PayPal-Request-Id", uniqueRequestId);
-        System.out.println("The request ID: " + apiContext.getRequestId());
-        System.out.println(apiContext.getHeadersMap());
         return payment.create(apiContext);
 
     }

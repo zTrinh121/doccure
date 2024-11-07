@@ -34,24 +34,28 @@ public class AppointmentServiceImpl  implements AppointmentService {
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
         List<AppointmentDetail> appointmentDetails;
+        List<AppointmentDetail> appointmentDetailsAll;
 
         if (status == null) {
             appointmentDetails = appointmentMapper.getAllAppointmentDetail(accessTokenUser.getUserId(), new RowBounds(offset, limit));
+            appointmentDetailsAll = appointmentMapper.getAllAppointmentDetail(accessTokenUser.getUserId());
         } else {
             StatusAppointmentType statusAppointmentType = getStatusAppointmentFromString(status);
-
             if (statusAppointmentType.name().equals("Upcoming")) {
                 appointmentDetails = appointmentMapper.getUpcomingAppointmentDetails(accessTokenUser.getUserId(), new RowBounds(offset, limit));
+                appointmentDetailsAll = appointmentMapper.getUpcomingAppointmentDetails(accessTokenUser.getUserId());
             } else {
                 Map<String, Object> params = new HashMap<>();
                 params.put("userId", accessTokenUser.getUserId());
                 params.put("status", statusAppointmentType.name());
                 appointmentDetails = appointmentMapper.getAppointmentDetailWithStatus(params, new RowBounds(offset, limit));
+                appointmentDetailsAll = appointmentMapper.getAppointmentDetailWithStatus(params);
             }
         }
 
         if (appointmentDetails.isEmpty()) throw new DataNotFoundException("No appointment detail found for user ID = " + accessTokenUser.getUserId());
-        response.setHeader("X-Total-Count", String.valueOf(appointmentDetails.size()));
+        response.setHeader("X-Total-Count", String.valueOf(appointmentDetailsAll.size()));
+
         return appointmentDetails
                 .stream()
                 .map(AppointmentDetailResponse::fromAppointmentDetail)
@@ -69,8 +73,10 @@ public class AppointmentServiceImpl  implements AppointmentService {
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
         List<AppointmentDetail> appointmentDetails;
+        List<AppointmentDetail> appointmentDetailsAll;
         if(statusAppointmentType.name().equals("Upcoming")){
             appointmentDetails = appointmentMapper.getUpcomingAppointmentDetailWithStatusByDate(accessTokenUser.getUserId(), new RowBounds(offset, limit));
+            appointmentDetailsAll = appointmentMapper.getUpcomingAppointmentDetailWithStatusByDate(accessTokenUser.getUserId());
         }else{
             Map<String, Object> params = new HashMap<>();
             params.put("userId", accessTokenUser.getUserId());
@@ -78,6 +84,7 @@ public class AppointmentServiceImpl  implements AppointmentService {
             params.put("startDate", startDate);
             params.put("endDate", endDate);
             appointmentDetails = appointmentMapper.getAppointmentDetailWithStatusByDate(params, new RowBounds(offset, limit));
+            appointmentDetailsAll = appointmentMapper.getAppointmentDetailWithStatusByDate(params);
         }
 
         if(appointmentDetails.isEmpty()) throw new DataNotFoundException(
@@ -86,7 +93,7 @@ public class AppointmentServiceImpl  implements AppointmentService {
                 startDate,
                 endDate)
         );
-        response.setHeader("X-Total-Count", String.valueOf(appointmentDetails.size()));
+        response.setHeader("X-Total-Count", String.valueOf(appointmentDetailsAll.size()));
         return appointmentDetails
                 .stream()
                 .map(AppointmentDetailResponse::fromAppointmentDetail)
@@ -102,14 +109,17 @@ public class AppointmentServiceImpl  implements AppointmentService {
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
         List<AppointmentDetail> appointmentDetails;
+        List<AppointmentDetail> appointmentDetailsAll;
         Map<String, Object> params = new HashMap<>();
         params.put("userId", accessTokenUser.getUserId());
         params.put("status", statusAppointmentType.name());
         params.put("keyword", keyword);
         if(statusAppointmentType.name().equals("Upcoming")){
             appointmentDetails = appointmentMapper.getUpcomingAppointmentDetailWithStatusByKeyword(params, new RowBounds(offset, limit));
+            appointmentDetailsAll = appointmentMapper.getUpcomingAppointmentDetailWithStatusByKeyword(params);
         }else{
             appointmentDetails = appointmentMapper.getAppointmentDetailWithStatusByKeyword(params, new RowBounds(offset, limit));
+            appointmentDetailsAll = appointmentMapper.getAppointmentDetailWithStatusByKeyword(params);
         }
 
         if(appointmentDetails.isEmpty()) throw new DataNotFoundException(
@@ -117,7 +127,7 @@ public class AppointmentServiceImpl  implements AppointmentService {
                         accessTokenUser.getUserId(),
                         keyword)
         );
-        response.setHeader("X-Total-Count", String.valueOf(appointmentDetails.size()));
+        response.setHeader("X-Total-Count", String.valueOf(appointmentDetailsAll.size()));
         return appointmentDetails
                 .stream()
                 .map(AppointmentDetailResponse::fromAppointmentDetail)

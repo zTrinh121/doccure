@@ -15,6 +15,7 @@ import com.doccure.BE.request.DoctorSpecializationRequest;
 import com.doccure.BE.response.*;
 import com.doccure.BE.service.DoctorService;
 import com.doccure.BE.util.CloudinaryUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -73,12 +74,13 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorFullResponse> getAllDoctor() throws DataNotFoundException {
+    public List<DoctorFullResponse> getAllDoctor(HttpServletResponse response) throws DataNotFoundException {
         List<DoctorFull> doctorFullResponseList = doctorMapper.getAllDoctorFulls();
         if (doctorFullResponseList.isEmpty())
             throw new DataNotFoundException("No doctor found in list");
 
         doctorFullResponseList = insertMaxMinPrice(doctorFullResponseList);
+        response.setHeader("X-Total-Count", String.valueOf(doctorFullResponseList.size()));
         return doctorFullResponseList.stream()
                 .map(DoctorFullResponse::fromDoctorFull)
                 .toList();

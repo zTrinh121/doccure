@@ -8,8 +8,9 @@ export const useAppointmentsQuery = ({ status, offset, limit }) => {
     queryKey: ["appointments", status, offset, limit],
     queryFn: async () => {
       const response = await getAppointments({ status, offset, limit });
-      console.log(response);
-      return response.data.data;
+      response.data.total = parseInt(response.headers['x-total-count'])
+
+      return response.data;
     },
   });
   return { isPending, isError, data, error }

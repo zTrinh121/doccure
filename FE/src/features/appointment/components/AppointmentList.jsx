@@ -6,23 +6,40 @@ import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 import { getTimeString } from '../../../utils/timeUtils';
 import { useState } from 'react';
 import { Spin } from 'antd';
+import { useEffect } from 'react';
+import { useMemo } from 'react';
 
 const AppointmentList = () => {
   const [status, setStatus] = useState('');
-  const [pagination, setPagination] = useState({ page: 1, pageSize: 10 });
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 10,
+    total: 10,
+  });
   const { isPending, isError, data, error } = useAppointmentsQuery({
     status: status,
-    offset: pagination.page,
+    offset: pagination.page - 1,
     limit: pagination.pageSize,
   });
+  // const total = useMemo(() => data?.total, [data?.total]);
 
-  // if (isPending) {
-  //   return <IsPendingSpin></IsPendingSpin>;
-  // }
+  useEffect(() => {
+    if (data?.total) {
+      //!no watching for empty data
+      setPagination((prevPagination) => ({
+        ...prevPagination,
+        total: data?.total,
+      }));
+    }
+  }, [data?.total]);
+  const responseData = data?.data;
 
   const onChangePagination = (page, pageSize) => {
-    console.log('page', page, 'pagesize', pageSize);
-    setPagination({ page, pageSize });
+    setPagination((prevPagination) => ({
+      ...prevPagination,
+      page,
+      pageSize,
+    }));
   };
 
   const onClick = (value) => {
@@ -49,7 +66,7 @@ const AppointmentList = () => {
           >
             Pending Payment
           </Button>
-          {data?.map((appointment) => {
+          {responseData?.map((appointment) => {
             return (
               <>
                 {' '}
@@ -73,7 +90,7 @@ const AppointmentList = () => {
       </Spin>
       <Pagination
         defaultCurrent={1}
-        total={50}
+        total={pagination.total}
         showSizeChanger
         showTotal={(total) => `Total ${total} items`}
         onChange={onChangePagination}

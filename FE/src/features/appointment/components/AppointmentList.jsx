@@ -18,8 +18,6 @@ const AppointmentList = () => {
 
   return (
     <div>
-      <AppointmentItem />
-      {JSON.stringify(data)}
       <div>
         {data.map((appointment) => {
           return (

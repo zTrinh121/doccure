@@ -1,13 +1,10 @@
-import React from 'react';
 import AppointmentItem from './AppointmentItem';
-import { Button, Pagination } from 'antd';
+import { Button, Pagination, Spin } from 'antd';
+
 import { useAppointmentsQuery } from '../../../hooks/useAppointmentsQuery';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 import { getTimeString } from '../../../utils/timeUtils';
 import { useState } from 'react';
-import { Spin } from 'antd';
 import { useEffect } from 'react';
-import { useMemo } from 'react';
 
 const AppointmentList = () => {
   const [status, setStatus] = useState('');
@@ -50,51 +47,53 @@ const AppointmentList = () => {
     <div>
       <Spin spinning={isPending}>
         <div>
-          <Button
-            type={status === 'booked' ? 'primary' : ''}
-            onClick={() => {
-              onClick('booked');
-            }}
-          >
-            Booked
-          </Button>
-          <Button
-            type={status === 'pending_payment' ? 'primary' : ''}
-            onClick={() => {
-              onClick('pending_payment');
-            }}
-          >
-            Pending Payment
-          </Button>
-          {responseData?.map((appointment) => {
-            return (
-              <>
-                {' '}
-                <AppointmentItem
-                  avatar={appointment.doctor.avatar}
-                  status={appointment.status}
-                  price={appointment.price}
-                  fullName={appointment.doctor.full_name}
-                  time={getTimeString({
-                    date: appointment.slot.date_slot,
-                    start: appointment.slot.start_time,
-                    end: appointment.slot.end_time,
-                  })}
-                  appointmentId={appointment.appointment_id}
-                  invoiceId={appointment.invoice.invoice_id}
-                />
-              </>
-            );
-          })}
+          <div className="flex flex-start gap-2 p-2">
+            <Button
+              type={status === 'booked' ? 'primary' : ''}
+              onClick={() => {
+                onClick('booked');
+              }}
+            >
+              Booked
+            </Button>
+            <Button
+              type={status === 'pending_payment' ? 'primary' : ''}
+              onClick={() => {
+                onClick('pending_payment');
+              }}
+            >
+              Pending Payment
+            </Button>
+          </div>
+          <div className="flex flex-col gap-1 p-2">
+            {responseData?.map((appointment) => (
+              <AppointmentItem
+                key={appointment.appointment_id}
+                avatar={appointment.doctor.avatar}
+                status={appointment.status}
+                price={appointment.price}
+                fullName={appointment.doctor.full_name}
+                time={getTimeString({
+                  date: appointment.slot.date_slot,
+                  start: appointment.slot.start_time,
+                  end: appointment.slot.end_time,
+                })}
+                appointmentId={appointment.appointment_id}
+                invoiceId={appointment.invoice.invoice_id}
+              />
+            ))}
+          </div>
         </div>
       </Spin>
-      <Pagination
-        defaultCurrent={1}
-        total={pagination.total}
-        showSizeChanger
-        showTotal={(total) => `Total ${total} items`}
-        onChange={onChangePagination}
-      />
+      <div className="flex justify-center">
+        <Pagination
+          defaultCurrent={1}
+          total={pagination.total}
+          showSizeChanger
+          showTotal={(total) => `Total ${total} items`}
+          onChange={onChangePagination}
+        />
+      </div>
     </div>
   );
 };

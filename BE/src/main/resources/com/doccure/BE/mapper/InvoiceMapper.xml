@@ -322,7 +322,7 @@
       ii.item_id, ii.item_name, ii.quantity, ii.price as invoice_item_price
     FROM invoice i
     JOIN appointment a ON i.appointment_id = a.appointment_id
-    JOIN invoice_item ii ON ii.invoice_id = i.invoice_id
+    LEFT JOIN invoice_item ii ON ii.invoice_id = i.invoice_id
     JOIN slot s ON s.slot_id = a.slot_id
     JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
     JOIN specialization sp ON ds.specialization_id = sp.specialization_id

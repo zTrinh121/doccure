@@ -8,6 +8,7 @@ import com.doccure.BE.response.DoctorFullResponse;
 import com.doccure.BE.response.DoctorInsertResponse;
 import com.doccure.BE.response.DoctorRatingResponse;
 import com.doccure.BE.response.DoctorSlotResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -20,7 +21,7 @@ public interface DoctorService {
     Doctor updateAvatar(Long doctorId, MultipartFile file) throws Exception;
 
     //Doctor with specializations
-    List<DoctorFullResponse> getAllDoctor() throws DataNotFoundException;
+    List<DoctorFullResponse> getAllDoctor(HttpServletResponse response) throws DataNotFoundException;
     DoctorFullResponse getDoctorById(Long doctorId) throws DataNotFoundException;
     List<DoctorFullResponse> getDoctorFullByKeyword(String keyword) throws Exception;
     List<DoctorFullResponse> getDoctorFullBySpecializationId(Long specializationId) throws Exception;

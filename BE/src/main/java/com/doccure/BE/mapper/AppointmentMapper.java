@@ -40,17 +40,25 @@ public interface AppointmentMapper {
     int updateByPrimaryKey(Appointment row);
 
     List<AppointmentDetail> getAppointmentDetailWithStatus(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getAppointmentDetailWithStatus(@Param("params") Map<String, Object> params);
     List<AppointmentDetail> getAllAppointmentDetail (Long userId, RowBounds bounds);
+    List<AppointmentDetail> getAllAppointmentDetail (Long userId);
 
     List<AppointmentDetail> getUpcomingAppointmentDetails(@Param("userId") Long userId, RowBounds bounds);
 
+    List<AppointmentDetail> getUpcomingAppointmentDetails(@Param("userId") Long userId);
+
     List<AppointmentDetail> getAppointmentDetailWithStatusByDate(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getAppointmentDetailWithStatusByDate(@Param("params") Map<String, Object> params);
 
     List<AppointmentDetail> getUpcomingAppointmentDetailWithStatusByDate(@Param("userId") Long userId, RowBounds bounds);
+    List<AppointmentDetail> getUpcomingAppointmentDetailWithStatusByDate(@Param("userId") Long userId);
 
     List<AppointmentDetail> getAppointmentDetailWithStatusByKeyword(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getAppointmentDetailWithStatusByKeyword(@Param("params") Map<String, Object> params);
 
     List<AppointmentDetail> getUpcomingAppointmentDetailWithStatusByKeyword(@Param("params") Map<String, Object> params, RowBounds bounds);
+    List<AppointmentDetail> getUpcomingAppointmentDetailWithStatusByKeyword(@Param("params") Map<String, Object> params);
 
     AppointmentDetail getAppointmentDetailById(@Param("params") Map<String, Object> params);
 }

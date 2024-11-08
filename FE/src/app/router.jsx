@@ -1,34 +1,12 @@
 //Splitting router into separate file
-import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
 
-// import ProductPage from "./pages/ProductPage.jsx";
 import HomePage from './routes/app/HomePage';
-import LoginPage from './routes/auth/LoginPage';
-import RegisterPage from './routes/auth/RegisterPage';
-import Profile from './routes/app/Profile';
 import RequireOtpVerification from '../features/auth/components/RequireOtpVerification';
 import HomeLayout from '../components/layouts/HomeLayout';
-import ChangePasswordPage from './routes/app/ChangePasswordPage';
-import ForgotPasswordPage from './routes/auth/ForgotPasswordPage';
-import OtpPage from './routes/auth/OtpPage';
-import ResetPasswordPage from './routes/auth/ResetPasswordPage';
-import DashboardLayout from '../components/layouts/DashboardLayout';
-import ChangeProfilePage from './routes/app/user/ChangeProfilePage';
-import SearchResultPage from './routes/app/SearchResultPage';
-import DoctorPage from './routes/app/doctor/DoctorPage';
-import DoctorBookingPage from './routes/app/doctor/DoctorBookingPage';
-import SlotPage from './routes/app/slot/SlotPage';
-import SuccessPage from './routes/app/pay/SuccessPage';
-import CancelPage from './routes/app/pay/CancelPage';
-import AppointmentPage from './routes/app/appointment/AppointmentPage';
 import PrivateRoutes from '../features/auth/components/PrivateRoutes';
-import AppointmentsPage from './routes/app/appointment/AppointmentsPage';
-import SimpleLayout from '../components/layouts/SimpleLayout';
-import ErrorPage from './routes/app/pay/ErrorPage';
-import InvoicePage from './routes/app/invoice/InvoicePage';
 
+//https://stackoverflow.com/questions/76340518/lazy-loading-routes-in-react-router-v6
 const router = createBrowserRouter([
   {
     path: '/',
@@ -40,91 +18,144 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <LoginPage />,
+        async lazy() {
+          let LoginPage = await import('./routes/auth/LoginPage');
+          return { Component: LoginPage.default };
+        },
       },
       {
         path: '/register',
-        element: <RegisterPage />,
+        async lazy() {
+          let RegisterPage = await import('./routes/auth/RegisterPage');
+          return { Component: RegisterPage.default };
+        },
       },
       {
         path: '/search',
-        element: <SearchResultPage />,
+        async lazy() {
+          let SearchResultPage = await import('./routes/app/SearchResultPage');
+          return { Component: SearchResultPage.default };
+        },
       },
 
       //forget password
       {
         path: '/forgotPassword',
-        element: <ForgotPasswordPage />,
+        async lazy() {
+          let ForgotPasswordPage = await import(
+            './routes/auth/ForgotPasswordPage'
+          );
+          return { Component: ForgotPasswordPage.default };
+        },
       },
       {
         path: '/otp',
-        element: (
-          <RequireOtpVerification allowedSteps={['otp', 'password']}>
-            <OtpPage />
-          </RequireOtpVerification>
-        ),
+        async lazy() {
+          const { default: OtpPage } = await import('./routes/auth/OtpPage');
+          return {
+            Component: (props) => (
+              <RequireOtpVerification allowedSteps={['otp', 'password']}>
+                <OtpPage {...props} />
+              </RequireOtpVerification>
+            ),
+          };
+        },
       },
       {
         path: '/resetPassword',
-        element: (
-          <RequireOtpVerification allowedSteps={['password']}>
-            <ResetPasswordPage />
-          </RequireOtpVerification>
-        ),
+        async lazy() {
+          const { default: ResetPasswordPage } = await import(
+            './routes/auth/ResetPasswordPage'
+          );
+          return {
+            Component: (props) => (
+              <RequireOtpVerification allowedSteps={['password']}>
+                <ResetPasswordPage {...props} />
+              </RequireOtpVerification>
+            ),
+          };
+        },
       },
       //end of forget pw
 
       //user
       {
         path: '/user',
-        element: (
-          <PrivateRoutes>
-            <DashboardLayout />
-          </PrivateRoutes>
-        ),
+        async lazy() {
+          const { default: DashboardLayout } = await import(
+            '../components/layouts/DashboardLayout'
+          );
+          return {
+            Component: () => (
+              <PrivateRoutes>
+                <DashboardLayout />
+              </PrivateRoutes>
+            ),
+          };
+        },
         children: [
           {
             path: 'profile',
-            element: (
-              // <ProtectedRoute>
-              <ChangeProfilePage />
-              // </ProtectedRoute>
-            ),
+            async lazy() {
+              let ChangeProfilePage = await import(
+                './routes/app/user/ChangeProfilePage'
+              );
+              return { Component: ChangeProfilePage.default };
+            },
           },
           {
             path: 'changePassword',
-            element: <ChangePasswordPage />,
+            async lazy() {
+              let ChangePasswordPage = await import(
+                './routes/app/ChangePasswordPage'
+              );
+              return { Component: ChangePasswordPage.default };
+            },
           },
+
           {
             path: 'appointment',
-
-            element: <AppointmentsPage />,
+            async lazy() {
+              let AppointmentsPage = await import(
+                './routes/app/appointment/AppointmentsPage'
+              );
+              return { Component: AppointmentsPage.default };
+            },
           },
           {
             path: 'appointment/:appointmentId',
-
-            element: <AppointmentPage />,
+            async lazy() {
+              let AppointmentPage = await import(
+                './routes/app/appointment/AppointmentPage'
+              );
+              return { Component: AppointmentPage.default };
+            },
           },
+
           {
             path: 'invoice',
-
-            // element: <AppointmentsPage />,
           },
           {
             path: 'invoice/:invoiceId',
-
-            element: <InvoicePage />,
+            async lazy() {
+              let InvoicePage = await import(
+                './routes/app/invoice/InvoicePage'
+              );
+              return { Component: InvoicePage.default };
+            },
           },
         ],
       },
       //slot
       {
         path: '/slot',
-        // element: <DashboardLayout />,
         children: [
           {
             path: ':slotId',
-            element: <SlotPage />,
+            async lazy() {
+              let SlotPage = await import('./routes/app/slot/SlotPage');
+              return { Component: SlotPage.default };
+            },
           },
         ],
       },
@@ -132,43 +163,67 @@ const router = createBrowserRouter([
 
       {
         path: '/pay',
-        element: (
-          <PrivateRoutes>
-            <SimpleLayout />
-          </PrivateRoutes>
-        ),
+        async lazy() {
+          const { default: SimpleLayout } = await import(
+            '../components/layouts/SimpleLayout'
+          );
+          return {
+            Component: () => (
+              <PrivateRoutes>
+                <SimpleLayout />
+              </PrivateRoutes>
+            ),
+          };
+        },
         children: [
           {
             path: 'success',
-            element: <SuccessPage />,
+            async lazy() {
+              let SuccessPage = await import('./routes/app/pay/SuccessPage');
+              return { Component: SuccessPage.default };
+            },
           },
           {
             path: 'cancel',
-            element: <CancelPage />,
+            async lazy() {
+              let CancelPage = await import('./routes/app/pay/CancelPage');
+              return { Component: CancelPage.default };
+            },
           },
           {
             path: 'error',
-            element: <ErrorPage />,
+            async lazy() {
+              let ErrorPage = await import('./routes/app/pay/ErrorPage');
+              return { Component: ErrorPage.default };
+            },
           },
         ],
       },
       //doctor
       {
         path: '/doctor',
-        // element: <DashboardLayout />,
         children: [
           {
             path: ':doctorId',
-            element: <DoctorPage />,
+            async lazy() {
+              let DoctorPage = await import('./routes/app/doctor/DoctorPage');
+              return { Component: DoctorPage.default };
+            },
           },
           {
-            //todo: flag as protected or handle unlogged in attempts
             path: ':doctorId/booking',
-            element: (
-              <PrivateRoutes>
-                <DoctorBookingPage />
-              </PrivateRoutes>
-            ),
+            async lazy() {
+              const { default: DoctorBookingPage } = await import(
+                './routes/app/doctor/DoctorBookingPage'
+              );
+              return {
+                Component: () => (
+                  <PrivateRoutes>
+                    <DoctorBookingPage />
+                  </PrivateRoutes>
+                ),
+              };
+            },
           },
         ],
       },

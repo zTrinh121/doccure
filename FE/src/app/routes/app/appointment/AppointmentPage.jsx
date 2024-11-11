@@ -1,7 +1,5 @@
 import { useParams } from 'react-router-dom';
 import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
-import AppointmentItem from '../../../../features/appointment/components/AppointmentItem';
-import AppointmentList from '../../../../features/appointment/components/AppointmentList';
 import { useAppointmentQuery } from '../../../../hooks/useAppointmentQuery';
 import ContentLayout from '../../../../components/layouts/ContentLayout';
 import DoctorPanel from '../../../../features/doctors/components/DoctorPanel';

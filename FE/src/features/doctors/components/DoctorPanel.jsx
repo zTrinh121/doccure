@@ -16,6 +16,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
+import AvatarWithDefault from '../../../components/ui/AvatarWithDefault';
 
 const DoctorPanel = ({
   doctorId,
@@ -38,14 +39,10 @@ const DoctorPanel = ({
   };
 
   return (
-    <Card className="p-4 my-1 shadow-lg border rounded-lg max-w-4xl">
+    <Card className="p-4 my-1 shadow-lg border rounded-lg">
       <div className="flex">
         <div className="mr-6 flex flex-col items-center">
-          <Avatar
-            size={80}
-            src={<img src={responseData.avatar} alt="avatar" />}
-            className="mb-4"
-          />
+          <AvatarWithDefault size={80} avatar={responseData.avatar} />
         </div>
 
         <div className="flex-1">

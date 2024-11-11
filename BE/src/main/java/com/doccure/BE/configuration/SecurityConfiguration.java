@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                                 "/api/v1/auth/verify-mail/**",
                                 "/api/v1/auth/forgot-password/**",
                                 "/api/v1/doctor/**",
-                                "/api/v1/specialization/**" ,
+                                "/api/v1/specialization/**",
                                 "/api/v1/slot/**",
                                 "/api/v1/paypal/pay/**")
                                 .permitAll()
@@ -95,7 +95,7 @@ public class SecurityConfiguration {
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-        configuration.setExposedHeaders(List.of("x-auth-token"));
+        configuration.setExposedHeaders(List.of("x-auth-token", "X-Total-Count"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

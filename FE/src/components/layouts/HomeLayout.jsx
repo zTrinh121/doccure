@@ -29,6 +29,7 @@ import { Outlet } from 'react-router-dom';
 import { getUsernameFromToken, logout } from '../../lib/auth';
 import { useAccessToken } from '../../stores/authStore';
 import { useProfileQuery } from '../../hooks/useProfileQuery';
+import AvatarWithDefault from '../ui/AvatarWithDefault';
 
 const HomeLayout = ({ children }) => {
   let location = useLocation();

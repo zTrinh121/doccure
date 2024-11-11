@@ -6,6 +6,7 @@ import { UserOutlined } from '@ant-design/icons';
 
 import { useProfileQuery } from '../../hooks/useProfileQuery';
 import { useNavigate } from 'react-router-dom';
+import AvatarWithDefault from './../ui/AvatarWithDefault';
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
@@ -25,11 +26,7 @@ const DashboardLayout = () => {
         <Card>
           <Flex justify="center" align="center" vertical>
             <Link>
-              <Avatar
-                src={<img src={data.data.data.avatar} alt="avatar" />}
-                size={64}
-                // icon={<UserOutlined />}
-              />
+              <AvatarWithDefault size={64} avatar={data.data.data.avatar} />
             </Link>
 
             <Typography.Title level={5} strong>
@@ -62,6 +59,15 @@ const DashboardLayout = () => {
               }}
             >
               View appointments
+            </Button>
+            <Button
+              block
+              type="link"
+              onClick={() => {
+                navigate('/user/invoice');
+              }}
+            >
+              View invoices
             </Button>
           </Flex>
         </Card>

@@ -70,8 +70,8 @@ const DoctorBookingPage = () => {
     const response = await postPayment({ slotId: select, specId: spec });
     console.log(response);
     console.log(response.data);
-    console.log(response.data.slice(9));
-    window.location.href = response.data.slice(9);
+    console.log(response.data.data.slice(9));
+    window.location.href = response.data.data.slice(9);
   };
 
   return (

@@ -3,9 +3,45 @@ import ContentLayout from '../../../../components/layouts/ContentLayout';
 import { Card, Flex, Button } from 'antd';
 import { Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
+import { getPaymentCancel } from '../../../../lib/payment';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const CancelPage = () => {
   const navigate = useNavigate();
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const appointmentId = urlParams.get('appointment_id');
+  const invoiceId = urlParams.get('invoice_id');
+
+  const [loading, setLoading] = useState('false');
+
+  // appointmentId, invoiceId, slotId, userId, paymentId, payerId
+
+  useEffect(() => {
+    const getPayment = async () => {
+      setLoading(true);
+      //todo: fix race condition:)
+      try {
+        return await getPaymentCancel({
+          appointmentId,
+          invoiceId,
+        });
+      } catch (error) {
+        console.log(error);
+        navigate('/pay/error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    console.log(getPayment());
+  }, []);
+
+  if (loading) {
+    return <IsPendingSpin />;
+  }
 
   return (
     <ContentLayout>
@@ -31,7 +67,6 @@ const CancelPage = () => {
           >
             Return home
           </Button>
-       
         </Flex>
       </Card>
     </ContentLayout>

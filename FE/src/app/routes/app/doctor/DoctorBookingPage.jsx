@@ -21,6 +21,7 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
 import { useNavigate } from 'react-router-dom';
 import { postPayment } from '../../../../lib/payment';
+import SlotsTable from '../../../../features/slots/components/SlotsTable';
 const { RangePicker } = DatePicker;
 
 const DoctorBookingPage = () => {
@@ -48,6 +49,14 @@ const DoctorBookingPage = () => {
   //todo: implement error screen for empty, loading screen
   if (isPending) {
     return <IsPendingSpin />;
+  }
+  if (isError) {
+    return (
+      <div>
+        Something went wrong!
+        {JSON.stringify(error.message)}
+      </div>
+    );
   }
 
   const responseData = data?.data.data;
@@ -84,68 +93,14 @@ const DoctorBookingPage = () => {
 
             <div>
               <RangePicker className="my-5" onChange={onChange} value={range} />
-
-              <Card>
-                <div className="flex items-start justify-center max-w-full overflow-hidden">
-                  {isError ? (
-                    <>No slots available</>
-                  ) : (
-                    <>
-                      <LeftOutlined
-                        className="mt-5"
-                        onClick={() => carouselRef.current.prev()}
-                      />
-                      <div className="w-[80%] max-w-[800px] mx-2">
-                        {/* Width control */}
-                        <Carousel
-                          centerPadding="60px"
-                          ref={carouselRef}
-                          draggable
-                          infinite={false}
-                          slidesToShow={dateArr.length < 7 ? dateArr.length : 7}
-                          arrows={false}
-                          dots={false}
-                        >
-                          {dateArr.map((date) => (
-                            <Col className="text-center" key={date.toString()}>
-                              <Title level={5}>{dayNames[date.getDay()]}</Title>
-
-                              {date.toLocaleDateString('en-GB')}
-                              {(
-                                tempMap.get(getKebabDateString(date)) || []
-                              ).map((slot) => (
-                                <Button
-                                  disabled={
-                                    !slot.status || slot.status === 'CANCELED'
-                                      ? false
-                                      : true
-                                  }
-                                  type={
-                                    select === slot.slot_id ? 'primary' : ''
-                                  }
-                                  block
-                                  className=" my-1 "
-                                  size="small"
-                                  key={slot.slot_id}
-                                  onClick={() => {
-                                    setSelect(slot.slot_id);
-                                  }}
-                                >
-                                  {slot.start_time}
-                                </Button>
-                              ))}
-                            </Col>
-                          ))}
-                        </Carousel>
-                      </div>
-                      <RightOutlined
-                        className="mt-5"
-                        onClick={() => carouselRef.current.next()}
-                      />
-                    </>
-                  )}
-                </div>
-              </Card>
+              <SlotsTable
+                startDate={startDate}
+                endDate={endDate}
+                doctorId={doctorId}
+                select={select}
+                setSelect={setSelect}
+                dateArr={dateArr}
+              />
               <Card>
                 {responseData.specializations.map((item) => (
                   <Button

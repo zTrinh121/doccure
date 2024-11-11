@@ -2,8 +2,7 @@ package com.doccure.BE.model;
 
 import java.time.LocalDateTime;
 
-//import com.doccure.BE.request.RatingRequest;
-
+import com.doccure.BE.request.RatingRequest;
 import lombok.*;
 
 @Getter
@@ -12,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Rating {
-
     private Long ratingId;
 
     private String commentRating;
@@ -24,12 +22,12 @@ public class Rating {
     private Long appointmentId;
 
 
-//    public static Rating fromRatingRequest(RatingRequest ratingRequest){
-//        return Rating
-//                .builder()
-//                .commentRating(ratingRequest.getCommentRating())
-//                .rating(ratingRequest.getRating())
-//                .appointmentId(ratingRequest.getAppointmentId())
-//                .build();
-//    }
+    public static Rating fromRatingRequest(RatingRequest ratingRequest){
+        return Rating
+                .builder()
+                .commentRating(ratingRequest.getCommentRating())
+                .rating(ratingRequest.getRating())
+                .appointmentId(ratingRequest.getAppointmentId())
+                .build();
+    }
 }

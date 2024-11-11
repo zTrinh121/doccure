@@ -41,7 +41,10 @@ public interface InvoiceMapper {
 
     List<InvoiceDetail> getInvoiceDetails(Long userId, RowBounds row);
 
+    List<InvoiceDetail> getInvoiceDetails(Long userId);
+
     InvoiceDetail getInvoiceDetailById(@Param("userId") Long userId, @Param("invoiceId") Long invoiceId);
 
     List<InvoiceDetail> getInvoiceDetailByKeyword (@Param("params") Map<String, Object> params, RowBounds row);
+    List<InvoiceDetail> getInvoiceDetailByKeyword (@Param("params") Map<String, Object> params);
 }

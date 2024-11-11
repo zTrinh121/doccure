@@ -22,10 +22,8 @@ export const searchDoctors = async ({ input, spec }) => {
   }
   else if (spec) {
     try {
-      console.log('a')
       const response = await publicAxiosInstance.get(`/doctor/specialization?specialization=${spec}`);
       resultArr = response.data.data;
-      console.log(resultArr)
     } catch (error) {
       console.log(error);
     }

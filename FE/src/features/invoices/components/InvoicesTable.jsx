@@ -6,6 +6,7 @@ import { PrinterOutlined } from '@ant-design/icons';
 import { getDownloadInvoice } from '../../../lib/invoice';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { downloadBlob } from './../../../utils/utils';
 
 const InvoicesTable = () => {
   const [pagination, setPagination] = useState({
@@ -18,7 +19,6 @@ const InvoicesTable = () => {
     offset: pagination.page - 1,
     limit: pagination.pageSize,
   });
-  console.log(data);
   const responseData = data.data.data;
 
   useEffect(() => {
@@ -32,11 +32,11 @@ const InvoicesTable = () => {
   }, [data?.data.total]);
 
   const onClickPrinter = async (invoiceId) => {
-    return getDownloadInvoice(invoiceId);
+    const response = await getDownloadInvoice(invoiceId);
+    return downloadBlob(response, invoiceId);
   };
 
   const onChangeTable = (pagination) => {
-    console.log(pagination);
     setPagination((p) => ({
       ...p,
       page: pagination.current,

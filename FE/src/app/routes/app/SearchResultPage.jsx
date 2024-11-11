@@ -46,12 +46,10 @@ const SearchResultPage = () => {
   }
 
   const onChangeRadio = (e) => {
-    console.log(e.target.value);
     setSearch('');
     setSpec(e.target.value);
   };
 
-  console.log(dataS);
 
   return (
     <div>

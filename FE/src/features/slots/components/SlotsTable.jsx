@@ -9,7 +9,6 @@ import { getKebabDateString } from './../../../utils/dateUtils';
 import { dayNames } from '../../../utils/constants';
 
 const SlotsTable = ({ startDate, endDate, doctorId, select, setSelect,dateArr }) => {
-  console.log({ startDate, endDate, doctorId, select, setSelect });
   const carouselRef = useRef(null);
   const { isPending, isError, data, error } = useDoctorSlotsQuery({
     startDate: startDate,

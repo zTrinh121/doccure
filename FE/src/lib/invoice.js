@@ -12,5 +12,8 @@ export const getInvoices = async ({ offset, limit }) => {
 }
 
 export const getDownloadInvoice = async (invoiceId) => {
-  return authAxiosInstance.get(`/pdf/${invoiceId}`)
+  const response = await authAxiosInstance.get(`${invoicePrefix}/pdf/${invoiceId}`, { responseType: 'blob' })
+  return response
+
+
 }

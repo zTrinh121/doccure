@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useDeferredValue } from 'react';
 import { useSearchQuery } from '../../../hooks/useSearchQuery';
 import { Form, Input, Flex, Row, Col } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import DoctorPanel from './../../../features/doctors/components/DoctorPanel';
 import { useNavigate } from 'react-router-dom';
+import useDebounce from '../../../hooks/useDebounce';
 
 const SearchResultPage = () => {
   //todo:encode uri
@@ -15,7 +16,18 @@ const SearchResultPage = () => {
     setSearch(values.search);
     navigate(`/search?query=${encodeURIComponent(values.search)}`);
   };
-  const { data = [], isSuccess, isPending, error } = useSearchQuery(search);
+  const [form] = Form.useForm();
+
+  const {
+    data = [],
+    isSuccess,
+    isPending,
+    error,
+  } = useSearchQuery(useDebounce(search));
+
+  const onValuesChange = () => {
+    form.submit();
+  };
 
   return (
     <div>
@@ -23,7 +35,12 @@ const SearchResultPage = () => {
         <Row style={{ width: '100%' }}>
           <Col span={2}></Col>
           <Col span={20}>
-            <Form onFinish={onFinish} autoComplete="off">
+            <Form
+              form={form}
+              onFinish={onFinish}
+              autoComplete="off"
+              onValuesChange={onValuesChange}
+            >
               <Form.Item name="search">
                 <Input prefix={<SearchOutlined />}></Input>
               </Form.Item>

@@ -132,8 +132,15 @@ const router = createBrowserRouter([
             },
           },
 
+          //invoice
           {
             path: 'invoice',
+            async lazy() {
+              let InvoicesPage = await import(
+                './routes/app/invoice/InvoicesPage'
+              );
+              return { Component: InvoicesPage.default };
+            },
           },
           {
             path: 'invoice/:invoiceId',

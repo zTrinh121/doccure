@@ -13,6 +13,7 @@ import com.doccure.BE.service.UsersService;
 import com.doccure.BE.util.CloudinaryUtil;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class UsersServiceImpl implements UsersService {
     private final UsersMapper usersMapper;
     private final Cloudinary cloudinary;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public UserResponse getUserByUsername(String username) throws Exception {
         Users user = usersMapper.findUserByUserName(username);
@@ -44,7 +46,7 @@ public class UsersServiceImpl implements UsersService {
         if(!usersMapper.findUserDifferentByEmail(userId, user.getEmail()).isEmpty()){
             throw new EmailAlreadyExistsException("Email already exists. Please choose a different email");
         }
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserId(userId);
         usersMapper.updateByPrimaryKeySelective(user);
         return UserResponse.fromUsers(user);

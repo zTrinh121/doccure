@@ -125,8 +125,9 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorRatingResponse> getAllDoctorRatingsPagination(int offset, int limit) throws Exception {
+    public List<DoctorRatingResponse> getAllDoctorRatingsPagination(int offset, int limit, HttpServletResponse response) throws Exception {
         List<DoctorRating> doctorRatingList = doctorMapper.getAllDoctorRatings(new RowBounds(offset, limit));
+        response.setHeader("X-Total-Count", String.valueOf(doctorMapper.getAllDoctorRatings().size()));
         return insertAvgSumRating(doctorRatingList);
     }
 

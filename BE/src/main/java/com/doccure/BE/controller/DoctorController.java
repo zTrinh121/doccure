@@ -16,7 +16,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -133,11 +132,12 @@ public class DoctorController {
 
     @GetMapping("/rating/all/pagination")
     public ResponseEntity<Object> getAllDoctorRatingsPagination(@RequestParam("offset") int offset,
-                                                                @RequestParam("limit") int limit) {
+                                                                @RequestParam("limit") int limit,
+                                                                HttpServletResponse response) {
         try {
             return ResponseHandler.responseBuilder(String.format("List rating doctor with pagination offset = %d and limit = %d", offset, limit),
                     HttpStatus.OK,
-                    doctorService.getAllDoctorRatingsPagination(offset, limit));
+                    doctorService.getAllDoctorRatingsPagination(offset, limit, response));
         } catch (Exception e) {
             return ResponseHandler.responseBuilder("There some error happens with getting rating doctor " ,
                     HttpStatus.BAD_REQUEST,
@@ -196,9 +196,6 @@ public class DoctorController {
                                                           @RequestParam("end_date") String endDate) throws Exception {
         LocalDate start = DateFormatUtil.parseStringToDate(startDate);
         LocalDate end = DateFormatUtil.parseStringToDate(endDate);
-        if (start == null || end == null){
-            return ResponseEntity.badRequest().body("Invalid date format. Please use yyyy-MM-dd.");
-        }
 
         return ResponseHandler.responseBuilder("Availability slot for doctor detail with id = " + id ,
                 HttpStatus.OK,
@@ -213,9 +210,6 @@ public class DoctorController {
                                                           @RequestParam("limit") int limit) throws Exception {
         LocalDate start = DateFormatUtil.parseStringToDate(startDate);
         LocalDate end = DateFormatUtil.parseStringToDate(endDate);
-        if (start == null || end == null){
-            return ResponseEntity.badRequest().body("Invalid date format. Please use yyyy-MM-dd.");
-        }
 
         return ResponseHandler.responseBuilder("Availability slot for doctor detail with id = " + id ,
                 HttpStatus.OK,

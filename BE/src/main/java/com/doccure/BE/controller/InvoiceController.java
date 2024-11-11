@@ -3,6 +3,7 @@ package com.doccure.BE.controller;
 import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.InvoiceService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,12 @@ public class InvoiceController {
     @GetMapping("/all")
     public ResponseEntity<Object> getAllInvoices(HttpServletRequest request,
                                                  @RequestParam("offset") int offset,
-                                                 @RequestParam("limit") int limit ) {
+                                                 @RequestParam("limit") int limit,
+                                                 HttpServletResponse response) {
         try {
             return ResponseHandler.responseBuilder("List invoices in detail",
                     HttpStatus.OK,
-                    invoiceService.getAllInvoices(offset, limit, request));
+                    invoiceService.getAllInvoices(offset, limit, request, response));
         } catch (Exception e) {
             return ResponseHandler.responseBuilder("There some error happens with getting all invoices " ,
                     HttpStatus.BAD_REQUEST,
@@ -50,11 +52,12 @@ public class InvoiceController {
     public ResponseEntity<Object> getInvoiceByID(HttpServletRequest request,
                                                  @RequestParam("offset") int offset,
                                                  @RequestParam("limit") int limit,
-                                                 @RequestParam("keyword") String keyword) {
+                                                 @RequestParam("keyword") String keyword,
+                                                 HttpServletResponse response) {
         try {
             return ResponseHandler.responseBuilder("List invoices in detail with keyword = " + keyword,
                     HttpStatus.OK,
-                    invoiceService.searchInvoices(keyword, offset, limit, request));
+                    invoiceService.searchInvoices(keyword, offset, limit, request, response));
         } catch (Exception e) {
             return ResponseHandler.responseBuilder("There some error happens with keyword = " + keyword,
                     HttpStatus.BAD_REQUEST,

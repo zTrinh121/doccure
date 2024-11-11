@@ -89,6 +89,12 @@
     from RATING
     where RATING_ID = #{ratingId,jdbcType=NUMERIC}
   </select>
+  <select id="selectByAppointmentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from RATING
+    where APPOINTMENT_ID = #{appointmentId,jdbcType=NUMERIC}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from RATING
     where RATING_ID = #{ratingId,jdbcType=NUMERIC}
@@ -99,10 +105,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.doccure.BE.model.Rating">
-    insert into RATING (RATING_ID, COMMENT_RATING, RATING, 
-      CREATED_AT, APPOINTMENT_ID)
-    values (#{ratingId,jdbcType=NUMERIC}, #{commentRating,jdbcType=VARCHAR}, #{rating,jdbcType=NUMERIC}, 
+  <insert id="insert" parameterType="com.doccure.BE.model.Rating"
+  useGeneratedKeys="true" keyProperty="ratingId" keyColumn="RATING_ID">
+    insert into RATING (COMMENT_RATING, RATING, CREATED_AT, APPOINTMENT_ID)
+    values (#{commentRating,jdbcType=VARCHAR}, #{rating,jdbcType=NUMERIC}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{appointmentId,jdbcType=NUMERIC})
   </insert>
   <insert id="insertSelective" parameterType="com.doccure.BE.model.Rating">

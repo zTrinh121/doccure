@@ -27,7 +27,7 @@ public class SlotController {
     private final SlotService slotService;
 
     @GetMapping("/{slotId}")
-    public ResponseEntity<Object> getSlotbySlotId(@PathVariable("slotId") Long slotId) throws  Exception{
+    public ResponseEntity<Object> getSlotBySlotId(@PathVariable("slotId") Long slotId) throws  Exception{
         return ResponseHandler.responseBuilder("Slot in detail with ID = " + slotId,
                 HttpStatus.OK,
                 slotService.getSlotBySlotId(slotId));

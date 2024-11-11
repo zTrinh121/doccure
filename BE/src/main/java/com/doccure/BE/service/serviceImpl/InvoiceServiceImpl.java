@@ -12,6 +12,7 @@ import com.doccure.BE.service.InvoiceService;
 import com.doccure.BE.util.PdfUtil;
 import com.doccure.BE.util.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final TokenMapper tokenMapper;
     private final UsersMapper usersMapper;
     @Override
-    public List<InvoiceDetailResponse> getAllInvoices(int offset, int limit, HttpServletRequest request) throws Exception {
+    public List<InvoiceDetailResponse> getAllInvoices(int offset, int limit, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
         List<InvoiceDetail> invoiceDetails = invoiceMapper.getInvoiceDetails(accessTokenUser.getUserId(),
                                                                                 new RowBounds(offset, limit));
+        response.setHeader("X-Total-Count", String.valueOf(invoiceMapper.getInvoiceDetails(accessTokenUser.getUserId()).size()));
         if(invoiceDetails.isEmpty()) throw new DataNotFoundException("Not found any invoices");
         return invoiceDetails.stream()
                 .map(InvoiceDetailResponse::fromInvoiceDetail)
@@ -46,8 +48,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<InvoiceDetailResponse> searchInvoices(String keyword, int offset,
-                                                      int row, HttpServletRequest request) throws Exception{
+    public List<InvoiceDetailResponse> searchInvoices(String keyword, 
+                                                    int offset,
+                                                      int row, 
+                                                      HttpServletRequest request,
+                                                      HttpServletResponse response) throws Exception{
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
         Map<String, Object> params = new HashMap<String, Object>();
@@ -55,6 +60,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         params.put("keyword", keyword);
         List<InvoiceDetail> invoiceDetails = invoiceMapper.getInvoiceDetailByKeyword(params, new RowBounds(offset, row));
         if(invoiceDetails.isEmpty()) throw new DataNotFoundException("Not found any invoices with keyword = " + keyword);
+        response.setHeader("X-Total-Count", String.valueOf(invoiceMapper.getInvoiceDetailByKeyword(params).size()));
         return invoiceDetails.stream()
                 .map(InvoiceDetailResponse::fromInvoiceDetail)
                 .toList();

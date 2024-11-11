@@ -40,7 +40,7 @@ public class SpecializationController {
                     errorMessages);
         }
         return ResponseHandler.responseBuilder("Insert successfully",
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 specializationService.insert(specializationName));
     }
 }

@@ -1,31 +1,71 @@
-import { Space, Table, Tag, Button } from 'antd';
+import { Space, Table, Tag, Button, Pagination } from 'antd';
 const { Column, ColumnGroup } = Table;
 
 import { useInvoicesQuery } from '../../../hooks/useInvoicesQuery';
 import { PrinterOutlined } from '@ant-design/icons';
 import { getDownloadInvoice } from '../../../lib/invoice';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const InvoicesTable = () => {
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 5,
+    total: 100,
+  });
+
   const { data, error, isFetching } = useInvoicesQuery({
-    offset: 0,
-    limit: 10,
+    offset: pagination.page - 1,
+    limit: pagination.pageSize,
   });
   console.log(data);
   const responseData = data.data.data;
 
-  const onClickPrinter=async(invoiceId)=>{
-return getDownloadInvoice(invoiceId)
-  }
+  useEffect(() => {
+    if (data?.data.total) {
+      //!no watching for empty data
+      setPagination((prevPagination) => ({
+        ...prevPagination,
+        total: data?.data.total,
+      }));
+    }
+  }, [data?.data.total]);
+
+  const onClickPrinter = async (invoiceId) => {
+    return getDownloadInvoice(invoiceId);
+  };
+
+  const onChangeTable = (pagination) => {
+    console.log(pagination);
+    setPagination((p) => ({
+      ...p,
+      page: pagination.current,
+      pageSize: pagination.pageSize,
+    }));
+  };
 
   return (
     <div>
       <div>
-        <Table dataSource={responseData}>
-          <Column title="Id" dataIndex="invoice_id" key="id" render={(invoice_id) => (
+        <Table
+          onChange={onChangeTable}
+          dataSource={responseData}
+          pagination={{
+            total: pagination.total,
+            current: pagination.page,
+            pageSize: pagination.pageSize,
+          }}
+        >
+          <Column
+            title="Id"
+            dataIndex="invoice_id"
+            key="id"
+            render={(invoice_id) => (
               <>
                 <a>{invoice_id}</a>
               </>
-            )}/>
+            )}
+          />
           <Column
             title="Dr."
             dataIndex="doctor"
@@ -51,7 +91,9 @@ return getDownloadInvoice(invoiceId)
             render={(invoiceId) => (
               <>
                 <Button
-                  onClick={()=>{onClickPrinter(invoiceId)}}
+                  onClick={() => {
+                    onClickPrinter(invoiceId);
+                  }}
                   shape="circle"
                   icon={<PrinterOutlined />}
                 />

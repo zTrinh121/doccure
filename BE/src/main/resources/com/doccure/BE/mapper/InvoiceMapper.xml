@@ -84,6 +84,13 @@
       order by ${orderByClause}
     </if>
   </select>
+   <select id="selectAllInvoices" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from INVOICE
+    where
+  </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -243,7 +250,93 @@
       UPDATED_AT = #{updatedAt,jdbcType=TIMESTAMP}
     where INVOICE_ID = #{invoiceId,jdbcType=NUMERIC}
   </update>
+  <!-- Invoice general -->
+    <resultMap id="BaseResultMapGeneral" type="com.doccure.BE.model.InvoiceGeneral">
+    <id column="INVOICE_ID" jdbcType="NUMERIC" property="invoiceId" />
+    <result column="INVOICE_NAME" jdbcType="VARCHAR" property="invoiceName" />
+    <result column="CREATED_AT" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="APPOINTMENT_ID" jdbcType="NUMERIC" property="appointmentId" />
+    <result column="UPDATED_AT" jdbcType="TIMESTAMP" property="updatedAt" />
+
+    <association property="appointment" javaType="com.doccure.BE.model.Appointment">
+      <id column="APPOINTMENT_ID" jdbcType="NUMERIC" property="appointmentId" />
+      <result column="STATUS" jdbcType="VARCHAR" property="status" />
+      <result column="PRICE" jdbcType="NUMERIC" property="price" />
+      <result column="SLOT_ID" jdbcType="NUMERIC" property="slotId" />
+      <result column="DOCTOR_SPECIALIZATION_ID" jdbcType="NUMERIC" property="doctorSpecializationId" />
+      <result column="USER_ID" jdbcType="NUMERIC" property="userId" />
+    </association>
+
+    <association property="doctor" javaType="com.doccure.BE.model.Doctor">
+      <id column="DOCTOR_ID" jdbcType="NUMERIC" property="doctorId" />
+      <result column="FIRST_NAME" jdbcType="VARCHAR" property="firstName" />
+      <result column="LAST_NAME" jdbcType="VARCHAR" property="lastName" />
+      <result column="EXPERIENCE" jdbcType="NUMERIC" property="experience" />
+      <result column="HOSPITAL" jdbcType="VARCHAR" property="hospital" />
+      <result column="AVATAR" jdbcType="VARCHAR" property="avatar" />
+    </association>
+
+     <association property="slot" javaType="com.doccure.BE.model.SlotAppointment">
+        <id column="SLOT_ID" jdbcType="NUMERIC" property="slotId" />
+        <result column="DATE_SLOT" jdbcType="TIMESTAMP" property="dateSlot" />
+        <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="END_TIME" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="PRICE" jdbcType="NUMERIC" property="price" />
+        <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    </association>
+
+    <association property="specialization" javaType="com.doccure.BE.model.Specialization">
+        <id column="SPECIALIZATION_ID" jdbcType="NUMERIC" property="specializationId" />
+      <result column="SPECIALIZATION_NAME" jdbcType="VARCHAR" property="specializationName" />
+    </association>
+  </resultMap>
+
+  <select id="getAllInvoiceGenerals" parameterType="Long" resultMap="BaseResultMapGeneral">
+    SELECT 
+      i.invoice_id, i.invoice_name, i.status as invoice_status, i.created_at, i.updated_at,
+      a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+      s.slot_id,s.start_datetime as DATE_SLOT, s.start_datetime as start_time, s.end_datetime as end_time,
+      d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+      sp.specialization_name, sp.specialization_id
+    FROM invoice i
+    JOIN appointment a ON i.appointment_id = a.appointment_id
+    JOIN slot s ON s.slot_id = a.slot_id
+    JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+    JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+    JOIN doctor d ON ds.doctor_id = d.doctor_id
+    WHERE 
+    a.user_id = #{userId,jdbcType=NUMERIC}
+  </select>
+
+  <select id="getInvoiceGeneralByKeyword" resultMap="BaseResultMapGeneral">
+    SELECT 
+      i.invoice_id, i.invoice_name, i.status as invoice_status, i.created_at, i.updated_at,
+      a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
+      s.slot_id,s.start_datetime as DATE_SLOT, s.start_datetime as start_time, s.end_datetime as end_time,
+      d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+      sp.specialization_name, sp.specialization_id
+    FROM invoice i
+    JOIN appointment a ON i.appointment_id = a.appointment_id
+    JOIN slot s ON s.slot_id = a.slot_id
+    JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
+    JOIN specialization sp ON ds.specialization_id = sp.specialization_id
+    JOIN doctor d ON ds.doctor_id = d.doctor_id
+    WHERE 
+    a.user_id = #{params.userId,jdbcType=NUMERIC}
+    AND (
+      UPPER(d.first_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+      OR UPPER(d.last_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+      OR UPPER(d.hospital) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+      OR UPPER(sp.specialization_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+      OR UPPER(i.invoice_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
+    )
+
+  </select>
+
   <!-- Invoice Detail -->
+  
+
   <resultMap id="BaseResultMapDetail" type="com.doccure.BE.model.InvoiceDetail">
     <id column="INVOICE_ID" jdbcType="NUMERIC" property="invoiceId" />
     <result column="INVOICE_NAME" jdbcType="VARCHAR" property="invoiceName" />
@@ -293,25 +386,6 @@
     </collection>
   </resultMap>
 
-  <select id="getInvoiceDetails" parameterType="Long" resultMap="BaseResultMapDetail">
-    SELECT 
-      i.invoice_id, i.invoice_name, i.status as invoice_status, i.created_at, i.updated_at,
-      a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
-      s.slot_id,s.start_datetime as DATE_SLOT, s.start_datetime as start_time, s.end_datetime as end_time,
-      d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
-      sp.specialization_name, sp.specialization_id,
-      ii.item_id, ii.item_name, ii.quantity, ii.price as invoice_item_price
-    FROM invoice i
-    JOIN appointment a ON i.appointment_id = a.appointment_id
-    JOIN invoice_item ii ON ii.invoice_id = i.invoice_id
-    JOIN slot s ON s.slot_id = a.slot_id
-    JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
-    JOIN specialization sp ON ds.specialization_id = sp.specialization_id
-    JOIN doctor d ON ds.doctor_id = d.doctor_id
-    WHERE 
-    a.user_id = #{userId,jdbcType=NUMERIC}
-  </select>
-
   <select id="getInvoiceDetailById" resultMap="BaseResultMapDetail">
     SELECT 
       i.invoice_id, i.invoice_name, i.status as invoice_status, i.created_at, i.updated_at,
@@ -332,31 +406,5 @@
     AND i.invoice_id= #{invoiceId,jdbcType=NUMERIC}
   </select>
 
-   <select id="getInvoiceDetailByKeyword" resultMap="BaseResultMapDetail">
-    SELECT 
-      i.invoice_id, i.invoice_name, i.status as invoice_status, i.created_at, i.updated_at,
-      a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
-      s.slot_id,s.start_datetime as DATE_SLOT, s.start_datetime as start_time, s.end_datetime as end_time,
-      d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
-      sp.specialization_name, sp.specialization_id,
-      ii.item_id, ii.item_name, ii.quantity, ii.price as invoice_item_price
-    FROM invoice i
-    JOIN appointment a ON i.appointment_id = a.appointment_id
-    JOIN invoice_item ii ON ii.invoice_id = i.invoice_id
-    JOIN slot s ON s.slot_id = a.slot_id
-    JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
-    JOIN specialization sp ON ds.specialization_id = sp.specialization_id
-    JOIN doctor d ON ds.doctor_id = d.doctor_id
-    WHERE 
-    a.user_id = #{params.userId,jdbcType=NUMERIC}
-    AND (
-      UPPER(d.first_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
-      OR UPPER(d.last_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
-      OR UPPER(d.hospital) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
-      OR UPPER(sp.specialization_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
-      OR UPPER(ii.item_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
-      OR UPPER(i.invoice_name) LIKE '%' || UPPER(#{params.keyword,jdbcType=VARCHAR}) || '%'
-    )
-
-  </select>
+   
 </mapper>

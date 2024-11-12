@@ -6,10 +6,11 @@ export const useInvoicesQuery = ({ offset, limit }) => {
   const { data, error, isFetching } = useSuspenseQuery({
     queryKey: ["invoices", offset, limit],
     queryFn: async () => {
-      return getInvoices({ offset, limit });
-      // response.data.total = parseInt(response.headers['x-total-count'])
+      const response = await getInvoices({ offset, limit });
 
-      // return response;
+      response.data.total = parseInt(response.headers['x-total-count'])
+
+      return response;
     },
   });
   return { data, error, isFetching }

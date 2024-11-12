@@ -2,12 +2,12 @@ import { Suspense } from 'react';
 import { useInvoicesQuery } from '../../../../hooks/useInvoicesQuery';
 import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
 import { Spin } from 'antd';
-import InvoicesList from '../../../../features/invoices/components/InvoicesList';
+import InvoicesTable from '../../../../features/invoices/components/InvoicesTable';
 
 const InvoicesPage = () => {
   return (
     <Suspense fallback={<div>Loading</div>}>
-      <InvoicesList />
+      <InvoicesTable />
     </Suspense>
   );
 };

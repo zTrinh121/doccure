@@ -1,4 +1,4 @@
-export const downloadBlob = (obj,name='download') => {
+export const downloadBlob = (obj, name = 'download') => {
   console.log(obj)
   const url = URL.createObjectURL(obj.data);
   const a = document.createElement('a');
@@ -10,4 +10,8 @@ export const downloadBlob = (obj,name='download') => {
   a.remove();
   URL.revokeObjectURL(url);
 
+}
+
+export const getStars = (rating = 0) => {
+  return Math.floor(rating / 0.5) * 0.5
 }

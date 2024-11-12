@@ -3,20 +3,14 @@ import { Card, Avatar, Badge, Typography, Rate, Button, Row, Col } from 'antd';
 import {
   CheckCircleOutlined,
   EnvironmentOutlined,
-  VideoCameraOutlined,
-  PhoneOutlined,
-  MessageOutlined,
-  HeartOutlined,
-  ShareAltOutlined,
-  LikeOutlined,
-  HomeOutlined,
   CalendarOutlined,
   ClockCircleOutlined,
-  TrophyOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 import AvatarWithDefault from '../../../components/ui/AvatarWithDefault';
+import { useDoctorRatings } from '../../../hooks/useDoctorRatings';
+import { getStars } from '../../../utils/utils';
 
 const DoctorPanel = ({
   doctorId,
@@ -24,11 +18,21 @@ const DoctorPanel = ({
   viewProfile = false,
 }) => {
   const navigate = useNavigate();
+
   const { data, isSuccess, isPending, error } = useDoctorQuery(doctorId);
-  if (isPending) {
+  const {
+    isPending: isPendingR,
+    isError: isErrorR,
+    data: dataR,
+    error: errorR,
+  } = useDoctorRatings(doctorId);
+  if (isPending || isPendingR) {
     return <IsPendingSpin />;
   }
+
   const responseData = data.data.data;
+  const responseDataR = dataR?.data.data;
+  console.log(dataR);
 
   const onClickBooking = () => {
     navigate(`/doctor/${responseData.doctor_id}/booking`);
@@ -52,24 +56,27 @@ const DoctorPanel = ({
             </Typography.Title>
             <CheckCircleOutlined className="text-green-500" />
           </div>
-          <Typography.Text>
+          {/* <Typography.Text>
             Puts title here ( bằng cấp or sth idk)
-          </Typography.Text>
+          </Typography.Text> */}
 
           <div className="mt-2 flex items-center text-gray-500">
             <EnvironmentOutlined className="mr-1" />
             <Typography.Text>{responseData.hospital}</Typography.Text>
           </div>
           <div className="mt-2 flex items-center">
-            <Rate allowHalf defaultValue={5} />
-            <Typography.Text className="ml-2">5.0</Typography.Text>
-            <Typography.Link className="ml-2">(150 Reviews)</Typography.Link>
+            <Rate
+              allowHalf
+              disabled
+              defaultValue={getStars(responseDataR?.avg_rating)}
+            />
+            <Typography.Text className="ml-2">
+              {responseDataR?.avg_rating}
+            </Typography.Text>
+            {/* <Typography.Link className="ml-2">(150 Reviews)</Typography.Link> */}
           </div>
         </div>
-
-        {/* Right Section with Additional Info */}
       </div>
-      {/* Bottom Section with Stats and Action */}
       {showBottomSection && (
         <div className="mt-4 border-t pt-4 flex justify-between">
           <div className="flex space-x-4">

@@ -3,6 +3,7 @@ package com.doccure.BE.mapper;
 import com.doccure.BE.model.Invoice;
 import com.doccure.BE.model.InvoiceDetail;
 import com.doccure.BE.model.InvoiceExample;
+import com.doccure.BE.model.InvoiceGeneral;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -39,12 +40,12 @@ public interface InvoiceMapper {
 
     int updateStatusByInvoiceId(@Param("status") String status, @Param("invoiceId") Long invoiceId);
 
-    List<InvoiceDetail> getInvoiceDetails(Long userId, RowBounds row);
+    List<InvoiceGeneral> getAllInvoiceGenerals(Long userId, RowBounds row);
 
-    List<InvoiceDetail> getInvoiceDetails(Long userId);
+    List<InvoiceGeneral> getAllInvoiceGenerals(Long userId);
 
     InvoiceDetail getInvoiceDetailById(@Param("userId") Long userId, @Param("invoiceId") Long invoiceId);
 
-    List<InvoiceDetail> getInvoiceDetailByKeyword (@Param("params") Map<String, Object> params, RowBounds row);
-    List<InvoiceDetail> getInvoiceDetailByKeyword (@Param("params") Map<String, Object> params);
+    List<InvoiceGeneral> getInvoiceGeneralByKeyword (@Param("params") Map<String, Object> params, RowBounds row);
+    List<InvoiceGeneral> getInvoiceGeneralByKeyword (@Param("params") Map<String, Object> params);
 }

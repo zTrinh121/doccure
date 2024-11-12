@@ -15,7 +15,7 @@ const AppointmentList = () => {
   });
   const { isPending, isError, data, error } = useAppointmentsQuery({
     status: status,
-    offset: pagination.page - 1,
+    offset: (pagination.page - 1) * pagination.pageSize,
     limit: pagination.pageSize,
   });
   // const total = useMemo(() => data?.total, [data?.total]);

@@ -11,12 +11,12 @@ import { downloadBlob } from './../../../utils/utils';
 const InvoicesTable = () => {
   const [pagination, setPagination] = useState({
     page: 1,
-    pageSize: 5,
+    pageSize: 10,
     total: 100,
   });
 
   const { data, error, isFetching } = useInvoicesQuery({
-    offset: pagination.page - 1,
+    offset: (pagination.page - 1) * pagination.pageSize,
     limit: pagination.pageSize,
   });
   const responseData = data.data.data;
@@ -100,39 +100,6 @@ const InvoicesTable = () => {
               </>
             )}
           />
-          {/* 
-          <Column title="Age" dataIndex="age" key="age" />
-          <Column title="Address" dataIndex="address" key="address" />
-          <Column
-            title="Tags"
-            dataIndex="tags"
-            key="tags"
-            render={(tags) => (
-              <>
-                {tags.map((tag) => {
-                  let color = tag.length > 5 ? 'geekblue' : 'green';
-                  if (tag === 'loser') {
-                    color = 'volcano';
-                  }
-                  return (
-                    <Tag color={color} key={tag}>
-                      {tag.toUpperCase()}
-                    </Tag>
-                  );
-                })}
-              </>
-            )}
-          />
-          <Column
-            title="Action"
-            key="action"
-            render={(_, record) => (
-              <Space size="middle">
-                <a>Invite {record.lastName}</a>
-                <a>Delete</a>
-              </Space>
-            )}
-          /> */}
         </Table>
       </div>
       {data?.data.data.map((invoice) => (

@@ -87,6 +87,7 @@ public class PayPalServiceImpl implements PayPalService {
 
     public Appointment manageSlotForAppointment(Long doctorId, Long slotId, Long specializationId, HttpServletRequest request) throws Exception{
         DoctorSlot doctor = doctorMapper.getDoctorSlotsById(doctorId);
+        DoctorFull doctorFull = doctorMapper.getDoctorFullById(doctorId);
         Slot chooseSlot = slotMapper.selectByPrimaryKey(slotId);
         if (doctor == null)
             throw new DataNotFoundException("No slot found for doctor with id = " + doctorId);
@@ -97,7 +98,7 @@ public class PayPalServiceImpl implements PayPalService {
             throw new DataIntegrityViolationException("Slot with id " + slotId + " is already booked.");
         }
 
-        List<Specialization> specializations = doctor.getSpecializations();
+        List<Specialization> specializations = doctorFull.getSpecializations();
         if (specializations.isEmpty()) {
             throw new DataNotFoundException("Doctor with id " + doctorId + " has no associated specializations.");
         }

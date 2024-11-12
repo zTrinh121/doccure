@@ -4,10 +4,9 @@ import com.doccure.BE.exception.DataNotFoundException;
 import com.doccure.BE.mapper.InvoiceMapper;
 import com.doccure.BE.mapper.TokenMapper;
 import com.doccure.BE.mapper.UsersMapper;
-import com.doccure.BE.model.InvoiceDetail;
-import com.doccure.BE.model.Token;
-import com.doccure.BE.model.Users;
+import com.doccure.BE.model.*;
 import com.doccure.BE.response.InvoiceDetailResponse;
+import com.doccure.BE.response.InvoiceGeneralResponse;
 import com.doccure.BE.service.InvoiceService;
 import com.doccure.BE.util.PdfUtil;
 import com.doccure.BE.util.TokenUtil;
@@ -30,15 +29,17 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final TokenMapper tokenMapper;
     private final UsersMapper usersMapper;
     @Override
-    public List<InvoiceDetailResponse> getAllInvoices(int offset, int limit, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public List<InvoiceGeneralResponse> getAllInvoices(int offset, int limit, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
-        List<InvoiceDetail> invoiceDetails = invoiceMapper.getInvoiceDetails(accessTokenUser.getUserId(),
+
+        List<InvoiceGeneral> invoiceGenerals = invoiceMapper.getAllInvoiceGenerals(accessTokenUser.getUserId(),
                                                                                 new RowBounds(offset, limit));
-        response.setHeader("X-Total-Count", String.valueOf(invoiceMapper.getInvoiceDetails(accessTokenUser.getUserId()).size()));
-        if(invoiceDetails.isEmpty()) throw new DataNotFoundException("Not found any invoices");
-        return invoiceDetails.stream()
-                .map(InvoiceDetailResponse::fromInvoiceDetail)
+
+        if(invoiceGenerals.isEmpty()) throw new DataNotFoundException("Not found any invoices");
+        response.setHeader("X-Total-Count", String.valueOf(invoiceMapper.getAllInvoiceGenerals(accessTokenUser.getUserId()).size()));
+        return invoiceGenerals.stream()
+                .map(InvoiceGeneralResponse::fromInvoiceGeneral)
                 .toList();
     }
 
@@ -48,7 +49,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<InvoiceDetailResponse> searchInvoices(String keyword, 
+    public List<InvoiceGeneralResponse> searchInvoices(String keyword, 
                                                     int offset,
                                                       int row, 
                                                       HttpServletRequest request,
@@ -58,11 +59,11 @@ public class InvoiceServiceImpl implements InvoiceService {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("userId", accessTokenUser.getUserId());
         params.put("keyword", keyword);
-        List<InvoiceDetail> invoiceDetails = invoiceMapper.getInvoiceDetailByKeyword(params, new RowBounds(offset, row));
-        if(invoiceDetails.isEmpty()) throw new DataNotFoundException("Not found any invoices with keyword = " + keyword);
-        response.setHeader("X-Total-Count", String.valueOf(invoiceMapper.getInvoiceDetailByKeyword(params).size()));
-        return invoiceDetails.stream()
-                .map(InvoiceDetailResponse::fromInvoiceDetail)
+        List<InvoiceGeneral> invoiceGenerals = invoiceMapper.getInvoiceGeneralByKeyword(params, new RowBounds(offset, row));
+        if(invoiceGenerals.isEmpty()) throw new DataNotFoundException("Not found any invoices with keyword = " + keyword);
+        response.setHeader("X-Total-Count", String.valueOf(invoiceMapper.getInvoiceGeneralByKeyword(params).size()));
+        return invoiceGenerals.stream()
+                .map(InvoiceGeneralResponse::fromInvoiceGeneral)
                 .toList();
     }
 

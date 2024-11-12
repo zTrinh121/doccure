@@ -123,6 +123,19 @@
 			<version>1.14.0</version>
 		</dependency>
 		<!--Paypal-->
+		<!--Pagination-->
+		<dependency>
+			<groupId>com.github.sea-huang</groupId>
+			<artifactId>spring-data-mybatis-pagination</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.sea-huang</groupId>
+			<artifactId>spring-data-mybatis-pagination</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+		<!--Pagination-->
+
 	</dependencies>
 
 	<build>

@@ -33,10 +33,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     public List<InvoiceDetailResponse> getAllInvoices(int offset, int limit, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String token = TokenUtil.checkToken(request);
         Token accessTokenUser = tokenMapper.findByAccessToken(token);
+
         List<InvoiceDetail> invoiceDetails = invoiceMapper.getInvoiceDetails(accessTokenUser.getUserId(),
                                                                                 new RowBounds(offset, limit));
-        response.setHeader("X-Total-Count", String.valueOf(invoiceMapper.getInvoiceDetails(accessTokenUser.getUserId()).size()));
+
         if(invoiceDetails.isEmpty()) throw new DataNotFoundException("Not found any invoices");
+        response.setHeader("X-Total-Count", String.valueOf(invoiceMapper.getInvoiceDetails(accessTokenUser.getUserId()).size()));
         return invoiceDetails.stream()
                 .map(InvoiceDetailResponse::fromInvoiceDetail)
                 .toList();

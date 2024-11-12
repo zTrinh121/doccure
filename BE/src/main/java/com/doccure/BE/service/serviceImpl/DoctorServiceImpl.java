@@ -75,7 +75,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<DoctorFullResponse> getAllDoctor(HttpServletResponse response) throws DataNotFoundException {
-        List<DoctorFull> doctorFullResponseList = doctorMapper.getAllDoctorFulls();
+            List<DoctorFull> doctorFullResponseList = doctorMapper.getAllDoctorFulls();
         if (doctorFullResponseList.isEmpty())
             throw new DataNotFoundException("No doctor found in list");
 

@@ -95,6 +95,16 @@
     from RATING
     where APPOINTMENT_ID = #{appointmentId,jdbcType=NUMERIC}
   </select>
+  <select id="selectByDoctorId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    FROM doctor d
+    JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id
+    JOIN specialization s ON ds.specialization_id = s.specialization_id
+    JOIN appointment a ON ds.doctor_specialization_id = a.doctor_specialization_id
+    JOIN rating r ON a.appointment_id = r.appointment_id;
+    where DOCTOR_ID = #{doctorId,jdbcType=NUMERIC}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from RATING
     where RATING_ID = #{ratingId,jdbcType=NUMERIC}
@@ -214,4 +224,65 @@
       APPOINTMENT_ID = #{appointmentId,jdbcType=NUMERIC}
     where RATING_ID = #{ratingId,jdbcType=NUMERIC}
   </update>
+
+
+  <resultMap id="BaseResultMapRating" type="com.doccure.BE.model.RatingSpecialization">
+    <id column="RATING_ID" jdbcType="NUMERIC" property="ratingId" />
+    <result column="SPECIALIZATION_ID" jdbcType="NUMERIC" property="specializationId" />
+    <result column="SPECIALIZATION_NAME" jdbcType="VARCHAR" property="specializationName" />
+    <result column="COMMENT_RATING" jdbcType="VARCHAR" property="commentRating" />
+    <result column="RATING" jdbcType="NUMERIC" property="rating" />
+    <result column="CREATED_AT" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="APPOINTMENT_ID" jdbcType="NUMERIC" property="appointmentId" />
+    <result column="DOCTOR_ID" jdbcType="NUMERIC" property="doctorId" />
+  </resultMap>
+
+  <select id="getAllDoctorRatings" resultMap="BaseResultMapRating">
+    SELECT d.doctor_id,
+           s.specialization_id, s.specialization_name,
+           r.appointment_id, r.rating_id, r.rating, r.comment_rating, r.created_at
+    FROM doctor d
+           JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id
+           JOIN specialization s ON ds.specialization_id = s.specialization_id
+           JOIN appointment a ON ds.doctor_specialization_id = a.doctor_specialization_id
+           JOIN rating r ON a.appointment_id = r.appointment_id
+  </select>
+
+  <select id="getDoctorRatingsByDoctorId" resultMap="BaseResultMapRating">
+    SELECT d.doctor_id,
+           s.specialization_id, s.specialization_name,
+           r.appointment_id, r.rating_id, r.rating, r.comment_rating, r.created_at
+    FROM doctor d
+           JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id
+           JOIN specialization s ON ds.specialization_id = s.specialization_id
+           JOIN appointment a ON ds.doctor_specialization_id = a.doctor_specialization_id
+           JOIN rating r ON a.appointment_id = r.appointment_id
+    WHERE d.doctor_id = #{doctorId,jdbcType=NUMERIC}
+  </select>
+
+  <select id="getDoctorRatingsByStartEndDate" resultMap="BaseResultMapRating">
+    SELECT d.doctor_id,
+    s.specialization_id, s.specialization_name,
+    r.appointment_id, r.rating_id, r.rating, r.comment_rating, r.created_at
+    FROM doctor d
+    JOIN doctor_specialization ds ON d.doctor_id = ds.doctor_id
+    JOIN specialization s ON ds.specialization_id = s.specialization_id
+    JOIN appointment a ON ds.doctor_specialization_id = a.doctor_specialization_id
+    JOIN rating r ON a.appointment_id = r.appointment_id
+    WHERE d.doctor_id = #{doctorId,jdbcType=NUMERIC}
+    <if test="startDate != null and endDate != null">
+      AND r.created_at BETWEEN #{startDate, jdbcType=DATE} AND #{endDate, jdbcType=DATE}
+    </if>
+    <if test="startDate != null and endDate == null">
+      <![CDATA[
+          AND r.created_at >= #{startDate, jdbcType=DATE}
+          ]]>
+    </if>
+    <if test="startDate == null and endDate != null">
+      <![CDATA[
+          AND r.created_at <= #{endDate, jdbcType=DATE}
+          ]]>
+    </if>
+  </select>
+
 </mapper>

@@ -49,7 +49,7 @@ public interface DoctorMapper {
    
     List<DoctorRating> getAllDoctorRatings(RowBounds rowBounds);
 
-    List<DoctorRating> getDoctorRatingsByStartEndDate(@Param("doctorId") Long doctorId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, RowBounds rowBounds);
+    List<DoctorRating> getDoctorRatingsByStartEndDate(@Param("doctorId") Long doctorId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     DoctorRating getDoctorRatingsById(Long doctorId);
 

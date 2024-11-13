@@ -15,6 +15,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @NoArgsConstructor
 @Builder
 public class RatingSpecialization {
+    @JsonProperty("doctor_id")
+    private Long doctorId;
+
     @JsonProperty("specialization_id")
     private Long specializationId;
 

@@ -203,17 +203,15 @@ public class DoctorController {
     }
 
     @GetMapping("/rating/date")
-    public ResponseEntity<Object> getDoctorRatingsByStartEndDate(@RequestParam("id") Long id,
+    public ResponseEntity<Object> getDoctorRatingsByStartEndDate(@RequestParam("doctor_id") Long id,
                                                           @RequestParam("start_date") String startDate,
-                                                          @RequestParam("end_date") String endDate,
-                                                          @RequestParam("offset") int offset,
-                                                          @RequestParam("limit") int limit) throws Exception {
+                                                          @RequestParam("end_date") String endDate) throws Exception {
         LocalDate start = DateFormatUtil.parseStringToDate(startDate);
         LocalDate end = DateFormatUtil.parseStringToDate(endDate);
 
-        return ResponseHandler.responseBuilder("Availability slot for doctor detail with id = " + id ,
+        return ResponseHandler.responseBuilder("Rating of doctor ID = " + id + " from = " + startDate + " to = " + endDate ,
                 HttpStatus.OK,
-                doctorService.getDoctorRatingsByStartEndDate(id, start, end, offset, limit));
+                doctorService.getDoctorRatingsByStartEndDate(id, start, end));
     }
 
 

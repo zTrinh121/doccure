@@ -26,12 +26,12 @@ public interface DoctorService {
     List<DoctorFullResponse> getDoctorFullByKeyword(String keyword) throws Exception;
     List<DoctorFullResponse> getDoctorFullBySpecializationId(Long specializationId) throws Exception;
 
-    //Doctor with rating 
+    //Doctor with rating
     List<DoctorRatingResponse> getAllDoctorRatings() throws Exception;
     List<DoctorRatingResponse> getAllDoctorRatingsPagination(int offset, int limit, HttpServletResponse response) throws Exception;
     DoctorRatingResponse getDoctorRatingByDoctorId(Long doctorId) throws DataNotFoundException;
     List<DoctorRatingResponse> filterDoctorRating(String ratingType, String orderType) throws Exception;
-    List<DoctorRating> getDoctorRatingsByStartEndDate( Long doctorId,  LocalDate startDate,  LocalDate endDate, int offset, int limit) throws Exception;
+    List<DoctorRating> getDoctorRatingsByStartEndDate( Long doctorId,  LocalDate startDate,  LocalDate endDate) throws Exception;
 
     //Doctor with slots
     List<DoctorSlotResponse> getAllDoctorSlots() throws DataNotFoundException;

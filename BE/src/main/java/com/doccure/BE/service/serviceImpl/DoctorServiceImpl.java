@@ -5,10 +5,7 @@ import com.doccure.BE.enums.OrderType;
 import com.doccure.BE.enums.RatingType;
 import com.doccure.BE.exception.DataIntegrityViolationException;
 import com.doccure.BE.exception.DataNotFoundException;
-import com.doccure.BE.mapper.DoctorMapper;
-import com.doccure.BE.mapper.DoctorSpecializationMapper;
-import com.doccure.BE.mapper.SlotMapper;
-import com.doccure.BE.mapper.SpecializationMapper;
+import com.doccure.BE.mapper.*;
 import com.doccure.BE.model.*;
 import com.doccure.BE.request.DoctorInsertRequest;
 import com.doccure.BE.request.DoctorSpecializationRequest;
@@ -32,6 +29,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final DoctorMapper doctorMapper;
     private final SlotMapper slotMapper;
     private  final DoctorSpecializationMapper doctorSpecializationMapper;
+    private final RatingMapper ratingMapper;
     private final SpecializationMapper specializationMapper;
     private final Cloudinary cloudinary;
     private final float MAX_RATING = 5;
@@ -75,7 +73,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<DoctorFullResponse> getAllDoctor(HttpServletResponse response) throws DataNotFoundException {
-            List<DoctorFull> doctorFullResponseList = doctorMapper.getAllDoctorFulls();
+        List<DoctorFull> doctorFullResponseList = doctorMapper.getAllDoctorFulls();
         if (doctorFullResponseList.isEmpty())
             throw new DataNotFoundException("No doctor found in list");
 
@@ -195,8 +193,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorRating> getDoctorRatingsByStartEndDate(Long doctorId, LocalDate startDate, LocalDate endDate, int offset, int limit) throws Exception {
-        List<DoctorRating> doctorRatingList = doctorMapper.getDoctorRatingsByStartEndDate(doctorId, startDate, endDate, new RowBounds(offset, limit));
+    public List<DoctorRating> getDoctorRatingsByStartEndDate(Long doctorId, LocalDate startDate, LocalDate endDate) throws Exception {
+        List<DoctorRating> doctorRatingList = doctorMapper.getDoctorRatingsByStartEndDate(doctorId, startDate, endDate);
         if(doctorRatingList.isEmpty()) throw new DataNotFoundException(String.format("No rating for doctor found from %s to %S", startDate, endDate));
         return doctorRatingList;
     }

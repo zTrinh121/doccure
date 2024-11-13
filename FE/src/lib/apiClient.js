@@ -3,8 +3,13 @@ import {
   getAccessToken,
   getActions
 } from '../stores/authStore';
-const { setAccessToken, clearTokens } = getActions();
+import { getGApiAccessToken } from "../stores/gApiStore";
+
+
 const apiUrl = import.meta.env.VITE_API_URL;
+const { setAccessToken, clearTokens } = getActions();
+
+
 
 export const publicAxiosInstance = axios.create({
   baseURL: apiUrl,
@@ -14,13 +19,8 @@ export const publicAxiosInstance = axios.create({
 export const authAxiosInstance = axios.create({
   baseURL: apiUrl,
   withCredentials: true,
-
 });
 
-//injects Token for every request
-//!apparently appending to every request, making server check for jwt everytime, either figure out how to conditionally include accessToken or tell back end about it >:)
-//Fucks with login too:)
-//todo:solution: have individual instances for requests demanding authentication and those that don't:)
 authAxiosInstance.interceptors.request.use(request => {
   const accessToken = getAccessToken();
   if (accessToken) {
@@ -30,6 +30,25 @@ authAxiosInstance.interceptors.request.use(request => {
 }, error => {
   return Promise.reject(error);
 });
+
+export const gApiAxiosInstance = axios.create({
+  baseURL:`https://www.googleapis.com/calendar/v3/calendars`,
+  withCredentials: true,
+})
+
+//!WIP
+gApiAxiosInstance.interceptors.request.use(request => {
+  const gApiAccessToken = getGApiAccessToken();
+  if (gApiAccessToken) {
+    request.headers['Authorization'] = `Bearer ${gApiAccessToken}`;
+  }
+  return request;
+}, error => {
+  return Promise.reject(error);
+});
+
+//injects Token for every request
+
 
 //duplicate of getNewAccessToken in auth.jsx
 export const getNewAccessToken = async () => {

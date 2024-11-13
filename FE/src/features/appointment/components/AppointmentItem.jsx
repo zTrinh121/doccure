@@ -2,6 +2,7 @@ import { Card, Divider } from 'antd';
 import React from 'react';
 import AvatarWithDefault from '../../../components/ui/AvatarWithDefault';
 import { useNavigate } from 'react-router-dom';
+import { postInsertEvent } from '../../../lib/gApiCalendar';
 
 const AppointmentItem = ({
   avatar,
@@ -20,6 +21,17 @@ const AppointmentItem = ({
 
   const onClickInvoice = () => {
     navigate(`/user/invoice/${invoiceId}`);
+  };
+
+  const onClickGoogleCalendar = async () => {
+    const event = {
+      summary: `Appointment with Dr. ${fullName}`,
+      start: new Date(Date.parse(time.slice(0, 16))).toISOString(),
+      end: new Date(
+        Date.parse(time.slice(0, 11) + time.slice(19)),
+      ).toISOString(),
+    };
+    console.log(postInsertEvent(event));
   };
 
   return (
@@ -52,6 +64,11 @@ const AppointmentItem = ({
             .replace(/\.\d{3}/, '')}`}
         >
           Add google event manually :){' '}
+        </a>
+        <Divider type="vertical" />
+
+        <a onClick={onClickGoogleCalendar}>
+          Add to Google Calendar (pog pog :O){' '}
         </a>
       </div>
     </Card>

@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 
 const AppointmentList = () => {
   const [status, setStatus] = useState('');
+
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 10,
@@ -43,8 +44,10 @@ const AppointmentList = () => {
     status === value ? setStatus('') : setStatus(value);
   };
 
+
   return (
     <div>
+    
       <Spin spinning={isPending}>
         <div>
           <div className="flex flex-start gap-2 p-2">

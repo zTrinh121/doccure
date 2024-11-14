@@ -1,28 +1,15 @@
+import { DatePicker, Col, Card, Button, Row, Flex } from 'antd';
+const { RangePicker } = DatePicker;
+import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
+import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
+import SlotsTable from '../../../../features/slots/components/SlotsTable';
+
+import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
 import { useDoctorSlotsQuery } from '../../../../hooks/useDoctorSlotsQuery';
 import { useState } from 'react';
-import {
-  DatePicker,
-  Col,
-  Carousel,
-  Typography,
-  Card,
-  Button,
-  Row,
-  Flex,
-} from 'antd';
-const { Title } = Typography;
-import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
-import { dayNames } from '../../../../utils/constants';
-import { getDateArr, getKebabDateString } from '../../../../utils/dateUtils';
-import dayjs from 'dayjs';
-import { useRef } from 'react';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
-import { useNavigate } from 'react-router-dom';
 import { postPayment } from '../../../../lib/payment';
-import SlotsTable from '../../../../features/slots/components/SlotsTable';
-const { RangePicker } = DatePicker;
+import { getDateArr, getKebabDateString } from '../../../../utils/dateUtils';
 
 const DoctorBookingPage = () => {
   const { doctorId } = useParams(); //for getting doctor id from url param
@@ -36,15 +23,12 @@ const DoctorBookingPage = () => {
   const [dateArr, setDateArr] = useState([new Date()]);
   const [select, setSelect] = useState('');
   const [spec, setSpec] = useState('');
-  const carouselRef = useRef(null);
 
   const { isPending, isError, data, error } = useDoctorSlotsQuery({
     startDate: startDate,
     endDate: endDate,
     doctorId: doctorId,
   });
-
-  const navigate = useNavigate();
 
   //todo: implement error screen for empty, loading screen
   if (isPending) {

@@ -32,8 +32,10 @@ import { useProfileQuery } from '../../hooks/useProfileQuery';
 import AvatarWithDefault from '../ui/AvatarWithDefault';
 
 const HomeLayout = ({ children }) => {
-  let location = useLocation();
-  // const [username, setUsername] = useState('');
+  const locationArr = useLocation().pathname.split('/');
+
+  const location = locationArr[1];
+
   const accessToken = useAccessToken();
   const { data, isSuccess, isPending, error } = useProfileQuery();
   const navigate = useNavigate();
@@ -103,9 +105,11 @@ const HomeLayout = ({ children }) => {
               }}
               mode="horizontal"
               defaultSelectedKeys={['']}
+              selectedKeys={[location]}
               items={[
                 { key: '', label: 'Home' },
                 { key: 'search', label: 'Search' },
+                { key: 'user', label: 'User' },
               ]}
             />
           </Col>

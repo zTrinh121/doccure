@@ -23,11 +23,11 @@ const AppointmentsPage = () => {
 
   return (
     <ContentLayout>
-      <Button
+      {/* <Button
         href={`https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events&response_type=token&redirect_uri=${redirectUri}&client_id=${clientId}`}
       >
         Google verification
-      </Button>
+      </Button> */}
 
       <AppointmentList></AppointmentList>
     </ContentLayout>

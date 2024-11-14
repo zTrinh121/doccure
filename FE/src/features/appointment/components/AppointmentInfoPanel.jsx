@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card } from 'antd';
 
-const AppointmentInfoPanel = ({ status,time,price,invoiceId }) => {
+const AppointmentInfoPanel = ({ status, time, price, invoiceId }) => {
   return (
-    <Card className="my-1 shadow-lg">
+    <Card className="my-1 ">
       Information
       <div className="grid grid-cols-2 gap-4">
         <div className="flex justify-between ">

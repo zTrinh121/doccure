@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useDoctorQuery } from '../../../../hooks/useDoctorQuery';
 import DoctorPanel from '../../../../features/doctors/components/DoctorPanel';
 import { Row, Col } from 'antd';
+import ReviewsCard from '../../../../features/doctors/components/ReviewsCard';
 
 import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
 
@@ -19,6 +20,7 @@ const DoctorPage = () => {
 
         <Col span={16}>
           <DoctorPanel doctorId={doctorId} />
+          <ReviewsCard doctorId={doctorId}/>
         </Col>
         <Col span={4}></Col>
       </Row>

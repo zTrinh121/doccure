@@ -34,7 +34,6 @@ const DoctorPanel = ({
 
   const responseData = data.data.data;
   const responseDataR = dataR?.data.data;
-  console.log(dataR);
 
   const onClickBooking = () => {
     navigate(`/doctor/${responseData.doctor_id}/booking`);

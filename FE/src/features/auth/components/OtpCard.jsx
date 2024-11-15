@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import { Flex } from 'antd';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import Timer from '../../../components/ui/Timer';
+import { notification } from '../../../utils/antDesignGlobals';
 
 const OtpCard = () => {
   const [loading, setLoading] = useState(false);
@@ -31,8 +32,18 @@ const OtpCard = () => {
     setLoading(true);
     try {
       const response = await verifyOtp({ otp: values.otp, email: resetEmail });
+      notification.success({
+        message: 'Success',
+
+        showProgress: true,
+      });
       setResetStep('password');
     } catch (error) {
+      notification.error({
+        message: 'Error',
+
+        showProgress: true,
+      });
       console.log(error);
     } finally {
       setLoading(false);

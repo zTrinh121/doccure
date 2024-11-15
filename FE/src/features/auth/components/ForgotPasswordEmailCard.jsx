@@ -7,6 +7,7 @@ import { getActions, useResetStep } from '../../../stores/authStore';
 import { Spin } from 'antd';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { notification } from '../../../utils/antDesignGlobals';
 //todos:notification,disabled button
 
 const ForgotPasswordEmailCard = () => {
@@ -19,10 +20,19 @@ const ForgotPasswordEmailCard = () => {
     setLoading(true);
     try {
       const response = await sendResetEmail({ email: values.email });
+      notification.success({
+        message: 'Email sent',
+        showProgress: true,
+      });
       setResetEmail(values.email);
       setResetStep('otp');
     } catch (error) {
       console.log(error);
+      notification.error({
+        message: 'Error',
+        
+        showProgress: true,
+      });
     } finally {
       setLoading(false);
     }
@@ -33,7 +43,6 @@ const ForgotPasswordEmailCard = () => {
       navigate('/otp');
     }
   }, [resetStep, navigate]);
-
 
   return (
     <Card>
@@ -54,8 +63,12 @@ const ForgotPasswordEmailCard = () => {
             name="email"
             rules={[
               {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
                 required: true,
-                message: 'Please input your email!',
+                message: 'Please input your E-mail!',
               },
             ]}
           >

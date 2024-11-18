@@ -12,6 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Map;
+
 @RestController
 @RequestMapping("${apiPrefix}/paypal")
 @RequiredArgsConstructor
@@ -63,7 +67,7 @@ public class PayPalController {
         try {
             Payment payment = payPalService.executePayment(paymentId, payerId);
             System.out.println(payment.toJSON());
-            AppointmentDetail appointmentDetail = payPalService.successPayment(appointmentId, invoiceId, slotId, userId);
+            Map<String, Object> appointmentDetail = payPalService.successPayment(appointmentId, invoiceId, slotId, userId);
             if (payment.getState().equals("approved")) {
                 return ResponseHandler.responseBuilder("Invoice in detail with ID = " + invoiceId,
                         HttpStatus.OK,
@@ -73,6 +77,10 @@ public class PayPalController {
             return ResponseHandler.responseBuilder("Something error just happen with invoice ID = " + invoiceId,
                     HttpStatus.BAD_REQUEST,
                     e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
         }
         return ResponseHandler.responseBuilder("Invoice in detail with ID = " + invoiceId,
                 HttpStatus.OK,

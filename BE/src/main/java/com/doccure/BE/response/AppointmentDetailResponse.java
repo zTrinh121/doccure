@@ -20,7 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonPropertyOrder({"appointmentId", "status", "price", "slotId",
+@JsonPropertyOrder({"appointmentId", "status", "price", "ratingStatus", "slotId",
                      "doctorSpecializationId", "userId", 
                      "doctor", "slot", "specialization"})
 public class AppointmentDetailResponse {
@@ -30,6 +30,9 @@ public class AppointmentDetailResponse {
     
     private String status;
     private BigDecimal price;
+
+    @JsonProperty("rating_status")
+    private String ratingStatus;
 
     @JsonProperty("slot_id")
     private Long slotId;
@@ -50,6 +53,7 @@ public class AppointmentDetailResponse {
                 .appointmentId(appointmentDetail.getAppointmentId())
                 .status(appointmentDetail.getStatus())
                 .price(appointmentDetail.getPrice())
+                .ratingStatus(appointmentDetail.getRatingStatus())
                 .slotId(appointmentDetail.getSlotId())
                 .doctorSpecializationId(appointmentDetail.getDoctorSpecializationId())
                 .userId(appointmentDetail.getUserId())

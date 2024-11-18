@@ -19,6 +19,7 @@ public class AppointmentDetail {
     private Long appointmentId;
     private String status;
     private BigDecimal price;
+    private String ratingStatus;
     private Long slotId;
     private Long doctorSpecializationId;
     private Long userId;

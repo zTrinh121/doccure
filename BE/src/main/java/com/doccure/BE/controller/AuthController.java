@@ -32,7 +32,7 @@ public class AuthController {
     public ResponseEntity<Object> register(
             @RequestBody Users request) throws Exception {
         return ResponseHandler.responseBuilder("Register successfully",
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 authService.register(request));
     }
 
@@ -40,7 +40,7 @@ public class AuthController {
     public ResponseEntity<Object> login(
             @RequestBody Users request, HttpServletResponse response) throws DataNotFoundException {
         return ResponseHandler.responseBuilder("Login successfully",
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 authService.authenticate(request, response));
     }
 
@@ -49,7 +49,7 @@ public class AuthController {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         return ResponseHandler.responseBuilder("New token generated",
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 authService.refreshToken(request, response));
     }
 
@@ -75,7 +75,7 @@ public class AuthController {
     @PostMapping("/verify-mail/{email}")
     public ResponseEntity<Object> verifyEmail(@PathVariable String email) throws Exception {
         return ResponseHandler.responseBuilder("Sent OTP to email successfully",
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 authService.verifyEmail(email));
 
     }
@@ -84,7 +84,7 @@ public class AuthController {
     public ResponseEntity<Object> verifyOtp(@PathVariable Long otp, 
     @PathVariable String email) throws Exception{
         return ResponseHandler.responseBuilder("Verified OTP successfully",
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 authService.verifyOtp(otp, email));
     }
 
@@ -93,7 +93,7 @@ public class AuthController {
     @PathVariable String email) throws PasswordChangeNotAllowedException {
         
         return ResponseHandler.responseBuilder("Please login again",
-                HttpStatus.OK,
+                HttpStatus.CREATED,
                 authService.forgotPassword(forgotPasswordRequest, email));
 
     }

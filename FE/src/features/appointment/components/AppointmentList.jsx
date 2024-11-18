@@ -9,9 +9,11 @@ import { useEffect } from 'react';
 import MemoizedButton from './MemoizedButton';
 import { useCallback } from 'react';
 import { memo } from 'react';
+import { startTransition } from 'react';
 
 const AppointmentList = () => {
   const [status, setStatus] = useState('');
+  const [statusQuery, setStatusQuery] = useState(status);
 
   const [pagination, setPagination] = useState({
     page: 1,
@@ -19,7 +21,7 @@ const AppointmentList = () => {
     total: 10,
   });
   const { isPending, isError, data, error } = useAppointmentsQuery({
-    status: status,
+    status: statusQuery,
     offset: (pagination.page - 1) * pagination.pageSize,
     limit: pagination.pageSize,
   });
@@ -45,7 +47,13 @@ const AppointmentList = () => {
   };
 
   const onClick = useCallback((value) => {
-    setStatus((prevStatus) => (prevStatus === value ? '' : value));
+    setStatus((prevStatus) => {
+      const newStatus = prevStatus === value ? '' : value;
+      startTransition(() => {
+        setStatusQuery(newStatus); // Use the resolved status value
+      });
+      return newStatus;
+    });
   }, []);
 
   const handleBookedClick = useCallback(() => onClick('booked'), [onClick]);
@@ -56,23 +64,22 @@ const AppointmentList = () => {
 
   return (
     <div>
-      
-      <Spin spinning={isPending}>
-        <div>
-          <div className="flex flex-start gap-2 p-2">
-            <MemoizedButton
-              isActive={status === 'booked'}
-              label="Booked"
-              onClick={handleBookedClick}
-            />
-            <MemoizedButton
-              isActive={status === 'pending_payment'}
-              label="Pending Payment"
-              // onClick={handleBookedClick}
+      <div>
+        <div className="flex flex-start gap-2 p-2">
+          <MemoizedButton
+            isActive={status === 'booked'}
+            label="Booked"
+            onClick={handleBookedClick}
+          />
+          <MemoizedButton
+            isActive={status === 'pending_payment'}
+            label="Pending Payment"
+            // onClick={handleBookedClick}
 
-              onClick={handlePendingClick}
-            />
-          </div>
+            onClick={handlePendingClick}
+          />
+        </div>
+        <Spin spinning={isPending}>
           <div className="flex flex-col gap-1 p-2">
             {responseData?.map((appointment) => (
               <AppointmentItem
@@ -91,8 +98,8 @@ const AppointmentList = () => {
               />
             ))}
           </div>
-        </div>
-      </Spin>
+        </Spin>
+      </div>
       <div className="flex justify-center">
         <Pagination
           defaultCurrent={1}

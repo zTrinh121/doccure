@@ -1,5 +1,5 @@
-import React from 'react';
 import { Row, Col } from 'antd';
+import { memo } from 'react';
 
 const ContentLayout = ({ children }) => {
   return (
@@ -13,4 +13,4 @@ const ContentLayout = ({ children }) => {
   );
 };
 
-export default ContentLayout;
+export default memo(ContentLayout);

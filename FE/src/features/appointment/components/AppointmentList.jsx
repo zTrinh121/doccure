@@ -1,10 +1,14 @@
 import AppointmentItem from './AppointmentItem';
-import { Button, Pagination, Spin } from 'antd';
+import { Button, Pagination, Spin, Typography, Divider } from 'antd';
+const { Title } = Typography;
 
 import { useAppointmentsQuery } from '../../../hooks/useAppointmentsQuery';
 import { getTimeString } from '../../../utils/timeUtils';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import MemoizedButton from './MemoizedButton';
+import { useCallback } from 'react';
+import { memo } from 'react';
 
 const AppointmentList = () => {
   const [status, setStatus] = useState('');
@@ -40,33 +44,34 @@ const AppointmentList = () => {
     }));
   };
 
-  const onClick = (value) => {
-    status === value ? setStatus('') : setStatus(value);
-  };
+  const onClick = useCallback((value) => {
+    setStatus((prevStatus) => (prevStatus === value ? '' : value));
+  }, []);
 
+  const handleBookedClick = useCallback(() => onClick('booked'), [onClick]);
+  const handlePendingClick = useCallback(
+    () => onClick('pending_payment'),
+    [onClick],
+  );
 
   return (
     <div>
-    
+      
       <Spin spinning={isPending}>
         <div>
           <div className="flex flex-start gap-2 p-2">
-            <Button
-              type={status === 'booked' ? 'primary' : ''}
-              onClick={() => {
-                onClick('booked');
-              }}
-            >
-              Booked
-            </Button>
-            <Button
-              type={status === 'pending_payment' ? 'primary' : ''}
-              onClick={() => {
-                onClick('pending_payment');
-              }}
-            >
-              Pending Payment
-            </Button>
+            <MemoizedButton
+              isActive={status === 'booked'}
+              label="Booked"
+              onClick={handleBookedClick}
+            />
+            <MemoizedButton
+              isActive={status === 'pending_payment'}
+              label="Pending Payment"
+              // onClick={handleBookedClick}
+
+              onClick={handlePendingClick}
+            />
           </div>
           <div className="flex flex-col gap-1 p-2">
             {responseData?.map((appointment) => (
@@ -101,4 +106,4 @@ const AppointmentList = () => {
   );
 };
 
-export default AppointmentList;
+export default memo(AppointmentList);

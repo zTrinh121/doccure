@@ -1,10 +1,19 @@
-import { Card, Divider, Modal, Input, Rate } from 'antd';
+import { Card, Divider, Modal, Input, Rate, Button } from 'antd';
 const { TextArea } = Input;
 import AvatarWithDefault from '../../../components/ui/AvatarWithDefault';
 
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { postInsertRating } from '../../../lib/review';
+import {
+  CalendarOutlined,
+  ClockCircleOutlined,
+  EyeOutlined,
+  StarOutlined,
+  TagOutlined,
+  TagsOutlined,
+} from '@ant-design/icons';
+import { Tooltip } from 'antd';
 
 const AppointmentItem = ({
   avatar,
@@ -46,7 +55,6 @@ const AppointmentItem = ({
   };
 
   const onOk = async () => {
-    
     console.log(
       postInsertRating({
         comment,
@@ -70,38 +78,68 @@ const AppointmentItem = ({
       </Modal>
 
       <Card>
-        <div>
-          <AvatarWithDefault avatar={avatar} size={30} />
-          <div>Dr. {fullName}</div>
-          <div>Status: {status}</div>
-          <div>Price: {price}</div>
-          <div>Time: {time}</div>
-          <a onClick={onClickDetails}>Details </a>
-          <Divider type="vertical" />
+        <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="flex items-center">
+            {/* <AvatarWithDefault avatar={avatar} size={30} /> */}
+            <p>Dr. {fullName}</p>
+          </div>
+          <div className="flex items-center"> {status}</div>
+          {/* <div>Price: {price}</div> */}
+          <div className="flex items-center">
+            <ClockCircleOutlined /> {time.slice(0, -7)}
+          </div>
+          <div className="flex flex-row justify-around items-center">
+            <Tooltip title="Details">
+              <Button
+                size="small"
+                shape="circle"
+                icon={<EyeOutlined />}
+                onClick={onClickDetails}
+              />
+            </Tooltip>
+            {/* <a onClick={onClickDetails}>Details </a> */}
+            {/* <Divider type="vertical" /> */}
 
-          <a onClick={onClickInvoice}>Invoice </a>
-          <Divider type="vertical" />
-          <a
-            target="_blank"
-            href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Appointment+with+Dr. ${fullName}&dates=${new Date(
-              Date.parse(time.slice(0, 16)),
-            )
-              .toISOString()
-              .replace(/-/g, '')
-              .replace(/:/g, '')
-              .replace(/\.\d{3}/, '')}/${new Date(
-              Date.parse(time.slice(0, 11) + time.slice(19)),
-            )
-              .toISOString()
-              .replace(/-/g, '')
-              .replace(/:/g, '')
-              .replace(/\.\d{3}/, '')}`}
-          >
-            Add google event manually :){' '}
-          </a>
-          <Divider type="vertical" />
+            <Tooltip title="Invoice">
+              <Button
+                size="small"
+                shape="circle"
+                icon={<TagOutlined />}
+                onClick={onClickInvoice}
+              />
+            </Tooltip>
 
-          <a onClick={onClickReview}>Add review</a>
+            <Tooltip title="Add google event manually :)">
+              <Button
+                size="small"
+                shape="circle"
+                icon={<CalendarOutlined />}
+                target="_blank"
+                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Appointment+with+Dr. ${fullName}&dates=${new Date(
+                  Date.parse(time.slice(0, 16)),
+                )
+                  .toISOString()
+                  .replace(/-/g, '')
+                  .replace(/:/g, '')
+                  .replace(/\.\d{3}/, '')}/${new Date(
+                  Date.parse(time.slice(0, 11) + time.slice(19)),
+                )
+                  .toISOString()
+                  .replace(/-/g, '')
+                  .replace(/:/g, '')
+                  .replace(/\.\d{3}/, '')}`}
+              />
+            </Tooltip>
+
+            <Tooltip title="Add review">
+              <Button
+                size="small"
+                shape="circle"
+                icon={<StarOutlined />}
+                onClick={onClickReview}
+              />
+            </Tooltip>
+          </div>
         </div>
       </Card>
     </>

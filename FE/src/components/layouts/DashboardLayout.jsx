@@ -23,7 +23,7 @@ const DashboardLayout = () => {
   return (
     <Layout>
       <Sider width="25%">
-        <Card>
+        <Card className="sticky top-16">
           <Flex justify="center" align="center" vertical>
             <Link>
               <AvatarWithDefault size={64} avatar={data.data.data.avatar} />

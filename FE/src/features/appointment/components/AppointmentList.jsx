@@ -10,6 +10,7 @@ import MemoizedButton from './MemoizedButton';
 import { useCallback } from 'react';
 import { memo } from 'react';
 import { startTransition } from 'react';
+import { Card } from 'antd';
 
 const AppointmentList = () => {
   const [status, setStatus] = useState('');
@@ -81,22 +82,26 @@ const AppointmentList = () => {
         </div>
         <Spin spinning={isPending}>
           <div className="flex flex-col gap-1 p-2">
-            {responseData?.map((appointment) => (
-              <AppointmentItem
-                key={appointment.appointment_id}
-                avatar={appointment.doctor.avatar}
-                status={appointment.status}
-                price={appointment.price}
-                fullName={appointment.doctor.full_name}
-                time={getTimeString({
-                  date: appointment.slot.date_slot,
-                  start: appointment.slot.start_time,
-                  end: appointment.slot.end_time,
-                })}
-                appointmentId={appointment.appointment_id}
-                invoiceId={appointment.invoice.invoice_id}
-              />
-            ))}
+            {responseData
+              ? responseData.map((appointment) => (
+                  <AppointmentItem
+                    key={appointment.appointment_id}
+                    avatar={appointment.doctor.avatar}
+                    status={appointment.status}
+                    price={appointment.price}
+                    fullName={appointment.doctor.full_name}
+                    time={getTimeString({
+                      date: appointment.slot.date_slot,
+                      start: appointment.slot.start_time,
+                      end: appointment.slot.end_time,
+                    })}
+                    appointmentId={appointment.appointment_id}
+                    invoiceId={appointment.invoice.invoice_id}
+                  />
+                ))
+              : Array.from({ length: pagination.pageSize }).map((_, index) => (
+                  <Card size="small" loading key={index} />
+                ))}
           </div>
         </Spin>
       </div>

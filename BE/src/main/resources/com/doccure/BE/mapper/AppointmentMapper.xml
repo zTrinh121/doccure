@@ -250,6 +250,7 @@
     <id column="APPOINTMENT_ID" jdbcType="NUMERIC" property="appointmentId" />
     <result column="STATUS" jdbcType="VARCHAR" property="status" />
     <result column="PRICE" jdbcType="NUMERIC" property="price" />
+    <result column="RATING_STATUS" jdbcType="VARCHAR" property="ratingStatus" />
     <result column="SLOT_ID" jdbcType="NUMERIC" property="slotId" />
     <result column="DOCTOR_SPECIALIZATION_ID" jdbcType="NUMERIC" property="doctorSpecializationId" />
     <result column="USER_ID" jdbcType="NUMERIC" property="userId" />
@@ -289,16 +290,21 @@
 
   <select id="getAppointmentDetailWithStatus" parameterType="map" resultMap="BaseResultMapDetail">
     SELECT a.appointment_id, a.status, a.slot_id, a.user_id, a.doctor_specialization_id, a.price,
-           s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
-           d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
-           sp.specialization_name, sp.specialization_id,
-           i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT
+          s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
+          d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
+          sp.specialization_name, sp.specialization_id,
+          i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT,
+          CASE 
+              WHEN r.rating_id is null THEN  'UNRATED' 
+              ELSE 'RATED'
+          END as rating_status
     FROM appointment a
     JOIN slot s ON s.slot_id = a.slot_id
     JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
     JOIN specialization sp ON ds.specialization_id = sp.specialization_id
     JOIN doctor d ON ds.doctor_id = d.doctor_id
     JOIN invoice i ON i.appointment_id = a.appointment_id
+    LEFT JOIN rating r on r.appointment_id = a.appointment_id
     WHERE 
         a.user_id = #{params.userId, jdbcType=NUMERIC}
             AND a.status = #{params.status, jdbcType=VARCHAR}
@@ -310,13 +316,18 @@
            s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
            d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
            sp.specialization_name, sp.specialization_id,
-           i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT
+           i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT,
+           CASE 
+                WHEN r.rating_id is null THEN  'UNRATED' 
+                ELSE 'RATED'
+            END as rating_status
     FROM appointment a
     JOIN slot s ON s.slot_id = a.slot_id
     JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
     JOIN specialization sp ON ds.specialization_id = sp.specialization_id
     JOIN doctor d ON ds.doctor_id = d.doctor_id
     JOIN invoice i ON i.appointment_id = a.appointment_id
+    LEFT JOIN rating r on r.appointment_id = a.appointment_id
     WHERE 
         a.user_id = #{userId, jdbcType=NUMERIC}
         
@@ -328,13 +339,18 @@
               s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
               d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
               sp.specialization_name, sp.specialization_id,
-              i.invoice_id, i.invoice_name, i.status as invoice_status
+              i.invoice_id, i.invoice_name, i.status as invoice_status,
+              CASE 
+                WHEN r.rating_id is null THEN  'UNRATED' 
+                ELSE 'RATED'
+              END as rating_status
       FROM appointment a
       JOIN slot s ON s.slot_id = a.slot_id
       JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
       JOIN specialization sp ON ds.specialization_id = sp.specialization_id
       JOIN doctor d ON ds.doctor_id = d.doctor_id
       JOIN invoice i ON i.appointment_id = a.appointment_id
+      LEFT JOIN rating r on r.appointment_id = a.appointment_id
       WHERE 
         a.user_id = #{userId, jdbcType=NUMERIC}
         AND a.status = 'BOOKED'
@@ -348,13 +364,18 @@
               s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
               d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
               sp.specialization_name, sp.specialization_id,
-              i.invoice_id, i.invoice_name, i.status as invoice_status
+              i.invoice_id, i.invoice_name, i.status as invoice_status,
+              CASE 
+                WHEN r.rating_id is null THEN  'UNRATED' 
+                ELSE 'RATED'
+              END as rating_status
       FROM appointment a
       JOIN slot s ON s.slot_id = a.slot_id
       JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
       JOIN specialization sp ON ds.specialization_id = sp.specialization_id
       JOIN doctor d ON ds.doctor_id = d.doctor_id
       JOIN invoice i ON i.appointment_id = a.appointment_id
+      LEFT JOIN rating r on r.appointment_id = a.appointment_id
       WHERE 
         a.user_id = #{params.userId, jdbcType=NUMERIC}
         AND a.status = #{params.status, jdbcType=VARCHAR}
@@ -378,13 +399,18 @@
               s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
               d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
               sp.specialization_name, sp.specialization_id,
-              i.invoice_id, i.invoice_name, i.status as invoice_status
+              i.invoice_id, i.invoice_name, i.status as invoice_status,
+               CASE 
+                WHEN r.rating_id is null THEN  'UNRATED' 
+                ELSE 'RATED'
+            END as rating_status
       FROM appointment a
       JOIN slot s ON s.slot_id = a.slot_id
       JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
       JOIN specialization sp ON ds.specialization_id = sp.specialization_id
       JOIN doctor d ON ds.doctor_id = d.doctor_id
       JOIN invoice i ON i.appointment_id = a.appointment_id
+      LEFT JOIN rating r on r.appointment_id = a.appointment_id
       WHERE 
         a.user_id = #{userId, jdbcType=NUMERIC}
         AND a.status = 'BOOKED'
@@ -411,13 +437,18 @@
               s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
               d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
               sp.specialization_name, sp.specialization_id,
-              i.invoice_id, i.invoice_name, i.status as invoice_status
+              i.invoice_id, i.invoice_name, i.status as invoice_status,
+               CASE 
+                WHEN r.rating_id is null THEN  'UNRATED' 
+                ELSE 'RATED'
+              END as rating_status
       FROM appointment a
       JOIN slot s ON s.slot_id = a.slot_id
       JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
       JOIN specialization sp ON ds.specialization_id = sp.specialization_id
       JOIN doctor d ON ds.doctor_id = d.doctor_id
       JOIN invoice i ON i.appointment_id = a.appointment_id
+      LEFT JOIN rating r on r.appointment_id = a.appointment_id
       WHERE 
         a.user_id = #{params.userId, jdbcType=NUMERIC}
         AND a.status = #{params.status, jdbcType=VARCHAR}
@@ -434,13 +465,18 @@
               s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
               d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
               sp.specialization_name, sp.specialization_id,
-              i.invoice_id, i.invoice_name, i.status as invoice_status
+              i.invoice_id, i.invoice_name, i.status as invoice_status,
+               CASE 
+                WHEN r.rating_id is null THEN  'UNRATED' 
+                ELSE 'RATED'
+            END as rating_status
       FROM appointment a
       JOIN slot s ON s.slot_id = a.slot_id
       JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
       JOIN specialization sp ON ds.specialization_id = sp.specialization_id
       JOIN doctor d ON ds.doctor_id = d.doctor_id
       JOIN invoice i ON i.appointment_id = a.appointment_id
+      LEFT JOIN rating r on r.appointment_id = a.appointment_id
       WHERE 
         a.user_id = #{params.userId, jdbcType=NUMERIC}
         AND a.status = #{params.status, jdbcType=VARCHAR}
@@ -460,13 +496,19 @@
               s.slot_id, s.start_datetime as DATE_SLOT, s.start_datetime as START_TIME, s.end_datetime as END_TIME,
               d.first_name, d.last_name, d.hospital, d.avatar, d.experience, d.doctor_id,
               sp.specialization_name, sp.specialization_id,
-              i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT
+              i.invoice_id, i.invoice_name, i.status as invoice_status, i.CREATED_AT, i.UPDATED_AT,
+              CASE 
+                WHEN r.rating_id is null THEN  'UNRATED' 
+                ELSE 'RATED'
+              END as rating_status
+
       FROM appointment a
       JOIN slot s ON s.slot_id = a.slot_id
       JOIN doctor_specialization ds ON ds.doctor_specialization_id = a.doctor_specialization_id
       JOIN specialization sp ON ds.specialization_id = sp.specialization_id
       JOIN doctor d ON ds.doctor_id = d.doctor_id
       JOIN invoice i ON i.appointment_id = a.appointment_id
+      LEFT JOIN rating r on r.appointment_id = a.appointment_id
       WHERE 
         a.user_id = #{params.userId, jdbcType=NUMERIC}
         AND a.appointment_id = #{params.appointmentId, jdbcType=VARCHAR}

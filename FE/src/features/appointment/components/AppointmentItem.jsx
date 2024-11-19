@@ -23,6 +23,7 @@ const AppointmentItem = ({
   price,
   fullName,
   invoiceId,
+  appointment,
 }) => {
   const navigate = useNavigate();
   const [rate, setRate] = useState(0);
@@ -134,6 +135,12 @@ const AppointmentItem = ({
 
             <Tooltip title="Add review">
               <Button
+                disabled={
+                  appointment.rating_status === 'RATED' ||
+                  appointment.status === 'PENDING_PAYMENT'
+                    ? true
+                    : false
+                }
                 size="small"
                 shape="circle"
                 icon={<StarOutlined />}

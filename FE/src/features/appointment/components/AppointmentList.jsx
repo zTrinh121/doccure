@@ -112,6 +112,7 @@ const AppointmentList = () => {
                     })}
                     appointmentId={appointment.appointment_id}
                     invoiceId={appointment.invoice.invoice_id}
+                    appointment={appointment}
                   />
                 ))
               : Array.from({ length: pagination.pageSize }).map((_, index) => (

@@ -49,7 +49,7 @@ const AppointmentList = () => {
       }));
     }
   }, [data?.total]);
-  const responseData = data?.data;
+  const responseData = data?.data || [];
 
   const onChangePagination = (page, pageSize) => {
     setPagination((prevPagination) => ({
@@ -59,15 +59,16 @@ const AppointmentList = () => {
     }));
   };
 
-  const onClick = useCallback((value) => {
-    setStatus((prevStatus) => {
-      const newStatus = prevStatus === value ? '' : value;
+  const onClick = useCallback(
+    (value) => {
+      const newStatus = status === value ? '' : value;
+      setStatus(newStatus);
       startTransition(() => {
         setStatusQuery(newStatus); // Use the resolved status value
       });
-      return newStatus;
-    });
-  }, []);
+    },
+    [status],
+  );
 
   const handleBookedClick = useCallback(() => onClick('booked'), [onClick]);
   const handlePendingClick = useCallback(
@@ -78,7 +79,7 @@ const AppointmentList = () => {
   const onChange = (dates, dateString) => {
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);
-    console.log(dateString)
+    console.log(dateString);
   };
 
   return (
@@ -99,43 +100,42 @@ const AppointmentList = () => {
               onClick={handlePendingClick}
             />
           </div>
-          {/* <Spin> */}
-          <div>
-            <RangePicker onChange={onChange} />
-          </div>
-          {/* </Spin> */}
+          {status ? (
+            <div>
+              <RangePicker onChange={onChange} />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         <Spin spinning={isPending}>
           <div className="flex flex-col gap-1 p-2">
-            {responseData
-              ? responseData.map((appointment) => (
-                  <AppointmentItem
-                    key={appointment.appointment_id}
-                    avatar={appointment.doctor.avatar}
-                    status={appointment.status}
-                    price={appointment.price}
-                    fullName={appointment.doctor.full_name}
-                    time={getTimeString({
-                      date: appointment.slot.date_slot,
-                      start: appointment.slot.start_time,
-                      end: appointment.slot.end_time,
-                    })}
-                    appointmentId={appointment.appointment_id}
-                    invoiceId={appointment.invoice.invoice_id}
-                    appointment={appointment}
-                    queryKey={[
-                      'appointments',
-                      status,
-                      (pagination.page - 1) * pagination.pageSize,
-                      pagination.pageSize,
-                      startDate,
-                      endDate,
-                    ]}
-                  />
-                ))
-              : Array.from({ length: pagination.pageSize }).map((_, index) => (
-                  <Card size="small" loading key={index} />
-                ))}
+            {responseData.map((appointment) => (
+              <AppointmentItem
+                isPending={isPending}
+                key={appointment.appointment_id}
+                avatar={appointment.doctor.avatar}
+                status={appointment.status}
+                price={appointment.price}
+                fullName={appointment.doctor.full_name}
+                time={getTimeString({
+                  date: appointment.slot.date_slot,
+                  start: appointment.slot.start_time,
+                  end: appointment.slot.end_time,
+                })}
+                appointmentId={appointment.appointment_id}
+                invoiceId={appointment.invoice.invoice_id}
+                appointment={appointment}
+                queryKey={[
+                  'appointments',
+                  status,
+                  (pagination.page - 1) * pagination.pageSize,
+                  pagination.pageSize,
+                  startDate,
+                  endDate,
+                ]}
+              />
+            ))}
           </div>
         </Spin>
       </div>

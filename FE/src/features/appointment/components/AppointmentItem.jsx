@@ -86,7 +86,8 @@ const AppointmentItem = ({
           <div className="flex items-center"> {status}</div>
           {/* <div>Price: {price}</div> */}
           <div className="flex items-center">
-            <ClockCircleOutlined /> {time.slice(0, -7)}
+            <ClockCircleOutlined />{' '}
+            <p className="mx-1">{`${time.slice(0, -7)}`}</p>
           </div>
           <div className="flex flex-row justify-around items-center">
             <Tooltip title="Details">

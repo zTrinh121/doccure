@@ -1,5 +1,13 @@
 import AppointmentItem from './AppointmentItem';
-import { Button, Pagination, Spin, Typography, Divider } from 'antd';
+import {
+  Button,
+  Pagination,
+  Spin,
+  Typography,
+  Divider,
+  DatePicker,
+} from 'antd';
+const { RangePicker } = DatePicker;
 const { Title } = Typography;
 
 import { useAppointmentsQuery } from '../../../hooks/useAppointmentsQuery';
@@ -66,19 +74,26 @@ const AppointmentList = () => {
   return (
     <div>
       <div>
-        <div className="flex flex-start gap-2 p-2">
-          <MemoizedButton
-            isActive={status === 'booked'}
-            label="Booked"
-            onClick={handleBookedClick}
-          />
-          <MemoizedButton
-            isActive={status === 'pending_payment'}
-            label="Pending Payment"
-            // onClick={handleBookedClick}
+        <div className="flex justify-between md: justify-normal flex-col md:flex-row">
+          <div className="flex flex-start gap-2 p-2">
+            <MemoizedButton
+              isActive={status === 'booked'}
+              label="Booked"
+              onClick={handleBookedClick}
+            />
+            <MemoizedButton
+              isActive={status === 'pending_payment'}
+              label="Pending Payment"
+              // onClick={handleBookedClick}
 
-            onClick={handlePendingClick}
-          />
+              onClick={handlePendingClick}
+            />
+          </div>
+          {/* <Spin> */}
+          <div>
+            <RangePicker />
+          </div>
+          {/* </Spin> */}
         </div>
         <Spin spinning={isPending}>
           <div className="flex flex-col gap-1 p-2">

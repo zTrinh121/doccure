@@ -39,7 +39,6 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.GeneralSecurityException;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -122,9 +121,9 @@ public class PayPalServiceImpl implements PayPalService {
         if (doctor == null)
             throw new DataNotFoundException("No slot found for doctor with id = " + doctorId);
 
-        if (chooseSlot.getStartDatetime().toLocalDate().isBefore(LocalDate.now())){
-            throw new DataIntegrityViolationException("The selected slot is in the past and cannot be booked");
-        }
+//        if (chooseSlot.getStartDatetime().toLocalDate().isBefore(LocalDate.now())){
+//            throw new DataIntegrityViolationException("The selected slot is in the past and cannot be booked");
+//        }
 
         boolean isBooked = doctor.getSlots().stream()
                 .anyMatch(slot -> slot.getSlotId().equals(slotId) && "BOOKED".equals(slot.getStatus()));
@@ -239,7 +238,7 @@ public class PayPalServiceImpl implements PayPalService {
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8080).build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8081).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
@@ -250,7 +249,7 @@ public class PayPalServiceImpl implements PayPalService {
                 .setDescription(invoice.getInvoiceName());
 
         String startDatetime = String.valueOf(slot.getStartDatetime());
-        DateTime startDateTime = new DateTime(startDatetime+":00-00:00");
+        DateTime startDateTime = new DateTime(startDatetime+":00+07:00");
         EventDateTime start = new EventDateTime()
                 .setDateTime(DateTime.parseRfc3339(String.valueOf(startDateTime)))
                 .setTimeZone("Asia/Ho_Chi_Minh");
@@ -258,7 +257,7 @@ public class PayPalServiceImpl implements PayPalService {
 
 
         String endDatetime = String.valueOf(slot.getEndDatetime());
-        DateTime endDateTime = new DateTime(endDatetime+":00-00:00");
+        DateTime endDateTime = new DateTime(endDatetime+":00+07:00");
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone("Asia/Ho_Chi_Minh");
@@ -280,7 +279,8 @@ public class PayPalServiceImpl implements PayPalService {
         String calendarId = "primary";
         event = service.events().insert(calendarId, event).execute();
         System.out.printf("Event created: %s\n", event.getHtmlLink());
-        return  event;
+        System.out.println(event);
+        return event;
     }
 
 }

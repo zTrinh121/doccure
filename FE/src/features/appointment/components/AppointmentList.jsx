@@ -23,6 +23,8 @@ import { Card } from 'antd';
 const AppointmentList = () => {
   const [status, setStatus] = useState('');
   const [statusQuery, setStatusQuery] = useState(status);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const [pagination, setPagination] = useState({
     page: 1,
@@ -113,6 +115,14 @@ const AppointmentList = () => {
                     appointmentId={appointment.appointment_id}
                     invoiceId={appointment.invoice.invoice_id}
                     appointment={appointment}
+                    queryKey={[
+                      'appointments',
+                      status,
+                      (pagination.page - 1) * pagination.pageSize,
+                      pagination.pageSize,
+                      startDate,
+                      endDate,
+                    ]}
                   />
                 ))
               : Array.from({ length: pagination.pageSize }).map((_, index) => (

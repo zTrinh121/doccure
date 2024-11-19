@@ -1,10 +1,7 @@
 import { Card, Divider, Modal, Input, Rate, Button } from 'antd';
 const { TextArea } = Input;
 import AvatarWithDefault from '../../../components/ui/AvatarWithDefault';
-
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { postInsertRating } from '../../../lib/review';
+import { Tooltip } from 'antd';
 import {
   CalendarOutlined,
   ClockCircleOutlined,
@@ -13,23 +10,65 @@ import {
   TagOutlined,
   TagsOutlined,
 } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { postInsertRating } from '../../../lib/review';
+import { notification } from '../../../utils/antDesignGlobals';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const AppointmentItem = ({
-  avatar,
   time,
   appointmentId,
-  status,
-  price,
   fullName,
   invoiceId,
   appointment,
+  queryKey,
 }) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [rate, setRate] = useState(0);
   const [comment, setComment] = useState('');
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const mutation = useMutation({
+    mutationFn: () => {
+      return postInsertRating({
+        comment,
+        rating: rate,
+        appointment_id: appointmentId,
+      });
+    },
+    // onMutate: (variables) => {
+
+    // },
+    onError: (error, variables, context) => {
+      // An error happened!
+      console.log(`rolling back optimistic update with id ${context.id}`);
+      openNotificationError(error.message);
+    },
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({ queryKey: queryKey });
+    },
+    onSettled: () => {
+      setIsModalOpen(false);
+    },
+  });
+
+  const onOk = async () => {
+    mutation.mutate();
+  };
+
+  const openNotificationError = (description) => {
+    notification.error({
+      message: 'Something went wrong',
+      description: description,
+      style: {
+        width: 300,
+      },
+    });
+  };
 
   const onClickDetails = () => {
     navigate(`/user/appointment/${appointmentId}`);
@@ -55,16 +94,6 @@ const AppointmentItem = ({
     setComment(e.target.value);
   };
 
-  const onOk = async () => {
-    console.log(
-      postInsertRating({
-        comment,
-        rating: rate,
-        appointment_id: appointmentId,
-      }),
-    );
-  };
-
   return (
     <>
       <Modal
@@ -82,9 +111,9 @@ const AppointmentItem = ({
         <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div className="flex items-center">
             {/* <AvatarWithDefault avatar={avatar} size={30} /> */}
-            <p>Dr. {fullName}</p>
+            <p>Dr. {appointment.doctor.full_name}</p>
           </div>
-          <div className="flex items-center"> {status}</div>
+          <div className="flex items-center"> {appointment.status}</div>
           {/* <div>Price: {price}</div> */}
           <div className="flex items-center">
             <ClockCircleOutlined />{' '}

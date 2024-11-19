@@ -35,6 +35,8 @@ const AppointmentList = () => {
     status: statusQuery,
     offset: (pagination.page - 1) * pagination.pageSize,
     limit: pagination.pageSize,
+    startDate,
+    endDate,
   });
   // const total = useMemo(() => data?.total, [data?.total]);
 
@@ -73,6 +75,12 @@ const AppointmentList = () => {
     [onClick],
   );
 
+  const onChange = (dates, dateString) => {
+    setStartDate(dateString[0]);
+    setEndDate(dateString[1]);
+    console.log(dateString)
+  };
+
   return (
     <div>
       <div>
@@ -93,7 +101,7 @@ const AppointmentList = () => {
           </div>
           {/* <Spin> */}
           <div>
-            <RangePicker />
+            <RangePicker onChange={onChange} />
           </div>
           {/* </Spin> */}
         </div>

@@ -28,6 +28,14 @@ export const searchDoctors = async ({ input, spec }) => {
       console.log(error);
     }
   }
+  else {
+    try {
+      const response = await publicAxiosInstance.get(`/doctor/all`);
+      resultArr = response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return resultArr
 }
 

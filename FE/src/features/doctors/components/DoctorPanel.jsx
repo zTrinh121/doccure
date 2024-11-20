@@ -70,9 +70,11 @@ const DoctorPanel = ({
             />
             <div className="flex flex-row space-x-1">
               <Typography.Text className="ml-2">
-                {responseDataR?.avg_rating}
+                {responseDataR?.avg_rating?.toFixed(2)}
               </Typography.Text>
-              <Text underline>{`${responseDataR?.count_ratings} Reviews`}</Text>
+              <Text underline>{`${responseDataR?.count_ratings || '0'} review${
+                responseDataR?.count_ratings > 1 ? 's' : ''
+              }`}</Text>
             </div>
 
             {/* <Typography.Link className="ml-2">(150 Reviews)</Typography.Link> */}
@@ -82,7 +84,6 @@ const DoctorPanel = ({
       {showBottomSection && (
         <div className="mt-4 border-t pt-4 flex justify-between">
           <div className="flex space-x-4">
-     
             <div className="flex items-center">
               <ClockCircleOutlined className="mr-2 text-blue-500" />
               <Typography.Text>

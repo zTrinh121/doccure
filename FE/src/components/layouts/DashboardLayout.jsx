@@ -1,12 +1,12 @@
-import { Spin, Typography, Layout, Avatar, Card, Flex, Button } from 'antd';
-const { Text, Link } = Typography;
+import { Spin, Typography, Layout, Card, Flex, Button } from 'antd';
+const { Link } = Typography;
 const { Sider, Content } = Layout;
 import { Outlet } from 'react-router-dom';
-import { UserOutlined } from '@ant-design/icons';
+import AvatarWithDefault from './../ui/AvatarWithDefault';
+import background from '../../assets/background.jpg';
 
 import { useProfileQuery } from '../../hooks/useProfileQuery';
 import { useNavigate } from 'react-router-dom';
-import AvatarWithDefault from './../ui/AvatarWithDefault';
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
@@ -23,8 +23,13 @@ const DashboardLayout = () => {
   return (
     <Layout>
       <Sider width="25%">
-        <Card className="sticky top-16">
+        <Card className="sticky top-16 mx-4" style={{ borderRadius: '10px' }}>
           <Flex justify="center" align="center" vertical>
+            <img
+              src={background}
+              className="absolute top-0 h-16 w-full object-cover"
+            />
+
             <Link>
               <AvatarWithDefault size={64} avatar={data.data.data.avatar} />
             </Link>

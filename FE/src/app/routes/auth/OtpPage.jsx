@@ -5,19 +5,16 @@ import Timer from '../../../components/ui/Timer';
 const OtpPage = () => {
   return (
     <>
-      <div>
-        <Flex justify="center" align="center">
-          <Row style={{ width: '100%' }}>
-            <Col span={6}></Col>
-            <Col span={12}>
-              <OtpCard />
-             
-            </Col>
+      <Flex justify="center" align="center">
+        <Row style={{ width: '100%' }}>
+          <Col span={6}></Col>
+          <Col span={12}>
+            <OtpCard />
+          </Col>
 
-            <Col span={6}></Col>
-          </Row>
-        </Flex>
-      </div>
+          <Col span={6}></Col>
+        </Row>
+      </Flex>
     </>
   );
 };

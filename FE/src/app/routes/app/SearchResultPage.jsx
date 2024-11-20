@@ -1,6 +1,6 @@
 import { useState, useDeferredValue } from 'react';
 import { useSearchQuery } from '../../../hooks/useSearchQuery';
-import { Form, Input, Flex, Row, Col, Radio } from 'antd';
+import { Form, Input, Flex, Row, Col, Radio, Card } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import DoctorPanel from './../../../features/doctors/components/DoctorPanel';
 import { useNavigate } from 'react-router-dom';
@@ -51,11 +51,11 @@ const SearchResultPage = () => {
   };
 
   return (
-    <div>
-      <Flex justify="center" align="center">
-        <Row style={{ width: '100%' }}>
-          <Col span={2}></Col>
-          <Col span={20}>
+    <>
+      <Row style={{ width: '100%' }}>
+        <Col span={2}></Col>
+        <Col span={20} className="grid grid-cols-3 gap-4">
+          <Card className="col-span-1">
             <Form
               form={form}
               onFinish={onFinish}
@@ -70,9 +70,15 @@ const SearchResultPage = () => {
               </Form.Item>
             </Form>
             <div>
-              Spec
-              {/* {JSON.stringify(dataS.data.data)} */}
-              <Radio.Group onChange={onChangeRadio} value={spec}>
+              Specialization
+              <Radio.Group
+                onChange={onChangeRadio}
+                value={spec}
+                className="flex flex-col"
+              >
+                <Radio key={''} value={''}>
+                  All
+                </Radio>
                 {dataS.data.data.map((spec) => (
                   <Radio
                     key={spec.specialization_id}
@@ -83,26 +89,27 @@ const SearchResultPage = () => {
                 ))}
               </Radio.Group>
             </div>
-            <div>
-              <Spin spinning={isPending}>
-                {data.length > 0
-                  ? data.map((item) => (
-                      <div key={item.doctor_id}>
-                        <DoctorPanel
-                          doctorId={item.doctor_id}
-                          viewProfile={true}
-                        />
-                      </div>
-                    ))
-                  : 'No results found.'}
-              </Spin>
-            </div>
-          </Col>
+          </Card>
 
-          <Col span={2}></Col>
-        </Row>
-      </Flex>
-    </div>
+          <div className="col-span-2">
+            <Spin spinning={isPending}>
+              {data.length > 0
+                ? data.map((item) => (
+                    <div key={item.doctor_id}>
+                      <DoctorPanel
+                        doctorId={item.doctor_id}
+                        viewProfile={true}
+                      />
+                    </div>
+                  ))
+                : 'No results found.'}
+            </Spin>
+          </div>
+        </Col>
+
+        <Col span={2}></Col>
+      </Row>
+    </>
   );
 };
 

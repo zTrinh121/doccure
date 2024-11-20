@@ -43,7 +43,7 @@ const DoctorBookingPage = () => {
     );
   }
 
-  const responseData = data?.data.data;
+  const responseData = data?.data.data || {};
   const tempMap = new Map();
   responseData?.slots.forEach((slot) => {
     let slots = tempMap.get(slot.date_slot) || [];

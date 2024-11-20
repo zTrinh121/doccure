@@ -1,4 +1,5 @@
-import { Form, Input, Button, Flex, Row, Col } from 'antd';
+import { Form, Input, Button, Flex, Row, Col, Typography, Divider } from 'antd';
+const { Title } = Typography;
 import { useAccessToken } from '../../../stores/authStore';
 import { changePassword, logout } from '../../../lib/auth';
 //todos: extract component, check confirm password front end
@@ -22,6 +23,8 @@ const ChangePasswordPage = () => {
           <Row style={{ width: '100%' }}>
             <Col span={1}></Col>
             <Col span={15}>
+              <Title level={3}>Change password</Title>
+              <Divider />
               <Form
                 layout="vertical"
                 onFinish={onFinish}

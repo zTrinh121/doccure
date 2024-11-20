@@ -23,7 +23,10 @@ const DashboardLayout = () => {
   return (
     <Layout>
       <Sider width="25%">
-        <Card className="sticky top-16 mx-4" style={{ borderRadius: '10px' }}>
+        <Card
+          className="sticky top-16 mx-4 overflow-hidden"
+          style={{ borderRadius: '10px' }}
+        >
           <Flex justify="center" align="center" vertical>
             <img
               src={background}

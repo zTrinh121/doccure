@@ -44,7 +44,7 @@ const DoctorPanel = ({
   };
 
   return (
-    <Card className="p-4 my-1 ">
+    <Card className=" ">
       <div className="flex">
         <div className="mr-6 flex flex-col items-center">
           <AvatarWithDefault size={80} avatar={responseData.avatar} />

@@ -1,5 +1,7 @@
 import { authAxiosInstance, getNewAccessToken } from "./apiClient";
 
+const userPrefix = '/users'
+
 export const changeAvatar = async ({ userId, file, token }) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -29,19 +31,7 @@ export const changeAvatar = async ({ userId, file, token }) => {
 }
 
 
-export const changeProfile = async ({ userId, values, token }) => {
-  const putChangeProfile = async (userId, values, token) => {
-
-    return authAxiosInstance.put(`users/${userId}`, values, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    }
-    )
-  }
-
-
-  const response = await putChangeProfile(userId, values, token);
+export const changeProfile = async ({ userId, values }) => {
+  const response = await authAxiosInstance.put(`${userPrefix}/${userId}`, values);
   return response;
-
 }

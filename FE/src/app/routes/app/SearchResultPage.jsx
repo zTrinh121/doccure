@@ -93,16 +93,18 @@ const SearchResultPage = () => {
 
           <div className="col-span-2">
             <Spin spinning={isPending}>
-              {data.length > 0
-                ? data.map((item) => (
-                    <div key={item.doctor_id}>
-                      <DoctorPanel
-                        doctorId={item.doctor_id}
-                        viewProfile={true}
-                      />
-                    </div>
-                  ))
-                : 'No results found.'}
+              <div className=" flex flex-col justify-between gap-3 ">
+                {data.length > 0
+                  ? data.map((item) => (
+                      <div key={item.doctor_id}>
+                        <DoctorPanel
+                          doctorId={item.doctor_id}
+                          viewProfile={true}
+                        />
+                      </div>
+                    ))
+                  : 'No results found.'}
+              </div>
             </Spin>
           </div>
         </Col>

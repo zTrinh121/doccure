@@ -33,5 +33,6 @@ build/
 .vscode/
 
 .env
-credentials.json
 StoredCredential
+/src/main/resources/credentials.json
+/tokens

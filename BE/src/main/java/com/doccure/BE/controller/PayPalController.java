@@ -1,6 +1,7 @@
 package com.doccure.BE.controller;
 
 import com.doccure.BE.model.AppointmentDetail;
+import com.doccure.BE.response.AppointmentDetailResponse;
 import com.doccure.BE.response.ResponseHandler;
 import com.doccure.BE.service.PayPalService;
 import com.paypal.api.payments.Links;
@@ -67,7 +68,7 @@ public class PayPalController {
         try {
             Payment payment = payPalService.executePayment(paymentId, payerId);
             System.out.println(payment.toJSON());
-            Map<String, Object> appointmentDetail = payPalService.successPayment(appointmentId, invoiceId, slotId, userId);
+            AppointmentDetailResponse appointmentDetail = payPalService.successPayment(appointmentId, invoiceId, slotId, userId);
             if (payment.getState().equals("approved")) {
                 return ResponseHandler.responseBuilder("Invoice in detail with ID = " + invoiceId,
                         HttpStatus.OK,

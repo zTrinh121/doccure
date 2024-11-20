@@ -1,9 +1,12 @@
 package com.doccure.BE.service;
 
+import com.doccure.BE.exception.DataNotFoundException;
 import com.doccure.BE.model.Appointment;
 import com.doccure.BE.model.AppointmentDetail;
 import com.doccure.BE.model.Invoice;
 import com.doccure.BE.model.Slot;
+import com.doccure.BE.request.GoogleEventResquest;
+import com.doccure.BE.response.AppointmentDetailResponse;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.services.calendar.Calendar;
@@ -29,10 +32,10 @@ public interface PayPalService {
 
     void cancelPayment(Long appointmentId, Long invoiceId);
 
-    Map<String, Object> successPayment(Long appointmentId, Long invoiceId, Long slotId, Long userId) throws IOException, GeneralSecurityException;
+    AppointmentDetailResponse successPayment(Long appointmentId, Long invoiceId, Long slotId, Long userId) throws IOException, GeneralSecurityException;
 
     Credential getCredentials(NetHttpTransport HTTP_TRANSPORT) throws IOException;
 
-    Event createEvent(Calendar service, Invoice invoice, Slot slot) throws IOException;
+    com.google.api.services.calendar.model.Event createEvent(GoogleEventResquest googleEventResquest) throws IOException, GeneralSecurityException, DataNotFoundException;
 
 }

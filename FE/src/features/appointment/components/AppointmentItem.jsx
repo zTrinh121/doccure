@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { postInsertRating } from '../../../lib/review';
 import { notification } from '../../../utils/antDesignGlobals';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { getAppointment } from '../../../lib/appointment';
 
 const AppointmentItem = ({
   time,
@@ -95,6 +96,15 @@ const AppointmentItem = ({
     setComment(e.target.value);
   };
 
+  const onMouseOverAppointment = async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ['appointment', appointment.appointment_id],
+      queryFn: async () => {
+        return (await getAppointment(appointment.appointment_id)).data.data;
+      },
+    });
+  };
+
   return (
     <>
       <Modal
@@ -127,6 +137,7 @@ const AppointmentItem = ({
                 shape="circle"
                 icon={<EyeOutlined />}
                 onClick={onClickDetails}
+                onMouseOver={onMouseOverAppointment}
               />
             </Tooltip>
             {/* <a onClick={onClickDetails}>Details </a> */}

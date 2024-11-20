@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { searchDoctors } from '../../../lib/doctor';
 import { useNavigate } from 'react-router-dom';
 import { getAppointments } from '../../../lib/appointment';
+import { message } from '../../../utils/antDesignGlobals';
 
 // import { useAuthStore } from '../../../stores/authStore';
 
@@ -21,8 +22,21 @@ const HomePage = () => {
     }
   };
 
+  const showNoti = () => {
+    message.success('Success!');
+  };
+
   return (
     <>
+      {/* https://ant.design/components/app */}
+      <Button
+        onClick={() => {
+          console.log('your mom');
+          showNoti();
+        }}
+      >
+        Your mom
+      </Button>
       <Flex
         justify="center"
         style={{

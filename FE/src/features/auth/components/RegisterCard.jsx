@@ -1,19 +1,23 @@
-import { Button, Card, Form, Input, Space } from 'antd';
+import { Button, Card, Form, Input, Space, Radio } from 'antd';
 const { Meta } = Card;
 
-import { notification } from 'antd';
-
 import { registerWithEmailAndPassword } from '../../../lib/auth';
-import { Radio } from 'antd';
 import { useNavigate } from 'react-router-dom';
-//todos:check correct confirm password
+import { notification } from '../../../utils/antDesignGlobals';
+
 const RegisterCard = () => {
   const navigate = useNavigate();
 
-  const [api, contextHolder] = notification.useNotification();
+  const openSuccessNotification = () => {
+    notification.success({
+      message: 'Registered successfully',
+      description: 'Please sign in again',
+      showProgress: true,
+    });
+  };
 
   const openNotification = (description) => {
-    api.error({
+    notification.error({
       message: 'Notification Title',
       description: description,
       showProgress: true,
@@ -21,16 +25,13 @@ const RegisterCard = () => {
   };
 
   const onFinish = async (values) => {
-
     try {
       const response = await registerWithEmailAndPassword(values);
-
-      openNotification('Succesful');
+      openSuccessNotification('Succesful');
       navigate('/login');
     } catch (error) {
       console.log(error);
       if (error.response) {
-   
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         openNotification(error.response.data.message);
@@ -50,8 +51,6 @@ const RegisterCard = () => {
 
   return (
     <Card>
-      {contextHolder}
-
       <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
         <Meta title="Register Doccure" />
 
@@ -69,8 +68,12 @@ const RegisterCard = () => {
             name="email"
             rules={[
               {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
                 required: true,
-                message: 'Please input your email!',
+                message: 'Please input your E-mail!',
               },
             ]}
           >
@@ -106,11 +109,24 @@ const RegisterCard = () => {
           <Form.Item
             label="Repeat password"
             name="repeatPassword"
+            dependencies={['password']}
             rules={[
               {
                 required: true,
-                message: 'Please repeat your password!',
+                message: 'Please confirm your password!',
               },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(
+                      'The new password that you entered do not match!',
+                    ),
+                  );
+                },
+              }),
             ]}
           >
             <Input.Password />

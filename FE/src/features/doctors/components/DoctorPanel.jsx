@@ -1,14 +1,16 @@
 import { useDoctorQuery } from '../../../hooks/useDoctorQuery';
 import { Card, Avatar, Badge, Typography, Rate, Button, Row, Col } from 'antd';
+const { Text } = Typography;
 import {
   CheckCircleOutlined,
   EnvironmentOutlined,
   CalendarOutlined,
   ClockCircleOutlined,
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 import AvatarWithDefault from '../../../components/ui/AvatarWithDefault';
+
+import { useNavigate } from 'react-router-dom';
 import { useDoctorRatings } from '../../../hooks/useDoctorRatings';
 import { getStars } from '../../../utils/utils';
 
@@ -32,7 +34,6 @@ const DoctorPanel = ({
 
   const responseData = data.data.data;
   const responseDataR = dataR?.data.data;
-  console.log(dataR);
 
   const onClickBooking = () => {
     navigate(`/doctor/${responseData.doctor_id}/booking`);
@@ -43,7 +44,7 @@ const DoctorPanel = ({
   };
 
   return (
-    <Card className="p-4 my-1 shadow-lg border rounded-lg">
+    <Card className="p-4 my-1 ">
       <div className="flex">
         <div className="mr-6 flex flex-col items-center">
           <AvatarWithDefault size={80} avatar={responseData.avatar} />
@@ -56,9 +57,6 @@ const DoctorPanel = ({
             </Typography.Title>
             <CheckCircleOutlined className="text-green-500" />
           </div>
-          {/* <Typography.Text>
-            Puts title here ( bằng cấp or sth idk)
-          </Typography.Text> */}
 
           <div className="mt-2 flex items-center text-gray-500">
             <EnvironmentOutlined className="mr-1" />
@@ -70,9 +68,13 @@ const DoctorPanel = ({
               disabled
               defaultValue={getStars(responseDataR?.avg_rating)}
             />
-            <Typography.Text className="ml-2">
-              {responseDataR?.avg_rating}
-            </Typography.Text>
+            <div className="flex flex-row space-x-1">
+              <Typography.Text className="ml-2">
+                {responseDataR?.avg_rating}
+              </Typography.Text>
+              <Text underline>{`${responseDataR?.count_ratings} Reviews`}</Text>
+            </div>
+
             {/* <Typography.Link className="ml-2">(150 Reviews)</Typography.Link> */}
           </div>
         </div>
@@ -80,10 +82,7 @@ const DoctorPanel = ({
       {showBottomSection && (
         <div className="mt-4 border-t pt-4 flex justify-between">
           <div className="flex space-x-4">
-            <div className="flex items-center">
-              <CalendarOutlined className="mr-2 text-blue-500" />
-              <Typography.Text>number of appointments</Typography.Text>
-            </div>
+     
             <div className="flex items-center">
               <ClockCircleOutlined className="mr-2 text-blue-500" />
               <Typography.Text>
@@ -96,7 +95,7 @@ const DoctorPanel = ({
               Price: ${responseData.min_price} - ${responseData.max_price} per
               Session
             </Typography.Text>
-            <Col>
+            <Col className="flex flex-row space-x-1">
               {viewProfile && (
                 <Button className="px-1" onClick={onClickProfile}>
                   View profile

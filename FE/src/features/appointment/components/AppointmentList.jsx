@@ -1,22 +1,42 @@
 import AppointmentItem from './AppointmentItem';
-import { Button, Pagination, Spin } from 'antd';
+import {
+  Button,
+  Pagination,
+  Spin,
+  Typography,
+  Divider,
+  DatePicker,
+} from 'antd';
+const { RangePicker } = DatePicker;
+const { Title } = Typography;
 
 import { useAppointmentsQuery } from '../../../hooks/useAppointmentsQuery';
 import { getTimeString } from '../../../utils/timeUtils';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import MemoizedButton from './MemoizedButton';
+import { useCallback } from 'react';
+import { memo } from 'react';
+import { startTransition } from 'react';
+import { Card } from 'antd';
 
 const AppointmentList = () => {
   const [status, setStatus] = useState('');
+  const [statusQuery, setStatusQuery] = useState(status);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
   const [pagination, setPagination] = useState({
     page: 1,
     pageSize: 10,
     total: 10,
   });
   const { isPending, isError, data, error } = useAppointmentsQuery({
-    status: status,
+    status: statusQuery,
     offset: (pagination.page - 1) * pagination.pageSize,
     limit: pagination.pageSize,
+    startDate,
+    endDate,
   });
   // const total = useMemo(() => data?.total, [data?.total]);
 
@@ -29,7 +49,7 @@ const AppointmentList = () => {
       }));
     }
   }, [data?.total]);
-  const responseData = data?.data;
+  const responseData = data?.data || [];
 
   const onChangePagination = (page, pageSize) => {
     setPagination((prevPagination) => ({
@@ -39,35 +59,60 @@ const AppointmentList = () => {
     }));
   };
 
-  const onClick = (value) => {
-    status === value ? setStatus('') : setStatus(value);
+  const onClick = useCallback(
+    (value) => {
+      const newStatus = status === value ? '' : value;
+      setStatus(newStatus);
+      startTransition(() => {
+        setStatusQuery(newStatus); // Use the resolved status value
+      });
+    },
+    [status],
+  );
+
+  const handleBookedClick = useCallback(() => onClick('booked'), [onClick]);
+  const handlePendingClick = useCallback(
+    () => onClick('pending_payment'),
+    [onClick],
+  );
+
+  const onChange = (dates, dateString) => {
+    setStartDate(dateString[0]);
+    setEndDate(dateString[1]);
+    console.log(dateString);
   };
 
   return (
     <div>
-      <Spin spinning={isPending}>
-        <div>
+      <div>
+        <div className="flex justify-between md: justify-normal flex-col md:flex-row">
           <div className="flex flex-start gap-2 p-2">
-            <Button
-              type={status === 'booked' ? 'primary' : ''}
-              onClick={() => {
-                onClick('booked');
-              }}
-            >
-              Booked
-            </Button>
-            <Button
-              type={status === 'pending_payment' ? 'primary' : ''}
-              onClick={() => {
-                onClick('pending_payment');
-              }}
-            >
-              Pending Payment
-            </Button>
+            <MemoizedButton
+              isActive={status === 'booked'}
+              label="Booked"
+              onClick={handleBookedClick}
+            />
+            <MemoizedButton
+              isActive={status === 'pending_payment'}
+              label="Pending Payment"
+              // onClick={handleBookedClick}
+
+              onClick={handlePendingClick}
+            />
           </div>
+          {status ? (
+            <div>
+              <RangePicker onChange={onChange} />
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+        <Spin spinning={isPending}>
           <div className="flex flex-col gap-1 p-2">
-            {responseData?.map((appointment) => (
+            {responseData.map((appointment) => (
               <AppointmentItem
+                isPending={isPending}
                 key={appointment.appointment_id}
                 avatar={appointment.doctor.avatar}
                 status={appointment.status}
@@ -80,11 +125,20 @@ const AppointmentList = () => {
                 })}
                 appointmentId={appointment.appointment_id}
                 invoiceId={appointment.invoice.invoice_id}
+                appointment={appointment}
+                queryKey={[
+                  'appointments',
+                  status,
+                  (pagination.page - 1) * pagination.pageSize,
+                  pagination.pageSize,
+                  startDate,
+                  endDate,
+                ]}
               />
             ))}
           </div>
-        </div>
-      </Spin>
+        </Spin>
+      </div>
       <div className="flex justify-center">
         <Pagination
           defaultCurrent={1}
@@ -98,4 +152,4 @@ const AppointmentList = () => {
   );
 };
 
-export default AppointmentList;
+export default memo(AppointmentList);

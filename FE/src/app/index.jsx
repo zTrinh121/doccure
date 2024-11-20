@@ -1,14 +1,16 @@
 import '../index.css';
 import { RouterProvider } from 'react-router-dom';
-import { Spin } from 'antd';
+import { Spin, App as AppAntd, Button } from 'antd';
 import { ConfigProvider } from 'antd';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import antDesignGlobals from '../utils/antDesignGlobals';
 
 import router from './router';
 import { getNewAccessToken } from '../lib/apiClient';
 import { useEffect } from 'react';
 import { getActions, useAccessToken, useIsLoading } from '../stores/authStore';
+import AntDesignGlobals from '../utils/antDesignGlobals';
 
 function App() {
   const queryClient = new QueryClient();
@@ -58,8 +60,11 @@ function App() {
           },
         }}
       >
-        <RouterProvider router={router} />
-        <ReactQueryDevtools />
+        <AppAntd>
+          <AntDesignGlobals />
+          <RouterProvider router={router} />
+          <ReactQueryDevtools />
+        </AppAntd>
       </ConfigProvider>
     </>
   );

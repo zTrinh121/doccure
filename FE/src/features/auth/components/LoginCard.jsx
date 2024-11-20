@@ -1,31 +1,39 @@
-import { Button, Card, Flex, Form, Input, Space } from 'antd';
+import { Button, Card, Flex, Form, Input, Space, Spin } from 'antd';
+const { Meta } = Card;
 import FloatLabel from '../../../components/ui/float-lable/FloatLabel';
+import { Link } from 'react-router-dom';
+
 import { useState } from 'react';
 import { login } from '../../../lib/auth';
 import { useNavigate } from 'react-router-dom';
 import { getActions } from '../../../stores/authStore';
-import { notification } from 'antd';
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Spin } from 'antd';
 import { useQueryClient } from '@tanstack/react-query';
-// import { useAuthStore } from '../../../stores/authStore';
-const { Meta } = Card;
+import { notification } from '../../../utils/antDesignGlobals';
 
 const LoginCard = () => {
-  const { setAccessToken } = getActions();
-
+  const { setAccessToken, setResetStep, setResetEmail } = getActions();
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [api, contextHolder] = notification.useNotification();
   const queryClient = useQueryClient();
-  // const setAccessToken = useAuthStore((state) => state.setAccessToken);
-  const openNotification = (description) => {
-    api.error({
-      message: 'Notification Title',
-      description: 'Incorrect username or password', //static value
-      showProgress: true,
+
+  const openNotificationError = (description) => {
+    notification.error({
+      message: 'Error',
+      description: 'Incorrect username or password',
+      style: {
+        width: 300,
+      },
+    });
+  };
+
+  const openNotificationSuccess = (description) => {
+    notification.success({
+      message: 'Login Successful',
+      // description: 'Incorrect username or password',
+      style: {
+        width: 300,
+      },
     });
   };
 
@@ -43,10 +51,10 @@ const LoginCard = () => {
 
       setAccessToken(response.data.data.access_token);
       queryClient.invalidateQueries({ queryKey: ['profile'] });
-
+      openNotificationSuccess();
       navigate('/');
     } catch (error) {
-      openNotification();
+      openNotificationError();
       console.log(error);
 
       console.error('Full error object:', error.config);
@@ -55,9 +63,14 @@ const LoginCard = () => {
     }
   };
 
+  const onClickForgot = () => {
+    setResetStep('');
+    setResetEmail('');
+    navigate('/forgotPassword');
+  };
+
   return (
     <>
-      {contextHolder}
       <Card>
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
           <Meta title="Login Doccure" />
@@ -105,7 +118,8 @@ const LoginCard = () => {
             </FloatLabel>
             <Form.Item>
               <Flex justify="flex-end" align="center">
-                <Link to="/forgotPassword">Forgot password</Link>
+                <a onClick={onClickForgot}>Forgot Password</a>
+                {/* <Link to="/forgotPassword">Forgot password</Link> */}
               </Flex>
             </Form.Item>
             <Form.Item>

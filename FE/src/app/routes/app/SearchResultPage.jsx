@@ -10,18 +10,12 @@ import { useSpecializationsQuery } from '../../../hooks/useSpecializationsQuery'
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 
 const SearchResultPage = () => {
-  //todo:encode uri
-  //todo: change search resutls without needing to enter
   const query = new URLSearchParams(location.search).get('query');
-  const navigate = useNavigate();
   const [search, setSearch] = useState(query);
+
   const [spec, setSpec] = useState('');
-  const onFinish = async (values) => {
-    setSearch(values.search);
-    setSpec('');
-    navigate(`/search?query=${encodeURIComponent(values.search)}`);
-  };
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   const {
     data = [],
@@ -37,6 +31,12 @@ const SearchResultPage = () => {
     error: errorS,
   } = useSpecializationsQuery();
 
+  const onFinish = async (values) => {
+    setSearch(values.search);
+    setSpec('');
+    navigate(`/search?query=${encodeURIComponent(values.search)}`);
+  };
+
   const onValuesChange = () => {
     form.submit();
   };
@@ -49,7 +49,6 @@ const SearchResultPage = () => {
     setSearch('');
     setSpec(e.target.value);
   };
-
 
   return (
     <div>
@@ -64,7 +63,10 @@ const SearchResultPage = () => {
               onValuesChange={onValuesChange}
             >
               <Form.Item name="search">
-                <Input prefix={<SearchOutlined />}></Input>
+                <Input
+                  prefix={<SearchOutlined />}
+                  defaultValue={search}
+                ></Input>
               </Form.Item>
             </Form>
             <div>

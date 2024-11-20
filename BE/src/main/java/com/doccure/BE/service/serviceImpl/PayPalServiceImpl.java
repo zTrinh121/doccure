@@ -16,6 +16,7 @@ import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInsta
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -61,6 +62,7 @@ public class PayPalServiceImpl implements PayPalService {
     private final static String TOKENS_DIRECTORY_PATH = "tokens";
     private final static List<String> SCOPES = Collections.singletonList("https://www.googleapis.com/auth/calendar");
     private final static String CREDENTIALS_FILE_PATH = "/credentials.json";
+    private final static String REDIRECT_URI = "http://localhost:8080/api/v1/google-calendar/callback";
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -211,26 +213,39 @@ public class PayPalServiceImpl implements PayPalService {
         return AppointmentDetailResponse.fromAppointmentDetail(appointmentMapper.getAppointmentDetailById(params));
     }
 
-
-
     @Override
     public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT)
             throws IOException {
-        InputStream in = BeApplication.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-        if (in == null) {
-            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-        }
-        GoogleClientSecrets clientSecrets =
-                GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline")
-                .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8081).build();
+        GoogleAuthorizationCodeFlow flow = getFlowGoogleCalendar(HTTP_TRANSPORT);
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8080).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
+
+
+
+    public String checkGoogleAuthorization(NetHttpTransport HTTP_TRANSPORT) throws IOException {
+        GoogleAuthorizationCodeFlow flow = getFlowGoogleCalendar(HTTP_TRANSPORT);
+
+        Credential credential = flow.loadCredential("user");
+        if (credential == null || credential.getAccessToken() == null) {
+            return flow.newAuthorizationUrl()
+                    .setRedirectUri(REDIRECT_URI)
+                    .build();
+        }
+        return null;
+    }
+
+    @Override
+    public Credential processAuthorizationCode(NetHttpTransport HTTP_TRANSPORT, String code) throws IOException {
+        GoogleAuthorizationCodeFlow flow = getFlowGoogleCalendar(HTTP_TRANSPORT);
+
+        GoogleTokenResponse tokenResponse = flow.newTokenRequest(code)
+                .setRedirectUri(REDIRECT_URI)
+                .execute();
+
+        return flow.createAndStoreCredential(tokenResponse, "user");
+    }
+
 
     @Override
     public com.google.api.services.calendar.model.Event createEvent(GoogleEventResquest googleEventResquest) throws IOException, GeneralSecurityException, DataNotFoundException {
@@ -279,6 +294,20 @@ public class PayPalServiceImpl implements PayPalService {
         event = service.events().insert(calendarId, event).execute();
         System.out.printf("Event created: %s\n", event.getHtmlLink());
         return  event;
+    }
+
+    public static GoogleAuthorizationCodeFlow getFlowGoogleCalendar(NetHttpTransport HTTP_TRANSPORT) throws IOException {
+        InputStream in = BeApplication.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        if (in == null) {
+            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+        }
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+
+        return new GoogleAuthorizationCodeFlow.Builder(
+                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                .setAccessType("offline")
+                .build();
     }
 
 }

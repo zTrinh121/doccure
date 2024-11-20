@@ -53,7 +53,8 @@ public class SecurityConfiguration {
                                 "/api/v1/doctor/**",
                                 "/api/v1/specialization/**",
                                 "/api/v1/slot/**",
-                                "/api/v1/paypal/pay/**")
+                                "/api/v1/paypal/pay/**",
+                                "/api/v1/google-calendar/callback/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())

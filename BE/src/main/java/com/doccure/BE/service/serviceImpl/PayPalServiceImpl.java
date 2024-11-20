@@ -7,6 +7,8 @@ import com.doccure.BE.mapper.*;
 import com.doccure.BE.model.*;
 import com.doccure.BE.model.Invoice;
 import com.doccure.BE.model.InvoiceItem;
+import com.doccure.BE.request.GoogleEventResquest;
+import com.doccure.BE.response.AppointmentDetailResponse;
 import com.doccure.BE.service.PayPalService;
 import com.doccure.BE.util.TokenUtil;
 import com.google.api.client.auth.oauth2.Credential;
@@ -53,12 +55,12 @@ public class PayPalServiceImpl implements PayPalService {
     private final DoctorSpecializationMapper doctorSpecializationMapper;
     private final InvoiceMapper invoiceMapper;
     private final InvoiceItemMapper invoiceItemMapper;
-    private final String APPLICATION_NAME = "Doccure";
-    private final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private final String TOKENS_DIRECTORY_PATH = "tokens";
-    private final List<String> SCOPES = Collections.singletonList("https://www.googleapis.com/auth/calendar");
 
-    private final String CREDENTIALS_FILE_PATH = "/credentials.json";
+    private final static String APPLICATION_NAME = "Doccure";
+    private final static JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    private final static String TOKENS_DIRECTORY_PATH = "tokens";
+    private final static List<String> SCOPES = Collections.singletonList("https://www.googleapis.com/auth/calendar");
+    private final static String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -190,7 +192,7 @@ public class PayPalServiceImpl implements PayPalService {
     }
 
     @Override
-    public Map<String, Object> successPayment(Long appointmentId, Long invoiceId, Long slotId, Long userId) throws IOException, GeneralSecurityException {
+    public AppointmentDetailResponse successPayment(Long appointmentId, Long invoiceId, Long slotId, Long userId) {
         appointmentMapper.updateStatusById("BOOKED", appointmentId);
         invoiceMapper.updateStatusByInvoiceId("SUCCESS", invoiceId);
         Slot slot = slotMapper.selectByPrimaryKey(slotId);
@@ -206,17 +208,7 @@ public class PayPalServiceImpl implements PayPalService {
         params.put("userId",userId);
         params.put("appointmentId", appointmentId);
 
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Calendar service =
-                new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                        .setApplicationName(APPLICATION_NAME)
-                        .build();
-        Event newEvent = createEvent(service, invoiceMapper.selectByPrimaryKey(invoiceId), slot);
-        System.out.println("New event created: " + newEvent);
-        Map<String, Object> result = new HashMap<>();
-        result.put("appointmentDetail", appointmentMapper.getAppointmentDetailById(params));
-        result.put("event", newEvent.getHtmlLink());
-        return result;
+        return AppointmentDetailResponse.fromAppointmentDetail(appointmentMapper.getAppointmentDetailById(params));
     }
 
 
@@ -224,8 +216,6 @@ public class PayPalServiceImpl implements PayPalService {
     @Override
     public Credential getCredentials(NetHttpTransport HTTP_TRANSPORT)
             throws IOException {
-        // Load client secrets.
-        System.out.println("Path: " + CREDENTIALS_FILE_PATH);
         InputStream in = BeApplication.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
@@ -233,32 +223,40 @@ public class PayPalServiceImpl implements PayPalService {
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
-        // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8080).build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8081).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    public com.google.api.services.calendar.model.Event createEvent(Calendar service, Invoice invoice, Slot slot) throws IOException {
+    @Override
+    public com.google.api.services.calendar.model.Event createEvent(GoogleEventResquest googleEventResquest) throws IOException, GeneralSecurityException, DataNotFoundException {
+        if(googleEventResquest == null){
+            throw new DataNotFoundException("Cannot found insert value for event google calendar");
+        }
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        Calendar service =
+                new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                        .setApplicationName(APPLICATION_NAME)
+                        .build();
         com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event()
-                .setSummary(invoice.getInvoiceName())
+                .setSummary(googleEventResquest.getEventName())
                 .setLocation("Da Nang")
-                .setDescription(invoice.getInvoiceName());
+                .setDescription(googleEventResquest.getEventDescription());
 
-        String startDatetime = String.valueOf(slot.getStartDatetime());
-        DateTime startDateTime = new DateTime(startDatetime+":00-00:00");
+        String startDatetime = String.valueOf(googleEventResquest.getStartDateTime());
+        DateTime startDateTime = new DateTime(startDatetime+":00+07:00");
         EventDateTime start = new EventDateTime()
                 .setDateTime(DateTime.parseRfc3339(String.valueOf(startDateTime)))
                 .setTimeZone("Asia/Ho_Chi_Minh");
         event.setStart(start);
 
 
-        String endDatetime = String.valueOf(slot.getEndDatetime());
-        DateTime endDateTime = new DateTime(endDatetime+":00-00:00");
+        String endDatetime = String.valueOf(googleEventResquest.getEndDateTime());
+        DateTime endDateTime = new DateTime(endDatetime+":00+07:00");
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone("Asia/Ho_Chi_Minh");

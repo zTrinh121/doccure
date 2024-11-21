@@ -6,6 +6,7 @@ import {
   CalendarOutlined,
   ClockCircleOutlined,
   EyeOutlined,
+  GoogleOutlined,
   StarOutlined,
   TagOutlined,
   TagsOutlined,
@@ -13,10 +14,11 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { postInsertRating } from '../../../lib/review';
 import { notification } from '../../../utils/antDesignGlobals';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAppointment } from '../../../lib/appointment';
+import { getCheckAuth, postAddEvent } from '../../../lib/googleCalendar';
+import { postInsertRating } from '../../../lib/rating';
 
 const AppointmentItem = ({
   time,
@@ -105,6 +107,31 @@ const AppointmentItem = ({
     });
   };
 
+  const onClickGoogleCalendar = async () => {
+    try {
+      const response = await getCheckAuth();
+      if (response.data.authUrl) {
+        window.open(response.data.authUrl, '_blank');
+      } else {
+        postAddEvent({
+          event_name: `Appointment+with+Dr. ${appointment.doctor.full_name}`,
+          event_description: '',
+          //+7hrs for timezone fuckery and bunch of slice and parse since someone cheaped out on actually usable date props;)
+          start_date_time: new Date(
+            new Date(Date.parse(time.slice(0, 16))).getTime() +
+              7 * 60 * 60 * 1000,
+          ).toISOString(),
+          end_date_time: new Date(
+            new Date(Date.parse(time.slice(0, 11) + time.slice(19))).getTime() +
+              7 * 60 * 60 * 1000,
+          ).toISOString(),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Modal
@@ -171,6 +198,16 @@ const AppointmentItem = ({
                   .replace(/-/g, '')
                   .replace(/:/g, '')
                   .replace(/\.\d{3}/, '')}`}
+              />
+            </Tooltip>
+
+            <Tooltip title="Add google event not manually (automatically) :)">
+              <Button
+                size="small"
+                shape="circle"
+                icon={<GoogleOutlined />}
+                target="_blank"
+                onClick={onClickGoogleCalendar}
               />
             </Tooltip>
 

@@ -62,7 +62,7 @@ public class PayPalServiceImpl implements PayPalService {
     private final static String TOKENS_DIRECTORY_PATH = "tokens";
     private final static List<String> SCOPES = Collections.singletonList("https://www.googleapis.com/auth/calendar");
     private final static String CREDENTIALS_FILE_PATH = "/credentials.json";
-    private final static String REDIRECT_URI = "http://localhost:8080/api/v1/google-calendar/callback";
+    private final static String REDIRECT_URI = "http://localhost:5173/googleCalendarAuthSuccessful";
 
     @Override
     @Transactional(rollbackFor = Exception.class)

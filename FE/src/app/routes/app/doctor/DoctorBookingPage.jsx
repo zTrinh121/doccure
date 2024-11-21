@@ -54,7 +54,6 @@ const DoctorBookingPage = () => {
     setRange([dates[0], dates[1]]);
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);
-
     setDateArr(getDateArr(new Date(dateString[0]), new Date(dateString[1])));
   };
 
@@ -70,11 +69,10 @@ const DoctorBookingPage = () => {
       <Row style={{ width: '100%' }}>
         <Col span={2}></Col>
         <Col span={20}>
-          <div>
+          <div className="flex flex-col gap-2">
             <DoctorPanel doctorId={doctorId} showBottomSection={false} />
 
-            <div>
-              <RangePicker className="my-5" onChange={onChange} value={range} />
+            <RangePicker onChange={onChange} value={range} />
               <SlotsTable
                 startDate={startDate}
                 endDate={endDate}
@@ -105,7 +103,6 @@ const DoctorBookingPage = () => {
                 >
                   Proceed to pay
                 </Button>
-              </div>
             </div>
           </div>
         </Col>

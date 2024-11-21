@@ -54,14 +54,12 @@ const DoctorBookingPage = () => {
     setRange([dates[0], dates[1]]);
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);
-
     setDateArr(getDateArr(new Date(dateString[0]), new Date(dateString[1])));
   };
 
   const onClickPay = async () => {
     // navigate(`/slot/${select}`);
     const response = await postPayment({ slotId: select, specId: spec });
-
     window.location.href = response.data.data.slice(9);
   };
 
@@ -70,42 +68,40 @@ const DoctorBookingPage = () => {
       <Row style={{ width: '100%' }}>
         <Col span={2}></Col>
         <Col span={20}>
-          <div>
+          <div className="flex flex-col gap-2">
             <DoctorPanel doctorId={doctorId} showBottomSection={false} />
 
-            <div>
-              <RangePicker className="my-5" onChange={onChange} value={range} />
-              <SlotsTable
-                startDate={startDate}
-                endDate={endDate}
-                doctorId={doctorId}
-                select={select}
-                setSelect={setSelect}
-                dateArr={dateArr}
-              />
-              <Card>
-                {responseData.specializations.map((item) => (
-                  <Button
-                    className="mx-2"
-                    key={spec.specialization_id}
-                    type={item.specialization_id === spec ? 'primary' : ''}
-                    onClick={() => {
-                      setSpec(item.specialization_id);
-                    }}
-                  >
-                    {item.specialization_name}
-                  </Button>
-                ))}
-              </Card>
-              <div className="flex justify-end">
+            <RangePicker onChange={onChange} value={range} />
+            <SlotsTable
+              startDate={startDate}
+              endDate={endDate}
+              doctorId={doctorId}
+              select={select}
+              setSelect={setSelect}
+              dateArr={dateArr}
+            />
+            <Card>
+              {responseData.specializations.map((item) => (
                 <Button
-                  disabled={select && spec ? false : true}
-                  onClick={onClickPay}
-                  className="my-2"
+                  className="mx-2"
+                  key={spec.specialization_id}
+                  type={item.specialization_id === spec ? 'primary' : ''}
+                  onClick={() => {
+                    setSpec(item.specialization_id);
+                  }}
                 >
-                  Proceed to pay
+                  {item.specialization_name}
                 </Button>
-              </div>
+              ))}
+            </Card>
+              <div className="flex justify-end">
+              <Button
+                disabled={select && spec ? false : true}
+                onClick={onClickPay}
+                className="my-2"
+              >
+                Proceed to pay
+              </Button>
             </div>
           </div>
         </Col>

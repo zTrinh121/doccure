@@ -7,9 +7,13 @@ import background from '../../assets/background.jpg';
 
 import { useProfileQuery } from '../../hooks/useProfileQuery';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const DashboardLayout = () => {
+  //todo:memo thisthing:)
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { data, isSuccess, isPending, error } = useProfileQuery();
 
   if (isPending) {
@@ -43,7 +47,7 @@ const DashboardLayout = () => {
 
             <Button
               block
-              type="link"
+              type={location.pathname === '/user/profile' ? 'primary' : 'link'}
               onClick={() => {
                 navigate('/user/profile');
               }}
@@ -52,7 +56,11 @@ const DashboardLayout = () => {
             </Button>
             <Button
               block
-              type="link"
+              type={
+                location.pathname === '/user/changePassword'
+                  ? 'primary'
+                  : 'link'
+              }
               onClick={() => {
                 navigate('/user/changePassword');
               }}
@@ -61,7 +69,9 @@ const DashboardLayout = () => {
             </Button>
             <Button
               block
-              type="link"
+              type={
+                location.pathname === '/user/appointment' ? 'primary' : 'link'
+              }
               onClick={() => {
                 navigate('/user/appointment');
               }}
@@ -70,7 +80,7 @@ const DashboardLayout = () => {
             </Button>
             <Button
               block
-              type="link"
+              type={location.pathname === '/user/invoice' ? 'primary' : 'link'}
               onClick={() => {
                 navigate('/user/invoice');
               }}

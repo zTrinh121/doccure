@@ -8,3 +8,7 @@ const ratingPrefix = '/rating';
 export const getRatingsOfDoctorById = async (doctorId) => {
   return publicAxiosInstance.get(`/doctor/rating/${doctorId}`);
 }
+
+export const postInsertRating = async (data) => {
+  return authAxiosInstance.post(`${ratingPrefix}/insert`, data)
+}

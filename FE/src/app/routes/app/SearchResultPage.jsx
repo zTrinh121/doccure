@@ -11,7 +11,7 @@ import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 
 const SearchResultPage = () => {
   const query = new URLSearchParams(location.search).get('query');
-  const [search, setSearch] = useState(query);
+  const [search, setSearch] = useState(query || '');
 
   const [spec, setSpec] = useState('');
   const [form] = Form.useForm();

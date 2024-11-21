@@ -60,7 +60,6 @@ const DoctorBookingPage = () => {
   const onClickPay = async () => {
     // navigate(`/slot/${select}`);
     const response = await postPayment({ slotId: select, specId: spec });
-
     window.location.href = response.data.data.slice(9);
   };
 
@@ -73,36 +72,36 @@ const DoctorBookingPage = () => {
             <DoctorPanel doctorId={doctorId} showBottomSection={false} />
 
             <RangePicker onChange={onChange} value={range} />
-              <SlotsTable
-                startDate={startDate}
-                endDate={endDate}
-                doctorId={doctorId}
-                select={select}
-                setSelect={setSelect}
-                dateArr={dateArr}
-              />
-              <Card>
-                {responseData.specializations.map((item) => (
-                  <Button
-                    className="mx-2"
-                    key={spec.specialization_id}
-                    type={item.specialization_id === spec ? 'primary' : ''}
-                    onClick={() => {
-                      setSpec(item.specialization_id);
-                    }}
-                  >
-                    {item.specialization_name}
-                  </Button>
-                ))}
-              </Card>
-              <div className="flex justify-end">
+            <SlotsTable
+              startDate={startDate}
+              endDate={endDate}
+              doctorId={doctorId}
+              select={select}
+              setSelect={setSelect}
+              dateArr={dateArr}
+            />
+            <Card>
+              {responseData.specializations.map((item) => (
                 <Button
-                  disabled={select && spec ? false : true}
-                  onClick={onClickPay}
-                  className="my-2"
+                  className="mx-2"
+                  key={spec.specialization_id}
+                  type={item.specialization_id === spec ? 'primary' : ''}
+                  onClick={() => {
+                    setSpec(item.specialization_id);
+                  }}
                 >
-                  Proceed to pay
+                  {item.specialization_name}
                 </Button>
+              ))}
+            </Card>
+              <div className="flex justify-end">
+              <Button
+                disabled={select && spec ? false : true}
+                onClick={onClickPay}
+                className="my-2"
+              >
+                Proceed to pay
+              </Button>
             </div>
           </div>
         </Col>

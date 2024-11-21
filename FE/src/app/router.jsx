@@ -38,6 +38,16 @@ const router = createBrowserRouter([
         },
       },
 
+      {
+        path: '/googleCalendarAuthSuccessful',
+        async lazy() {
+          let GoogleCalendarAuthSuccessfulPage = await import(
+            './routes/app/googleCalendarAuth/GoogleCalendarAuthSuccessfulPage'
+          );
+          return { Component: GoogleCalendarAuthSuccessfulPage.default };
+        },
+      },
+
       //forget password
       {
         path: '/forgotPassword',

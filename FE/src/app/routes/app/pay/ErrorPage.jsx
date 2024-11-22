@@ -1,13 +1,13 @@
 import { CloseCircleTwoTone } from '@ant-design/icons';
-import ContentLayout from '../../../../components/layouts/ContentLayout';
 import { Card, Flex, Button,Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import CenterLayout from '../../../../components/layouts/CenterLayout';
 
 const ErrorPage = () => {
   const navigate = useNavigate();
 
   return (
-    <ContentLayout>
+    <CenterLayout>
       <Card>
         <Flex vertical align="center">
           <CloseCircleTwoTone
@@ -32,7 +32,7 @@ const ErrorPage = () => {
           </Button>
         </Flex>
       </Card>
-    </ContentLayout>
+    </CenterLayout>
   );
 };
 

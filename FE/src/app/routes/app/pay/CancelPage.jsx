@@ -1,9 +1,9 @@
 import { CloseCircleTwoTone } from '@ant-design/icons';
-import ContentLayout from '../../../../components/layouts/ContentLayout';
-import { Card, Flex, Button } from 'antd';
-import { Typography } from 'antd';
+import { Card, Flex, Button, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
+import CenterLayout from '../../../../components/layouts/CenterLayout';
+
 import { getPaymentCancel } from '../../../../lib/payment';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -44,7 +44,7 @@ const CancelPage = () => {
   }
 
   return (
-    <ContentLayout>
+    <CenterLayout>
       <Card>
         <Flex vertical align="center">
           <CloseCircleTwoTone
@@ -69,7 +69,7 @@ const CancelPage = () => {
           </Button>
         </Flex>
       </Card>
-    </ContentLayout>
+    </CenterLayout>
   );
 };
 

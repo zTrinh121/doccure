@@ -1,14 +1,13 @@
-import { CheckCircleFilled, CheckCircleTwoTone } from '@ant-design/icons';
-import { useParams } from 'react-router-dom';
-import ContentLayout from '../../../../components/layouts/ContentLayout';
+import {  CheckCircleTwoTone } from '@ant-design/icons';
 import { Button, Card, Flex, Typography } from 'antd';
-const { Text, Link } = Typography;
+const { Text } = Typography;
 import { useAppointmentQuery } from '../../../../hooks/useAppointmentQuery';
 import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getPaymentSuccessful } from '../../../../lib/payment';
 import { useState } from 'react';
+import CenterLayout from '../../../../components/layouts/CenterLayout';
 
 const SuccessPage = () => {
   const navigate = useNavigate();
@@ -61,7 +60,7 @@ const SuccessPage = () => {
   };
 
   return (
-    <ContentLayout>
+    <CenterLayout>
       <Card>
         <Flex vertical align="center">
           <CheckCircleTwoTone
@@ -102,7 +101,7 @@ const SuccessPage = () => {
           </Button>
         </Flex>
       </Card>
-    </ContentLayout>
+    </CenterLayout>
   );
 };
 

@@ -5,6 +5,9 @@ import { Row, Col } from 'antd';
 import ReviewsCard from '../../../../features/doctors/components/ReviewsCard';
 
 import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
+import { getActions, useScrollTarget } from '../../../../stores/scrollStore';
+import { useEffect } from 'react';
+import { useRef } from 'react';
 
 const DoctorPage = () => {
   const { doctorId } = useParams(); //for getting doctor id from url param
@@ -13,6 +16,23 @@ const DoctorPage = () => {
   //   return <IsPendingSpin />;
   // }
   // const responseData = data.data.data;
+  const scrollTarget = useScrollTarget();
+
+  const reviewRef = useRef(null);
+
+  const { setScrollTarget } = getActions();
+
+  useEffect(() => {
+    console.log(reviewRef.current);
+    if (scrollTarget === 'review') {
+      reviewRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+    setScrollTarget(''); //does not cause an infiniteloop because empty dependencies array but this is the definition of playing stupid games:)
+  }, []);
+
   return (
     <div>
       <Row>
@@ -20,7 +40,7 @@ const DoctorPage = () => {
 
         <Col span={16}>
           <DoctorPanel doctorId={doctorId} />
-          <ReviewsCard doctorId={doctorId}/>
+          <ReviewsCard ref={reviewRef} doctorId={doctorId} />
         </Col>
         <Col span={4}></Col>
       </Row>

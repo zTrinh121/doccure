@@ -1,10 +1,9 @@
 import { useDoctorQuery } from '../../../hooks/useDoctorQuery';
-import { Card, Avatar, Badge, Typography, Rate, Button, Row, Col } from 'antd';
-const { Text } = Typography;
+import { Card, Typography, Rate, Button, Col } from 'antd';
+const { Link } = Typography;
 import {
   CheckCircleOutlined,
   EnvironmentOutlined,
-  CalendarOutlined,
   ClockCircleOutlined,
 } from '@ant-design/icons';
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
@@ -13,6 +12,7 @@ import AvatarWithDefault from '../../../components/ui/AvatarWithDefault';
 import { useNavigate } from 'react-router-dom';
 import { useDoctorRatings } from '../../../hooks/useDoctorRatings';
 import { getStars } from '../../../utils/utils';
+import { getActions } from '../../../stores/scrollStore';
 
 const DoctorPanel = ({
   doctorId,
@@ -20,7 +20,7 @@ const DoctorPanel = ({
   viewProfile = false,
 }) => {
   const navigate = useNavigate();
-
+  const { setScrollTarget } = getActions();
   const { data, isSuccess, isPending, error } = useDoctorQuery(doctorId);
   const {
     isPending: isPendingR,
@@ -40,6 +40,11 @@ const DoctorPanel = ({
   };
 
   const onClickProfile = () => {
+    navigate(`/doctor/${responseData.doctor_id}`);
+  };
+
+  const onClickReview = () => {
+    setScrollTarget('review')
     navigate(`/doctor/${responseData.doctor_id}`);
   };
 
@@ -72,9 +77,9 @@ const DoctorPanel = ({
               <Typography.Text className="ml-2">
                 {responseDataR?.avg_rating?.toFixed(2)}
               </Typography.Text>
-              <Text underline>{`${responseDataR?.count_ratings || '0'} review${
-                responseDataR?.count_ratings > 1 ? 's' : ''
-              }`}</Text>
+              <Link underline onClick={onClickReview}>{`${
+                responseDataR?.count_ratings || '0'
+              } review${responseDataR?.count_ratings > 1 ? 's' : ''}`}</Link>
             </div>
 
             {/* <Typography.Link className="ml-2">(150 Reviews)</Typography.Link> */}

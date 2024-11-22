@@ -3,7 +3,6 @@ import {
   getAccessToken,
   getActions
 } from '../stores/authStore';
-import { getGApiAccessToken } from "../stores/gApiStore";
 
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -31,21 +30,9 @@ authAxiosInstance.interceptors.request.use(request => {
   return Promise.reject(error);
 });
 
-export const gApiAxiosInstance = axios.create({
-  baseURL:`https://www.googleapis.com/calendar/v3/calendars`,
-  withCredentials: true,
-})
 
-//!WIP
-gApiAxiosInstance.interceptors.request.use(request => {
-  const gApiAccessToken = getGApiAccessToken();
-  if (gApiAccessToken) {
-    request.headers['Authorization'] = `Bearer ${gApiAccessToken}`;
-  }
-  return request;
-}, error => {
-  return Promise.reject(error);
-});
+
+
 
 //injects Token for every request
 

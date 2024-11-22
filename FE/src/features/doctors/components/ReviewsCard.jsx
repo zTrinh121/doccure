@@ -1,12 +1,13 @@
 import { Card, Rate } from 'antd';
 const { Meta } = Card;
 import { useDoctorRatings } from '../../../hooks/useDoctorRatings';
+import { forwardRef } from 'react';
 
-const ReviewsCard = ({ doctorId }) => {
+const ReviewsCard = forwardRef(({ doctorId }, ref) => {
   const { isPending, isError, data, error } = useDoctorRatings(doctorId);
   const responseData = data?.data.data;
   return (
-    <Card className="p-4 my-1 ">
+    <Card className="p-4 my-1 " ref={ref}>
       <Meta title="Reviews" />
       <br />
       <div className="flex flex-col space-y-1">
@@ -28,6 +29,8 @@ const ReviewsCard = ({ doctorId }) => {
       </div>
     </Card>
   );
-};
+});
+
+ReviewsCard.displayName = 'ReviewsCard';
 
 export default ReviewsCard;

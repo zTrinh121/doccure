@@ -74,6 +74,16 @@ const AppointmentItem = ({
     });
   };
 
+  const openNotificationSuccess = (description) => {
+    notification.success({
+      message: 'Appointment added successfully',
+      description: description,
+      style: {
+        width: 300,
+      },
+    });
+  };
+
   const onClickDetails = () => {
     navigate(`/user/appointment/${appointmentId}`);
   };
@@ -112,7 +122,7 @@ const AppointmentItem = ({
       const response = await getCheckAuth();
       if (response.data.authUrl) {
         window.open(response.data.authUrl, '_blank');
-      } else {
+      } else if (response.data.message === 'Already authorized') {
         postAddEvent({
           event_name: `Appointment+with+Dr. ${appointment.doctor.full_name}`,
           event_description: '',
@@ -126,9 +136,15 @@ const AppointmentItem = ({
               7 * 60 * 60 * 1000,
           ).toISOString(),
         });
+        openNotificationSuccess(
+          `Appointment with Dr. ${appointment.doctor.full_name}`,
+        );
+      } else {
+        openNotificationError('Not authorized');
       }
     } catch (error) {
       console.log(error);
+      openNotificationError(error);
     }
   };
 

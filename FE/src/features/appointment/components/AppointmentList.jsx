@@ -1,24 +1,15 @@
 import AppointmentItem from './AppointmentItem';
-import {
-  Button,
-  Pagination,
-  Spin,
-  Typography,
-  Divider,
-  DatePicker,
-} from 'antd';
+import { Pagination, Spin, DatePicker } from 'antd';
 const { RangePicker } = DatePicker;
-const { Title } = Typography;
+import MemoizedButton from './MemoizedButton';
 
 import { useAppointmentsQuery } from '../../../hooks/useAppointmentsQuery';
 import { getTimeString } from '../../../utils/timeUtils';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import MemoizedButton from './MemoizedButton';
 import { useCallback } from 'react';
 import { memo } from 'react';
 import { startTransition } from 'react';
-import { Card } from 'antd';
 
 const AppointmentList = () => {
   const [status, setStatus] = useState('');

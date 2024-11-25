@@ -1,10 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { useDoctorQuery } from '../../../../hooks/useDoctorQuery';
 import DoctorPanel from '../../../../features/doctors/components/DoctorPanel';
 import { Row, Col } from 'antd';
 import ReviewsCard from '../../../../features/doctors/components/ReviewsCard';
 
-import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
 import { getActions, useScrollTarget } from '../../../../stores/scrollStore';
 import { useEffect } from 'react';
 import { useRef } from 'react';

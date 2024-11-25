@@ -1,8 +1,8 @@
 import '../index.css';
 import { RouterProvider } from 'react-router-dom';
-import { Spin, App as AppAntd, Button } from 'antd';
+import { Spin, App as AppAntd } from 'antd';
 import { ConfigProvider } from 'antd';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // import antDesignGlobals from '../utils/antDesignGlobals';
 

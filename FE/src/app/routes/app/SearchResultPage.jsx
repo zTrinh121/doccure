@@ -1,4 +1,4 @@
-import { useState, useDeferredValue } from 'react';
+import { useState } from 'react';
 import { useSearchQuery } from '../../../hooks/useSearchQuery';
 import { Form, Input, Flex, Row, Col, Radio, Card } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
@@ -17,19 +17,9 @@ const SearchResultPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const {
-    data = [],
-    isSuccess,
-    isPending,
-    error,
-  } = useSearchQuery({ input: useDebounce(search), spec });
+  const searchQuery = useSearchQuery({ input: useDebounce(search), spec });
 
-  const {
-    data: dataS,
-    isSuccess: isSuccessS,
-    isPending: isPendingS,
-    error: errorS,
-  } = useSpecializationsQuery();
+  const specializationQuery = useSpecializationsQuery();
 
   const onFinish = async (values) => {
     setSearch(values.search);
@@ -41,7 +31,7 @@ const SearchResultPage = () => {
     form.submit();
   };
 
-  if (isPending || isPendingS) {
+  if (searchQuery.isPending || specializationQuery.isPending) {
     return <IsPendingSpin />;
   }
 
@@ -79,7 +69,7 @@ const SearchResultPage = () => {
                 <Radio key={''} value={''}>
                   All
                 </Radio>
-                {dataS.data.data.map((spec) => (
+                {specializationQuery.data.data.data.map((spec) => (
                   <Radio
                     key={spec.specialization_id}
                     value={spec.specialization_id}
@@ -92,10 +82,10 @@ const SearchResultPage = () => {
           </Card>
 
           <div className="col-span-2">
-            <Spin spinning={isPending}>
+            <Spin spinning={searchQuery.isPending}>
               <div className=" flex flex-col justify-between gap-3 ">
-                {data.length > 0
-                  ? data.map((item) => (
+                {searchQuery.data.length > 0
+                  ? searchQuery.data.map((item) => (
                       <div key={item.doctor_id}>
                         <DoctorPanel
                           doctorId={item.doctor_id}

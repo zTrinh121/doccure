@@ -13,7 +13,7 @@ export const searchDoctors = async ({ input, spec }) => {
 
     for (const element of arr) {
       try {
-        const response = await publicAxiosInstance.get(`/doctor?keyword=${element}`);
+        const response = await publicAxiosInstance.get(`${doctorPrefix}?keyword=${element}`);
         response.data.data.forEach(element => {
           if (!checkDupe(resultArr, element)) resultArr.push(element)
         })
@@ -24,7 +24,7 @@ export const searchDoctors = async ({ input, spec }) => {
   }
   else if (spec) {
     try {
-      const response = await publicAxiosInstance.get(`/doctor/specialization?specialization=${spec}`);
+      const response = await publicAxiosInstance.get(`${doctorPrefix}/specialization?specialization=${spec}`);
       resultArr = response.data.data;
     } catch (error) {
       console.log(error);
@@ -32,7 +32,7 @@ export const searchDoctors = async ({ input, spec }) => {
   }
   else {
     try {
-      const response = await publicAxiosInstance.get(`/doctor/all`);
+      const response = await publicAxiosInstance.get(`${doctorPrefix}/all`);
       resultArr = response.data.data;
     } catch (error) {
       console.log(error);
@@ -42,7 +42,7 @@ export const searchDoctors = async ({ input, spec }) => {
 }
 
 export const getDoctor = async (id) => {
-  return publicAxiosInstance.get(`/doctor/${id}`)
+  return publicAxiosInstance.get(`${doctorPrefix}/${id}`)
 }
 
 export const getFilterDoctorByRating = async () => {
@@ -50,5 +50,5 @@ export const getFilterDoctorByRating = async () => {
 }
 export const getDoctorSlots = async (startDate, endDate, doctorId) => {
   //yyyy-mm-dd
-  return publicAxiosInstance.get(`doctor/slot/date?id=${doctorId}&start_date=${startDate}&end_date=${endDate}`)
+  return publicAxiosInstance.get(`${doctorPrefix}/slot/date?id=${doctorId}&start_date=${startDate}&end_date=${endDate}`)
 }

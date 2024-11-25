@@ -21,65 +21,62 @@ const DoctorPanel = ({
 }) => {
   const navigate = useNavigate();
   const { setScrollTarget } = getActions();
-  const { data, isSuccess, isPending, error } = useDoctorQuery(doctorId);
-  const {
-    isPending: isPendingR,
-    isError: isErrorR,
-    data: dataR,
-    error: errorR,
-  } = useDoctorRatings(doctorId);
-  if (isPending || isPendingR) {
+  const doctorQuery = useDoctorQuery(doctorId);
+  const ratingQuery = useDoctorRatings(doctorId);
+  if (doctorQuery.isPending || ratingQuery.isPending) {
     return <IsPendingSpin />;
   }
 
-  const responseData = data.data.data;
-  const responseDataR = dataR?.data.data;
+  const responseDataDoctor = doctorQuery.data.data.data;
+  const responseDataRating = ratingQuery.data?.data.data;
 
   const onClickBooking = () => {
-    navigate(`/doctor/${responseData.doctor_id}/booking`);
+    navigate(`/doctor/${responseDataDoctor.doctor_id}/booking`);
   };
 
   const onClickProfile = () => {
-    navigate(`/doctor/${responseData.doctor_id}`);
+    navigate(`/doctor/${responseDataDoctor.doctor_id}`);
   };
 
   const onClickReview = () => {
-    setScrollTarget('review')
-    navigate(`/doctor/${responseData.doctor_id}`);
+    setScrollTarget('review');
+    navigate(`/doctor/${responseDataDoctor.doctor_id}`);
   };
 
   return (
     <Card className=" ">
       <div className="flex">
         <div className="mr-6 flex flex-col items-center">
-          <AvatarWithDefault size={80} avatar={responseData.avatar} />
+          <AvatarWithDefault size={80} avatar={responseDataDoctor.avatar} />
         </div>
 
         <div className="flex-1">
           <div className="flex items-center">
             <Typography.Title level={4} className="m-0 mr-2">
-              {responseData.full_name}
+              {responseDataDoctor.full_name}
             </Typography.Title>
             <CheckCircleOutlined className="text-green-500" />
           </div>
 
           <div className="mt-2 flex items-center text-gray-500">
             <EnvironmentOutlined className="mr-1" />
-            <Typography.Text>{responseData.hospital}</Typography.Text>
+            <Typography.Text>{responseDataDoctor.hospital}</Typography.Text>
           </div>
           <div className="mt-2 flex items-center">
             <Rate
               allowHalf
               disabled
-              defaultValue={getStars(responseDataR?.avg_rating)}
+              defaultValue={getStars(responseDataRating?.avg_rating)}
             />
             <div className="flex flex-row space-x-1">
               <Typography.Text className="ml-2">
-                {responseDataR?.avg_rating?.toFixed(2)}
+                {responseDataRating?.avg_rating?.toFixed(2)}
               </Typography.Text>
               <Link underline onClick={onClickReview}>{`${
-                responseDataR?.count_ratings || '0'
-              } review${responseDataR?.count_ratings > 1 ? 's' : ''}`}</Link>
+                responseDataRating?.count_ratings || '0'
+              } review${
+                responseDataRating?.count_ratings > 1 ? 's' : ''
+              }`}</Link>
             </div>
 
             {/* <Typography.Link className="ml-2">(150 Reviews)</Typography.Link> */}
@@ -92,14 +89,14 @@ const DoctorPanel = ({
             <div className="flex items-center">
               <ClockCircleOutlined className="mr-2 text-blue-500" />
               <Typography.Text>
-                In Practice for {responseData.experience} Years
+                In Practice for {responseDataDoctor.experience} Years
               </Typography.Text>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             <Typography.Text>
-              Price: ${responseData.min_price} - ${responseData.max_price} per
-              Session
+              Price: ${responseDataDoctor.min_price} - $
+              {responseDataDoctor.max_price} per Session
             </Typography.Text>
             <Col className="flex flex-row space-x-1">
               {viewProfile && (

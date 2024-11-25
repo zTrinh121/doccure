@@ -1,6 +1,5 @@
 import background from '../../../assets/background.png';
 import { Flex, Input, Space, Carousel, Button, Form } from 'antd';
-import CircleCard from '../../../components/ui/circleCard';
 import DoctorCard from '../../../features/doctors/components/DoctorCard';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';

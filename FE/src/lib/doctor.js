@@ -1,5 +1,7 @@
 import { publicAxiosInstance } from "./apiClient";
 
+const doctorPrefix = '/doctor'
+
 export const searchDoctors = async ({ input, spec }) => {
   const checkDupe = (array, doctor) => {
     return array.find(item => item.doctor_id === doctor.doctor_id)
@@ -43,6 +45,9 @@ export const getDoctor = async (id) => {
   return publicAxiosInstance.get(`/doctor/${id}`)
 }
 
+export const getFilterDoctorByRating = async () => {
+  return publicAxiosInstance.get(`${doctorPrefix}/rating/filter?type=avgRating&order=highToLow`)
+}
 export const getDoctorSlots = async (startDate, endDate, doctorId) => {
   //yyyy-mm-dd
   return publicAxiosInstance.get(`doctor/slot/date?id=${doctorId}&start_date=${startDate}&end_date=${endDate}`)

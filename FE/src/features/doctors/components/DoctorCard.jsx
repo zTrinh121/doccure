@@ -6,38 +6,40 @@ import {
 import { Card, Rate } from 'antd';
 const { Meta } = Card;
 
-const DoctorCard = () => {
+import { getStars } from '../../../utils/utils';
+
+const DoctorCard = ({ doctor }) => {
   return (
     <Card
       hoverable
       style={{
         width: 240,
       }}
-      cover={
-        <img
-          alt="example"
-          src="https://doccure.dreamstechnologies.com/react/template/assets/img/doctors/doctor-06.jpg"
-        />
-      }
+      cover={<img alt="example" src={doctor.avatar} />}
     >
       <Meta
-        title="Katherine Berthold"
-        description="MS - Orthopaedics, MBBS, M.Ch - Orthopaedics"
+        title={doctor.full_name}
+        // description="MS - Orthopaedics, MBBS, M.Ch - Orthopaedics"
       />
-      <Rate allowHalf disabled defaultValue={2.5} style={{ fontSize: 10 }} />
-      (52)
+      <Rate
+        allowHalf
+        disabled
+        defaultValue={getStars(doctor?.avg_rating)}
+        style={{ fontSize: 10 }}
+      />
+      ({doctor?.ratings?.length || 0})
       <p>
         <EnvironmentOutlined />
-        SOmewhere
+        {doctor.hospital}
       </p>
-      <p>
+      {/* <p>
         <ClockCircleOutlined />
         Sometime
-      </p>
-      <p>
+      </p> */}
+      {/* <p>
         <DollarOutlined />
         Some amount
-      </p>
+      </p> */}
     </Card>
   );
 };

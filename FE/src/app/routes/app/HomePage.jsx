@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 
 import { searchDoctors } from '../../../lib/doctor';
 import { useNavigate } from 'react-router-dom';
+import { useDoctorsRating } from '../../../hooks/useDoctorsRating';
+import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 
 // import { useAuthStore } from '../../../stores/authStore';
 
@@ -19,6 +21,11 @@ const HomePage = () => {
       navigate(`/search?query=${encodeURIComponent(values.search)}`);
     }
   };
+
+  const { isPending, isError, data, error } = useDoctorsRating();
+  if (isPending) {
+    return <IsPendingSpin></IsPendingSpin>;
+  }
 
   return (
     <>
@@ -107,11 +114,10 @@ const HomePage = () => {
         <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
           Our Doctors
         </h2>
-        <Carousel autoplay draggable slidesToShow={3} arrows>
-          <DoctorCard name="Dr. Jane Smith" specialty="Cardiology" />
-          <DoctorCard name="Dr. John Doe" specialty="Dermatology" />
-          <DoctorCard name="Dr. Emily Davis" specialty="Pediatrics" />
-          <DoctorCard name="Dr. Michael Brown" specialty="Orthopedics" />
+        <Carousel draggable slidesToShow={3} arrows infinite={false}>
+          {data.map((doctor) => (
+            <DoctorCard key={doctor.doctor_id} doctor={doctor} />
+          ))}
         </Carousel>
       </div>
     </>

@@ -19,6 +19,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAppointment } from '../../../lib/appointment';
 import { getCheckAuth, postAddEvent } from '../../../lib/googleCalendar';
 import { postInsertRating } from '../../../lib/rating';
+import { Spin } from 'antd';
 
 const AppointmentItem = ({
   time,
@@ -35,6 +36,7 @@ const AppointmentItem = ({
   const [rate, setRate] = useState(0);
   const [comment, setComment] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const mutation = useMutation({
     mutationFn: () => {
@@ -119,32 +121,42 @@ const AppointmentItem = ({
 
   const onClickGoogleCalendar = async () => {
     try {
+      setIsLoading(true);
       const response = await getCheckAuth();
       if (response.data.authUrl) {
         window.open(response.data.authUrl, '_blank');
       } else if (response.data.message === 'Already authorized') {
-        postAddEvent({
-          event_name: `Appointment+with+Dr. ${appointment.doctor.full_name}`,
-          event_description: '',
-          //+7hrs for timezone fuckery and bunch of slice and parse since someone cheaped out on actually usable date props;)
-          start_date_time: new Date(
-            new Date(Date.parse(time.slice(0, 16))).getTime() +
-              7 * 60 * 60 * 1000,
-          ).toISOString(),
-          end_date_time: new Date(
-            new Date(Date.parse(time.slice(0, 11) + time.slice(19))).getTime() +
-              7 * 60 * 60 * 1000,
-          ).toISOString(),
-        });
-        openNotificationSuccess(
-          `Appointment with Dr. ${appointment.doctor.full_name}`,
-        );
+        try {
+          await postAddEvent({
+            event_name: `Appointment+with+Dr. ${appointment.doctor.full_name}`,
+            event_description: '',
+            //+7hrs for timezone fuckery and bunch of slice and parse since someone cheaped out on actually usable date props;)
+            start_date_time: new Date(
+              new Date(Date.parse(time.slice(0, 16))).getTime() +
+                7 * 60 * 60 * 1000,
+            ).toISOString(),
+            end_date_time: new Date(
+              new Date(
+                Date.parse(time.slice(0, 11) + time.slice(19)),
+              ).getTime() +
+                7 * 60 * 60 * 1000,
+            ).toISOString(),
+          });
+          openNotificationSuccess(
+            `Appointment with Dr. ${appointment.doctor.full_name}`,
+          );
+        } catch (error) {
+          openNotificationError(error.message);
+          console.log(error);
+        }
       } else {
         openNotificationError('Not authorized');
       }
     } catch (error) {
       console.log(error);
       openNotificationError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -218,13 +230,15 @@ const AppointmentItem = ({
             </Tooltip>
 
             <Tooltip title="Add google event not manually (automatically) :)">
-              <Button
-                size="small"
-                shape="circle"
-                icon={<GoogleOutlined />}
-                target="_blank"
-                onClick={onClickGoogleCalendar}
-              />
+              <Spin spinning={isLoading}>
+                <Button
+                  size="small"
+                  shape="circle"
+                  icon={<GoogleOutlined />}
+                  target="_blank"
+                  onClick={onClickGoogleCalendar}
+                />
+              </Spin>
             </Tooltip>
 
             <Tooltip title="Add review">

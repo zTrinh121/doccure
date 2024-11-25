@@ -8,11 +8,16 @@ const GoogleCalendarAuthSuccessfulPage = () => {
   if (code && scope) {
     try {
       getCallback(code, scope);
+      return (
+        <p className="flex justify-center align-middle">
+          Google calendar is authorized, you can now close this window
+        </p>
+      );
     } catch (error) {
       console.log(error);
       return (
         <p className="flex justify-center align-middle">
-          Google calendar authorization failed, please retry later!s
+          Google calendar authorization failed, please retry later!
         </p>
       );
     }
@@ -20,7 +25,7 @@ const GoogleCalendarAuthSuccessfulPage = () => {
 
   return (
     <p className="flex justify-center align-middle">
-      Google calendar is authorized, you can now close this window
+      Google calendar authorization failed, please retry later!s
     </p>
   );
 };

@@ -42,20 +42,8 @@ const HomePage = () => {
           </Form>
         </Space>
       </Flex>
-      <div className="px-8 my-12">
-        {/* Services Section */}
-        <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
-          Our Services
-        </h2>
-        <Carousel autoplay draggable slidesToShow={3} arrows>
-          <CircleCard
-            title="General Consultation"
-            description="Comprehensive health checks for all ages."
-          />
-        </Carousel>
-      </div>
 
-      {/* Testimonials Section */}
+      {/* Testimonials Section
       <div className="bg-gray-100 py-12">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">
           What Our Patients Say
@@ -87,7 +75,7 @@ const HomePage = () => {
             <p className="mt-2 text-right">- Patient D</p>
           </div>
         </Carousel>
-      </div>
+      </div> */}
 
       <Flex
         justify="center"
@@ -107,7 +95,7 @@ const HomePage = () => {
           <p className="text-gray-600">
             We are here to provide you with exceptional care and support.
           </p>
-          <Link to="/appointments">
+          <Link to="/search">
             <Button type="primary" size="large">
               Schedule Now
             </Button>

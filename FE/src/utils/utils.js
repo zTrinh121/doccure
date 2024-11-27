@@ -1,5 +1,4 @@
 export const downloadBlob = (obj, name = 'download') => {
-  console.log(obj)
   const url = URL.createObjectURL(obj.data);
   const a = document.createElement('a');
   a.href = url;

@@ -10,6 +10,5 @@ export const useDoctorRatings = (doctorId) => {
       return getRatingsOfDoctorById(doctorId)
     },
   });
-  console.log(data)
   return { isPending, isError, data, error }
 }

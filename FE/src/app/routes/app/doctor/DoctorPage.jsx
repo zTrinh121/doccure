@@ -21,7 +21,6 @@ const DoctorPage = () => {
   const { setScrollTarget } = getActions();
 
   useEffect(() => {
-    console.log(reviewRef.current);
     if (scrollTarget === 'review') {
       reviewRef.current?.scrollIntoView({
         behavior: 'smooth',

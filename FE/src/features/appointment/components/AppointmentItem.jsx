@@ -51,7 +51,7 @@ const AppointmentItem = ({
     // },
     onError: (error, variables, context) => {
       // An error happened!
-      console.log(`rolling back optimistic update with id ${context.id}`);
+      // console.log(`rolling back optimistic update with id ${context.id}`);
       openNotificationError(error.message);
     },
     onSuccess: (data, variables, context) => {

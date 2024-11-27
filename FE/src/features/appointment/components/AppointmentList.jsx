@@ -70,7 +70,6 @@ const AppointmentList = () => {
   const onChange = (dates, dateString) => {
     setStartDate(dateString[0]);
     setEndDate(dateString[1]);
-    console.log(dateString);
   };
 
   return (

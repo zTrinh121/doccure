@@ -35,17 +35,21 @@ const DoctorBookingPage = () => {
     return <IsPendingSpin />;
   }
   if (isError) {
-    return (
-      <div>
-        Something went wrong!
-        {JSON.stringify(error.message)}
-      </div>
-    );
+    console.log(error);
+    if (error.status !== 404) {
+      return (
+        <div>
+          Something went wrong!
+       
+          <p>{JSON.stringify(error.message)}</p>
+        </div>
+      );
+    }
   }
 
   const responseData = data?.data.data || {};
   const tempMap = new Map();
-  responseData?.slots.forEach((slot) => {
+  responseData?.slots?.forEach((slot) => {
     let slots = tempMap.get(slot.date_slot) || [];
     tempMap.set(slot.date_slot, [...slots, slot]);
   });
@@ -81,7 +85,7 @@ const DoctorBookingPage = () => {
               dateArr={dateArr}
             />
             <Card>
-              {responseData.specializations.map((item) => (
+              {responseData.specializations?.map((item) => (
                 <Button
                   className="mx-2"
                   key={spec.specialization_id}
@@ -94,7 +98,7 @@ const DoctorBookingPage = () => {
                 </Button>
               ))}
             </Card>
-              <div className="flex justify-end">
+            <div className="flex justify-end">
               <Button
                 disabled={select && spec ? false : true}
                 onClick={onClickPay}

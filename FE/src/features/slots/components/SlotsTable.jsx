@@ -8,8 +8,16 @@ import { useDoctorSlotsQuery } from '../../../hooks/useDoctorSlotsQuery';
 import { getKebabDateString } from './../../../utils/dateUtils';
 import { dayNames } from '../../../utils/constants';
 import { notification } from '../../../utils/antDesignGlobals';
+import { useEffect } from 'react';
 
-const SlotsTable = ({ startDate, endDate, doctorId, select, setSelect,dateArr }) => {
+const SlotsTable = ({
+  startDate,
+  endDate,
+  doctorId,
+  select,
+  setSelect,
+  dateArr,
+}) => {
   const carouselRef = useRef(null);
   const { isPending, isError, data, error } = useDoctorSlotsQuery({
     startDate: startDate,
@@ -17,23 +25,20 @@ const SlotsTable = ({ startDate, endDate, doctorId, select, setSelect,dateArr })
     doctorId: doctorId,
   });
 
+  // useEffect(() => {
+  //   console.log(isError);
+  //   if (isError) {
+  //     notification.error({
+  //       message: 'Error',
+  //       style: {
+  //         width: 300,
+  //       },
+  //     });
+  //   }
+  // }, [isError]);
+
   if (isPending) {
     return <IsPendingSpin />;
-  }
-  if (isError) {
-    notification.error({
-      message: 'Error',
-      // description: 'Incorrect username or password',
-      style: {
-        width: 300,
-      },
-    });
-    // return (
-    //   <div>
-    //     Something went wrong!
-    //     {JSON.stringify(error.message)}
-    //   </div>
-    // );
   }
 
   const responseData = data?.data.data;

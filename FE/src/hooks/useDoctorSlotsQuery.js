@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDoctorSlots } from "../lib/doctor";
+import { notification } from "../utils/antDesignGlobals";
 
 export const useDoctorSlotsQuery = ({ startDate, endDate, doctorId }) => {
 

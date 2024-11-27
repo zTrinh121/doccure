@@ -7,10 +7,17 @@ import { Card, Rate } from 'antd';
 const { Meta } = Card;
 
 import { getStars } from '../../../utils/utils';
+import { useNavigate } from 'react-router-dom';
 
 const DoctorCard = ({ doctor }) => {
+  const navigate = useNavigate();
+  const onClick = () => {
+    navigate(`/doctor/${doctor.doctor_id}/booking`);
+  };
+
   return (
     <Card
+      onClick={onClick}
       hoverable
       style={{
         width: 240,

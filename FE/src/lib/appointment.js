@@ -9,3 +9,7 @@ export const getAppointment = async (id) => {
 export const getAppointments = async ({ status, offset, limit, startDate, endDate }) => {
   return authAxiosInstance.get(`${appointmentPrefix}/all${startDate && endDate ? '/date' : ''}?offset=${offset}&limit=${limit}${status ? `&status=${status}` : ''}${startDate ? `&start_date=${startDate}` : ''}${endDate ? `&end_date=${endDate}` : ''}`)
 }
+
+export const getAppointmentsInfinite = async ({ status, offset, limit, startDate, endDate }) => {
+  return authAxiosInstance.get(`${appointmentPrefix}/all${startDate && endDate ? '/date' : ''}?offset=${offset}&limit=${limit}${status ? `&status=${status}` : ''}${startDate ? `&start_date=${startDate}` : ''}${endDate ? `&end_date=${endDate}` : ''}`)
+}

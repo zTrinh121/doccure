@@ -12,6 +12,7 @@ export const useAppointmentsQuery = ({ status, offset, limit, startDate='', endD
 
       return response.data;
     },
+    
   });
   return { isPending, isError, data, error }
 }

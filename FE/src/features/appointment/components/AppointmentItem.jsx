@@ -1,6 +1,5 @@
-import { Card, Divider, Modal, Input, Rate, Button } from 'antd';
+import { Card,  Modal, Input, Rate, Button } from 'antd';
 const { TextArea } = Input;
-import AvatarWithDefault from '../../../components/ui/AvatarWithDefault';
 import { Tooltip } from 'antd';
 import {
   CalendarOutlined,
@@ -9,7 +8,6 @@ import {
   GoogleOutlined,
   StarOutlined,
   TagOutlined,
-  TagsOutlined,
 } from '@ant-design/icons';
 
 import { useNavigate } from 'react-router-dom';
@@ -23,12 +21,8 @@ import { Spin } from 'antd';
 
 const AppointmentItem = ({
   time,
-  appointmentId,
-  fullName,
-  invoiceId,
   appointment,
   queryKey,
-  isPending,
 }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -43,7 +37,7 @@ const AppointmentItem = ({
       return postInsertRating({
         comment,
         rating: rate,
-        appointment_id: appointmentId,
+        appointment_id: appointment.appointment_id,
       });
     },
     // onMutate: (variables) => {
@@ -87,11 +81,11 @@ const AppointmentItem = ({
   };
 
   const onClickDetails = () => {
-    navigate(`/user/appointment/${appointmentId}`);
+    navigate(`/user/appointment/${appointment.appointment_id}`);
   };
 
   const onClickInvoice = () => {
-    navigate(`/user/invoice/${invoiceId}`);
+    navigate(`/user/invoice/${appointment.invoice.invoice_id}`);
   };
 
   const onClickReview = () => {
@@ -173,7 +167,7 @@ const AppointmentItem = ({
         <TextArea rows={4} value={comment} onChange={onChangeText} />
       </Modal>
 
-      <Card loading={isPending}>
+      <Card>
         <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div className="flex items-center">
             {/* <AvatarWithDefault avatar={avatar} size={30} /> */}
@@ -213,9 +207,9 @@ const AppointmentItem = ({
                 shape="circle"
                 icon={<CalendarOutlined />}
                 target="_blank"
-                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Appointment+with+Dr. ${fullName}&dates=${new Date(
-                  Date.parse(time.slice(0, 16)),
-                )
+                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Appointment+with+Dr. ${
+                  appointment.doctor.full_name
+                }&dates=${new Date(Date.parse(time.slice(0, 16)))
                   .toISOString()
                   .replace(/-/g, '')
                   .replace(/:/g, '')

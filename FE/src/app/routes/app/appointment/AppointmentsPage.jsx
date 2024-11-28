@@ -1,17 +1,33 @@
-import { Typography, Divider } from 'antd';
+import { Typography, Divider, Button, Switch, Spin } from 'antd';
 const { Title } = Typography;
 import ContentLayout from '../../../../components/layouts/ContentLayout';
 import AppointmentList from '../../../../features/appointment/components/AppointmentList';
 
-import { memo } from 'react';
+import { memo, Suspense } from 'react';
+import { useState } from 'react';
+import { startTransition } from 'react';
+import AppointmentFeed from '../../../../features/appointment/components/AppointmentFeed';
 
 const AppointmentsPage = () => {
+  const [infinite, setInfinite] = useState(false);
+  const onChangeSwitch = (checked) => {
+    // startTransition(() => {
+    setInfinite(checked);
+    // });
+  };
   return (
     <ContentLayout>
       <Title level={3}>Appointments</Title>
-      <Divider />
+      <Switch
+        checkedChildren="infinite"
+        unCheckedChildren="paginated"
+        onChange={onChangeSwitch}
+      />
 
-      <AppointmentList></AppointmentList>
+      <Divider />
+      {/* <Suspense fallback={<Spin tip="Loading appointments..." />}> */}
+      {infinite ? <AppointmentFeed /> : <AppointmentList />}
+      {/* </Suspense> */}
     </ContentLayout>
   );
 };

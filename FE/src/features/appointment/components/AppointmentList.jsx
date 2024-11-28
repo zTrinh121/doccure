@@ -102,19 +102,12 @@ const AppointmentList = () => {
           <div className="flex flex-col gap-1 p-2">
             {responseData.map((appointment) => (
               <AppointmentItem
-                isPending={isPending}
                 key={appointment.appointment_id}
-                avatar={appointment.doctor.avatar}
-                status={appointment.status}
-                price={appointment.price}
-                fullName={appointment.doctor.full_name}
                 time={getTimeString({
                   date: appointment.slot.date_slot,
                   start: appointment.slot.start_time,
                   end: appointment.slot.end_time,
                 })}
-                appointmentId={appointment.appointment_id}
-                invoiceId={appointment.invoice.invoice_id}
                 appointment={appointment}
                 queryKey={[
                   'appointments',

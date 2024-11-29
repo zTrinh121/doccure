@@ -37,8 +37,6 @@ const AppointmentFeed = () => {
   };
 
   useEffect(() => {
-    console.log('effect');
-    console.log(containerRef.current);
     const observer = new IntersectionObserver(intersectCallback, options);
     if (containerRef.current) observer.observe(containerRef.current);
     return () => {

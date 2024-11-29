@@ -2,6 +2,9 @@ import React from 'react';
 import { useAppointmentsInfiniteQuery } from './../../../hooks/useAppointmentsInfiniteQuery';
 import AppointmentItem from './AppointmentItem';
 import { getTimeString } from '../../../utils/timeUtils';
+import { useState } from 'react';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 
 const AppointmentFeed = () => {
   const {
@@ -13,7 +16,29 @@ const AppointmentFeed = () => {
     isFetchingNextPage,
     status,
   } = useAppointmentsInfiniteQuery();
-  console.log(data);
+
+  //intersection observer
+  const containerRef = useRef(null);
+  const intersectCallback = (entries) => {
+    const [entry] = entries;
+    if (hasNextPage && !isFetchingNextPage && entry.isIntersecting) {
+      fetchNextPage();
+    }
+  };
+  const options = {
+    root: null,
+    rootMargin: '0px',
+  };
+
+  useEffect(() => {
+    console.log('effect');
+    console.log(containerRef.current);
+    const observer = new IntersectionObserver(intersectCallback, options);
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => {
+      if (containerRef.current) observer.unobserve(containerRef.current);
+    };
+  }, [status]);
 
   return status === 'pending' ? (
     <p>Loading...</p>
@@ -39,7 +64,7 @@ const AppointmentFeed = () => {
           </React.Fragment>
         ))}
       </div>
-      <div>
+      <div ref={containerRef}>
         <button
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}

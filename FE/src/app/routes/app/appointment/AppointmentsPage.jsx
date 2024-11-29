@@ -27,6 +27,12 @@ const AppointmentsPage = () => {
       <Divider />
       {/* <Suspense fallback={<Spin tip="Loading appointments..." />}> */}
       {infinite ? <AppointmentFeed /> : <AppointmentList />}
+      {/* <div style={{ display: infinite ? 'block' : 'none' }}>
+        <AppointmentFeed />
+      </div>
+      <div style={{ display: infinite ? 'none' : 'block' }}>
+        <AppointmentList />
+      </div> */}
       {/* </Suspense> */}
     </ContentLayout>
   );

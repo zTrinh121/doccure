@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { getAppointments } from "../lib/appointment";
 
-export const useAppointmentsInfiniteQuery = () => {
+export const useAppointmentsInfiniteQuery = ({ statusSelect, startDate, endDate }) => {
   const {
     data,
     error,
@@ -11,9 +11,9 @@ export const useAppointmentsInfiniteQuery = () => {
     isFetchingNextPage,
     status
   } = useInfiniteQuery({
-    queryKey: ['appointments'],
+    queryKey: ['appointments', statusSelect, "_", "_", startDate, endDate],
     queryFn: async ({ pageParam }) => {
-      const response = await getAppointments({ status: '', offset: pageParam.offset, limit: pageParam.limit });
+      const response = await getAppointments({ status: statusSelect, offset: pageParam.offset, limit: pageParam.limit, startDate, endDate });
       response.data.total = parseInt(response.headers['x-total-count']);
       const nextOffset = pageParam.offset += pageParam.limit;
       response.data.nextPageParam =

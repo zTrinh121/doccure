@@ -11,28 +11,24 @@ import AppointmentFeed from '../../../../features/appointment/components/Appoint
 const AppointmentsPage = () => {
   const [infinite, setInfinite] = useState(false);
   const onChangeSwitch = (checked) => {
-    // startTransition(() => {
     setInfinite(checked);
-    // });
   };
   return (
     <ContentLayout>
-      <Title level={3}>Appointments</Title>
-      <Switch
-        checkedChildren="infinite"
-        unCheckedChildren="paginated"
-        onChange={onChangeSwitch}
-      />
+      <div className="flex flex-row content-end gap-2">
+        <Title level={3}>Appointments</Title>
+        <Switch
+          className="self-center"
+          checkedChildren="infinite"
+          unCheckedChildren="paginated"
+          onChange={onChangeSwitch}
+        />
+      </div>
 
       <Divider />
       {/* <Suspense fallback={<Spin tip="Loading appointments..." />}> */}
       {infinite ? <AppointmentFeed /> : <AppointmentList />}
-      {/* <div style={{ display: infinite ? 'block' : 'none' }}>
-        <AppointmentFeed />
-      </div>
-      <div style={{ display: infinite ? 'none' : 'block' }}>
-        <AppointmentList />
-      </div> */}
+
       {/* </Suspense> */}
     </ContentLayout>
   );

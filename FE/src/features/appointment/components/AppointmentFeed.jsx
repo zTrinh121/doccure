@@ -1,12 +1,18 @@
 import React from 'react';
-import { useAppointmentsInfiniteQuery } from './../../../hooks/useAppointmentsInfiniteQuery';
 import AppointmentItem from './AppointmentItem';
+import MemoizedButton from './MemoizedButton';
+import { DatePicker } from 'antd';
+const { RangePicker } = DatePicker;
+
+import { useAppointmentsInfiniteQuery } from './../../../hooks/useAppointmentsInfiniteQuery';
 import { getTimeString } from '../../../utils/timeUtils';
-import { useState } from 'react';
-import { useRef } from 'react';
-import { useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 const AppointmentFeed = () => {
+  const [statusSelect, setStatusSelect] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
   const {
     data,
     error,
@@ -15,7 +21,7 @@ const AppointmentFeed = () => {
     isFetching,
     isFetchingNextPage,
     status,
-  } = useAppointmentsInfiniteQuery();
+  } = useAppointmentsInfiniteQuery({ statusSelect, startDate, endDate });
 
   //intersection observer
   const containerRef = useRef(null);
@@ -40,12 +46,52 @@ const AppointmentFeed = () => {
     };
   }, [status]);
 
+  const onClick = useCallback(
+    (value) => {
+      const newStatus = statusSelect === value ? '' : value;
+      setStatusSelect(newStatus);
+    },
+    [statusSelect],
+  );
+
+  const handleBookedClick = useCallback(() => onClick('booked'), [onClick]);
+  const handlePendingClick = useCallback(
+    () => onClick('pending_payment'),
+    [onClick],
+  );
+
+  const onChange = (dates, dateString) => {
+    setStartDate(dateString[0]);
+    setEndDate(dateString[1]);
+  };
+
   return status === 'pending' ? (
     <p>Loading...</p>
   ) : status === 'error' ? (
     <p>Error: {error.message}</p>
   ) : (
     <>
+      <div className="flex justify-between md: justify-normal flex-col md:flex-row">
+        <div className="flex flex-start gap-2 p-2">
+          <MemoizedButton
+            isActive={statusSelect === 'booked'}
+            label="Booked"
+            onClick={handleBookedClick}
+          />
+          <MemoizedButton
+            isActive={statusSelect === 'pending_payment'}
+            label="Pending Payment"
+            onClick={handlePendingClick}
+          />
+        </div>
+        {statusSelect ? (
+          <div>
+            <RangePicker onChange={onChange} />
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
       <div className="flex flex-col gap-1 p-2">
         {data.pages.map((group, i) => (
           <React.Fragment key={i}>

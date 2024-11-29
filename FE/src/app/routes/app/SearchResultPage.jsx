@@ -53,10 +53,7 @@ const SearchResultPage = () => {
               onValuesChange={onValuesChange}
             >
               <Form.Item name="search">
-                <Input
-                  prefix={<SearchOutlined />}
-                  defaultValue={search}
-                ></Input>
+                <Input prefix={<SearchOutlined />} value={search}></Input>
               </Form.Item>
             </Form>
             <div>

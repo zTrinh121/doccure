@@ -92,7 +92,7 @@ const OtpCard = () => {
             </Flex>
             <Flex justify="flex-end" align="flex-end">
               <div>
-                <ClockCircleOutlined />
+                {/* <ClockCircleOutlined /> */}
                 {/* <Timer duration={60} /> */}
               </div>
             </Flex>

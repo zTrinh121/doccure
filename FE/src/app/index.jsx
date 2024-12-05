@@ -3,39 +3,16 @@ import { RouterProvider } from 'react-router-dom';
 import { Spin, App as AppAntd } from 'antd';
 import { ConfigProvider } from 'antd';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-// import antDesignGlobals from '../utils/antDesignGlobals';
 
 import router from './router';
-import { getNewAccessToken } from '../lib/apiClient';
-import { useEffect } from 'react';
-import { getActions, useIsLoading } from '../stores/authStore';
+import {  useIsLoading } from '../stores/authStore';
 import AntDesignGlobals from '../utils/antDesignGlobals';
+import { useRefreshToken } from '../hooks/useRefreshToken';
 
 function App() {
   const isLoading = useIsLoading();
-  const { setIsLoading } = getActions();
-
-  useEffect(() => {
-    //todos:implement check for expire at value in return body of login request
-    //todo: and make reloading less obnoxios
-    const abortController = new AbortController();
-
-    const fetchAccessToken = async () => {
-      try {
-        setIsLoading(true); // Start loading
-        await getNewAccessToken(abortController);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false); // End loading only after the request completes
-      }
-    };
-
-    fetchAccessToken();
-    return () => {
-      //     // abortController.abort(); //because fetching the first time invalidate current key, making subsequent requests invalid
-    };
-  }, []);
+  useRefreshToken();
+ 
 
   if (isLoading) {
     return (
@@ -58,7 +35,7 @@ function App() {
       >
         <AppAntd>
           <AntDesignGlobals />
-            <RouterProvider router={router} />
+          <RouterProvider router={router} />
           <ReactQueryDevtools />
         </AppAntd>
       </ConfigProvider>

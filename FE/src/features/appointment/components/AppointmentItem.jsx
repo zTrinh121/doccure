@@ -1,4 +1,4 @@
-import { Card,  Modal, Input, Rate, Button } from 'antd';
+import { Card, Modal, Input, Rate, Button } from 'antd';
 const { TextArea } = Input;
 import { Tooltip } from 'antd';
 import {
@@ -18,12 +18,9 @@ import { getAppointment } from '../../../lib/appointment';
 import { getCheckAuth, postAddEvent } from '../../../lib/googleCalendar';
 import { postInsertRating } from '../../../lib/rating';
 import { Spin } from 'antd';
+import PropTypes from 'prop-types';
 
-const AppointmentItem = ({
-  time,
-  appointment,
-  queryKey,
-}) => {
+const AppointmentItem = ({ time, appointment, queryKey }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -257,3 +254,9 @@ const AppointmentItem = ({
 };
 
 export default AppointmentItem;
+
+AppointmentItem.propTypes = {
+  time: PropTypes.string,
+  appointment: PropTypes.object,
+  queryKey: PropTypes.array,
+};

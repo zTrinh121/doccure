@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSearchQuery } from '../../../hooks/useSearchQuery';
-import { Form, Input, Flex, Row, Col, Radio, Card } from 'antd';
+import { Form, Input, Row, Col, Radio, Card } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import DoctorPanel from './../../../features/doctors/components/DoctorPanel';
 import { useNavigate } from 'react-router-dom';

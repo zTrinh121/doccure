@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Button } from 'antd';
+import PropTypes from 'prop-types';
 
 /**
  * MemoizedButton Component
@@ -17,3 +18,9 @@ const MemoizedButton = memo(({ isActive, label, onClick }) => (
 MemoizedButton.displayName = 'MemoizedButton';
 
 export default MemoizedButton;
+
+MemoizedButton.propTypes = {
+  isActive: PropTypes.bool,
+  label: PropTypes.string,
+  onClick: PropTypes.func,
+};

@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { useResetStep } from '../../../stores/authStore';
-
+import PropTypes from 'prop-types';
 
 function RequireOtpVerification({ children, allowedSteps }) {
   const resetStep = useResetStep();
@@ -12,3 +12,8 @@ function RequireOtpVerification({ children, allowedSteps }) {
   );
 }
 export default RequireOtpVerification;
+
+RequireOtpVerification.propTypes = {
+  children: PropTypes.element,
+  allowedSteps: PropTypes.string,
+};

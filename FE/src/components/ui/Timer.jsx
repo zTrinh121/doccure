@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
@@ -61,3 +61,8 @@ const Timer = ({ duration = 90, rejectDestination = 'forgotPassword' }) => {
 };
 
 export default Timer;
+
+Timer.propTypes = {
+  duration: PropTypes.number,
+  rejectDestination: PropTypes.string,
+};

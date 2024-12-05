@@ -1,13 +1,24 @@
 import { UploadOutlined } from '@ant-design/icons';
-import { Upload, Spin } from 'antd';
-import { Card } from 'antd';
-import { Form, Input, Button, Flex, Row, Col, Typography, Divider } from 'antd';
+import {
+  Card,
+  Form,
+  Input,
+  Button,
+  Flex,
+  Row,
+  Col,
+  Typography,
+  Divider,
+  Upload,
+  Spin,
+  Radio,
+} from 'antd';
 const { Title } = Typography;
+
 import { useProfileQuery } from '../../../../hooks/useProfileQuery';
 import { changeAvatar, changeProfile } from '../../../../lib/user';
 import { useAccessToken } from '../../../../stores/authStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Radio } from 'antd';
 
 const ChangeProfilePage = () => {
   const accessToken = useAccessToken();

@@ -8,6 +8,7 @@ const { Meta } = Card;
 
 import { getStars } from '../../../utils/utils';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const DoctorCard = ({ doctor }) => {
   const navigate = useNavigate();
@@ -52,3 +53,8 @@ const DoctorCard = ({ doctor }) => {
 };
 
 export default DoctorCard;
+
+
+DoctorCard.propTypes = {
+  doctor: PropTypes.object,
+};

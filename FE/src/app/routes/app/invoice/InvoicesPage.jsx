@@ -7,11 +7,13 @@ import ContentLayout from './../../../../components/layouts/ContentLayout';
 const InvoicesPage = () => {
   return (
     <ContentLayout>
-      <Title level={3}>Invoices</Title>
-      <Divider />
-      <Suspense fallback={<div>Loading</div>}>
-        <InvoicesTable />
-      </Suspense>
+      <div>
+        <Title level={3}>Invoices</Title>
+        <Divider />
+        <Suspense fallback={<div>Loading</div>}>
+          <InvoicesTable />
+        </Suspense>
+      </div>
     </ContentLayout>
   );
 };

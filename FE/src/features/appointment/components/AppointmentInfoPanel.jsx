@@ -1,5 +1,5 @@
-import React from 'react';
 import { Card } from 'antd';
+import PropTypes from 'prop-types';
 
 const AppointmentInfoPanel = ({ status, time, price, invoiceId }) => {
   return (
@@ -28,3 +28,10 @@ const AppointmentInfoPanel = ({ status, time, price, invoiceId }) => {
 };
 
 export default AppointmentInfoPanel;
+
+AppointmentInfoPanel.propTypes = {
+  status: PropTypes.string,
+  time: PropTypes.string,
+  price: PropTypes.number,
+  invoiceId: PropTypes.number,
+};

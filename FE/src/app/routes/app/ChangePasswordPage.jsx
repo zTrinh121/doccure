@@ -1,8 +1,9 @@
 import { Form, Input, Button, Flex, Row, Col, Typography, Divider } from 'antd';
 const { Title } = Typography;
+
 import { useAccessToken } from '../../../stores/authStore';
 import { changePassword, logout } from '../../../lib/auth';
-//todos: extract component, check confirm password front end
+
 const ChangePasswordPage = () => {
   const accessToken = useAccessToken();
 

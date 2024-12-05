@@ -1,5 +1,6 @@
 import { Row, Col } from 'antd';
 import { memo } from 'react';
+import PropTypes from 'prop-types';
 
 const ContentLayout = ({ children }) => {
   return (
@@ -14,3 +15,7 @@ const ContentLayout = ({ children }) => {
 };
 
 export default memo(ContentLayout);
+
+ContentLayout.propTypes = {
+  children: PropTypes.element,
+};

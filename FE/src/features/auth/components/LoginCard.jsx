@@ -1,7 +1,6 @@
 import { Button, Card, Flex, Form, Input, Space, Spin } from 'antd';
 const { Meta } = Card;
 import FloatLabel from '../../../components/ui/float-lable/FloatLabel';
-import { Link } from 'react-router-dom';
 
 import { useState } from 'react';
 import { login } from '../../../lib/auth';

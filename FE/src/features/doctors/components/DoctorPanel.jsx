@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDoctorRatings } from '../../../hooks/useDoctorRatings';
 import { getStars } from '../../../utils/utils';
 import { getActions } from '../../../stores/scrollStore';
+import PropTypes from 'prop-types';
 
 const DoctorPanel = ({
   doctorId,
@@ -117,3 +118,9 @@ const DoctorPanel = ({
 };
 
 export default DoctorPanel;
+
+DoctorPanel.propTypes = {
+  doctorId: PropTypes.string,
+  showBottomSection: PropTypes.bool,
+  viewProfile: PropTypes.bool,
+};

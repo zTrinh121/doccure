@@ -72,3 +72,4 @@ const ResetPasswordCard = () => {
 };
 
 export default ResetPasswordCard;
+

@@ -69,7 +69,7 @@ const AppointmentFeed = () => {
     <p>Error: {error.message}</p>
   ) : (
     <>
-      <div className="flex justify-between md: justify-normal flex-col md:flex-row">
+      <div className="flex justify-between md:justify-normal flex-col md:flex-row">
         <div className="flex flex-start gap-2 p-2">
           <MemoizedButton
             isActive={statusSelect === 'booked'}

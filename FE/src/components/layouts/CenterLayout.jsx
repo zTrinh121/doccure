@@ -1,5 +1,6 @@
 import { Row, Col } from 'antd';
 import { memo } from 'react';
+import PropTypes from 'prop-types';
 
 const CenterLayout = ({ children }) => {
   return (
@@ -14,3 +15,7 @@ const CenterLayout = ({ children }) => {
 };
 
 export default memo(CenterLayout);
+
+CenterLayout.propTypes = {
+  children: PropTypes.element,
+};

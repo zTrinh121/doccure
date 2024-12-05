@@ -2,6 +2,7 @@ import { Card, Rate } from 'antd';
 const { Meta } = Card;
 import { useDoctorRatings } from '../../../hooks/useDoctorRatings';
 import { forwardRef } from 'react';
+import PropTypes from 'prop-types';
 
 const ReviewsCard = forwardRef(({ doctorId }, ref) => {
   const { isPending, isError, data, error } = useDoctorRatings(doctorId);
@@ -34,3 +35,7 @@ const ReviewsCard = forwardRef(({ doctorId }, ref) => {
 ReviewsCard.displayName = 'ReviewsCard';
 
 export default ReviewsCard;
+
+ReviewsCard.propTypes = {
+  doctorId: PropTypes.string,
+};

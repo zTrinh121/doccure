@@ -12,8 +12,6 @@ import { Spin } from 'antd';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Flex } from 'antd';
-import { ClockCircleOutlined } from '@ant-design/icons';
-import Timer from '../../../components/ui/Timer';
 import { notification } from '../../../utils/antDesignGlobals';
 
 const OtpCard = () => {

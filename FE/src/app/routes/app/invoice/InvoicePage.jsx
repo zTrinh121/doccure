@@ -44,7 +44,6 @@ const InvoicePage = () => {
         </table>
         <p>Total amount: {data?.slot.price}</p>
       </Card>
-    
     </ContentLayout>
   );
 };

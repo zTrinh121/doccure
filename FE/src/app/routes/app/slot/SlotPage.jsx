@@ -1,9 +1,9 @@
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button,Card } from 'antd';
 import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
+import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
+
 import { useParams } from 'react-router-dom';
 import { useSlotQuery } from '../../../../hooks/useSlotQuery';
-import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
-import { Card } from 'antd';
 import { useState } from 'react';
 import { useDoctorQuery } from '../../../../hooks/useDoctorQuery';
 
@@ -12,21 +12,21 @@ const SlotPage = () => {
   //todo: somehow figure out how to make these names not stupid
   const [specId, setSpecId] = useState('');
 
-  const { isPending, isError, data, error } = useSlotQuery(slotId);
-  const responseData = data.data.data;
+  const slotQuery = useSlotQuery(slotId);
+  const responseData = slotQuery.data.data.data;
 
-  const { isPendingDoctor, isErrorDoctor, dataDoctor, errorDoctor } =
-    useDoctorQuery(responseData.doctor_id, isPending);
+  const doctorQuery =
+    useDoctorQuery(responseData.doctor_id, slotQuery.isPending);
 
-  if (isPending) {
+  if (slotQuery.isPending) {
     return <IsPendingSpin></IsPendingSpin>;
   }
 
-  if (isPending || isPendingDoctor) {
+  if (slotQuery.isPending || doctorQuery.isPending) {
     return <IsPendingSpin></IsPendingSpin>;
   }
 
-  const responseDataDoctor = dataDoctor.data.data;
+  const responseDataDoctor = doctorQuery.data.data.data;
 
   const doctorId = responseData.doctor_id;
 

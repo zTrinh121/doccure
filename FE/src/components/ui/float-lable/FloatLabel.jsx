@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import "./floatLabel.css";
+import './floatLabel.css';
+import PropTypes from 'prop-types';
 
 const FloatLabel = (props) => {
   const [focus, setFocus] = useState(false);
   const { children, label, value } = props;
 
   const labelClass =
-    focus || (value && value.length !== 0) ? "label label-float" : "label";
+    focus || (value && value.length !== 0) ? 'label label-float' : 'label';
 
   return (
     <div
@@ -22,3 +23,9 @@ const FloatLabel = (props) => {
 };
 
 export default FloatLabel;
+
+FloatLabel.propTypes = {
+  children: PropTypes.element,
+  label: PropTypes.string,
+  value: PropTypes.string,
+};

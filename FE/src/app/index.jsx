@@ -2,20 +2,16 @@ import '../index.css';
 import { RouterProvider } from 'react-router-dom';
 import { Spin, App as AppAntd } from 'antd';
 import { ConfigProvider } from 'antd';
-import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // import antDesignGlobals from '../utils/antDesignGlobals';
 
 import router from './router';
 import { getNewAccessToken } from '../lib/apiClient';
 import { useEffect } from 'react';
-import { getActions, useAccessToken, useIsLoading } from '../stores/authStore';
+import { getActions, useIsLoading } from '../stores/authStore';
 import AntDesignGlobals from '../utils/antDesignGlobals';
 
 function App() {
-  const queryClient = new QueryClient();
-  const accessToken = useAccessToken();
-
   const isLoading = useIsLoading();
   const { setIsLoading } = getActions();
 

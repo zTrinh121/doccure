@@ -10,6 +10,8 @@ import {
   Space,
   Typography,
   Avatar,
+  Spin,
+  Popover,
 } from 'antd';
 const { Header, Content, Footer } = Layout;
 const { Paragraph } = Typography;
@@ -21,17 +23,12 @@ import {
 import { Link } from 'react-router-dom';
 
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Spin } from 'antd';
-// import { useAuthStore } from '../../stores/authStore';
-import { Popover } from 'antd';
 import { Outlet } from 'react-router-dom';
-
 import { getUsernameFromToken, logout } from '../../lib/auth';
 import { useAccessToken } from '../../stores/authStore';
 import { useProfileQuery } from '../../hooks/useProfileQuery';
-import AvatarWithDefault from '../ui/AvatarWithDefault';
 
-const HomeLayout = ({ children }) => {
+const HomeLayout = () => {
   const locationArr = useLocation().pathname.split('/');
 
   const location = locationArr[1];
@@ -231,3 +228,4 @@ const HomeLayout = ({ children }) => {
 };
 
 export default HomeLayout;
+

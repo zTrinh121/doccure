@@ -58,7 +58,7 @@ function App() {
       >
         <AppAntd>
           <AntDesignGlobals />
-          <RouterProvider router={router} />
+            <RouterProvider router={router} />
           <ReactQueryDevtools />
         </AppAntd>
       </ConfigProvider>

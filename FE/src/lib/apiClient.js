@@ -6,7 +6,7 @@ import {
 
 
 const apiUrl = import.meta.env.VITE_API_URL;
-const { setAccessToken, clearTokens } = getActions();
+const { setAccessToken } = getActions();
 
 
 

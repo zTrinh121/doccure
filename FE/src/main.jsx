@@ -21,6 +21,7 @@ const queryClient = new QueryClient({
         style: {
           width: 300,
         },
+        description: error.message,
       });
     },
   }),
@@ -28,8 +29,8 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
   </StrictMode>,
 );

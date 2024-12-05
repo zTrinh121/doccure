@@ -27,6 +27,8 @@ import { Outlet } from 'react-router-dom';
 import { getUsernameFromToken, logout } from '../../lib/auth';
 import { useAccessToken } from '../../stores/authStore';
 import { useProfileQuery } from '../../hooks/useProfileQuery';
+import BasicErrorBoundary from './../errors/BasicErrorBoundary';
+import { MainErrorFallback } from './../errors/MainErrorFallback';
 
 const HomeLayout = () => {
   const locationArr = useLocation().pathname.split('/');
@@ -187,7 +189,9 @@ const HomeLayout = () => {
           padding: '48px 0',
         }}
       >
-        <Outlet />
+        <BasicErrorBoundary fallback={<MainErrorFallback/>}>
+          <Outlet />
+        </BasicErrorBoundary>
       </Content>
 
       <Footer
@@ -228,4 +232,3 @@ const HomeLayout = () => {
 };
 
 export default HomeLayout;
-

@@ -49,7 +49,6 @@ const HomePage = () => {
         </Space>
       </Flex>
 
-
       <Flex
         justify="center"
         align="center"

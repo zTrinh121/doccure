@@ -1,12 +1,14 @@
-import { Button } from "antd";
+import { Button } from 'antd';
 
 export const MainErrorFallback = () => {
   return (
     <div
-      className="flex h-screen w-screen flex-col items-center justify-center text-red-500"
+      className="flex h-screen w-screen flex-col items-center justify-center "
       role="alert"
     >
-      <h2 className="text-lg font-semibold">Ooops, something went wrong :( </h2>
+      <h2 className="text-lg font-semibold">
+        Ooops, something went wrong sadge face emoji :|{' '}
+      </h2>
       <Button
         className="mt-4"
         onClick={() => window.location.assign(window.location.origin)}

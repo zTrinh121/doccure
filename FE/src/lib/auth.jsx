@@ -1,6 +1,5 @@
 import {
   authAxiosInstance,
-  getNewAccessToken,
   publicAxiosInstance,
 } from './apiClient';
 import { jwtDecode } from 'jwt-decode';
@@ -36,27 +35,8 @@ export const getUsernameFromToken = (token) => {
 };
 
 export const changePassword = async (token, data) => {
-  const putChangePassword = async (token, data) => {
-    return authAxiosInstance.put(`${authPrefix}/change-password`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Adding the Bearer token to the request
-      },
-    });
-  };
   data.username = getUsernameFromToken(token);
-  try {
-    const response = await putChangePassword(token, data);
-    return response;
-  } catch (error) {
-    try {
-      console.log(error);
-      let newToken = await getNewAccessToken();
-      const retryResponse = await putChangePassword(newToken, data);
-      return retryResponse;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  return authAxiosInstance.put(`${authPrefix}/change-password`, data);
 };
 
 // export const getNewAccessToken = async () => {

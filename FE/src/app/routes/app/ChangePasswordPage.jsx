@@ -3,17 +3,27 @@ const { Title } = Typography;
 
 import { useAccessToken } from '../../../stores/authStore';
 import { changePassword, logout } from '../../../lib/auth';
+import { useState } from 'react';
+import { addNotificationSuccess } from '../../../utils/antDesignGlobals';
 
 const ChangePasswordPage = () => {
   const accessToken = useAccessToken();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onFinish = async (data) => {
+    setIsLoading(true);
     try {
       await changePassword(accessToken, data);
 
       logout();
     } catch (error) {
       console.log(error);
+    } finally {
+      addNotificationSuccess(
+        'Password changed successfully',
+        'Please login again',
+      );
+      setIsLoading(false);
     }
   };
 
@@ -61,7 +71,6 @@ const ChangePasswordPage = () => {
                   <Input.Password />
                 </Form.Item>
 
-            
                 <Form.Item
                   label="Confirm password"
                   name="confirm_password"
@@ -89,7 +98,12 @@ const ChangePasswordPage = () => {
                 </Form.Item>
 
                 <Form.Item>
-                  <Button type="primary" htmlType="submit" block>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    block
+                    disabled={isLoading}
+                  >
                     Submit
                   </Button>
                 </Form.Item>

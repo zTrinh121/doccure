@@ -11,7 +11,16 @@ const AntDesignGlobals = () => {
   notification = staticFunction.notification;
   return null;
 };
+const addNotificationSuccess = (message, description) => {
+  notification.success({
+    message: message,
+    description: description,
+    style: {
+      width: 300,
+    },
+  });
+};
 
-export default AntDesignGlobals
+export default AntDesignGlobals;
 
-export { message, modal, notification };
+export { message, modal, notification,addNotificationSuccess };

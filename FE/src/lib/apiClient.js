@@ -1,46 +1,43 @@
-import axios from "axios";
-import {
-  getAccessToken,
-  getActions
-} from '../stores/authStore';
-
+import axios from 'axios';
+import { getAccessToken, getActions } from '../stores/authStore';
 
 const apiUrl = import.meta.env.VITE_API_URL;
-const { setAccessToken } = getActions();
-
-
+const { setAccessToken, clearTokens } = getActions();
 
 export const publicAxiosInstance = axios.create({
   baseURL: apiUrl,
-  withCredentials: true,//redundant?
-})
+  withCredentials: true, //redundant?
+});
 
 export const authAxiosInstance = axios.create({
   baseURL: apiUrl,
   withCredentials: true,
 });
 
-authAxiosInstance.interceptors.request.use(request => {
-  const accessToken = getAccessToken();
-  if (accessToken) {
-    request.headers['Authorization'] = `Bearer ${accessToken}`;
-  }
-  return request;
-}, error => {
-  return Promise.reject(error);
-});
-
-
-
-
+authAxiosInstance.interceptors.request.use(
+  (request) => {
+    const accessToken = getAccessToken();
+    if (accessToken) {
+      request.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    return request;
+  },
+  (error) => {
+    clearTokens();
+    return Promise.reject(error);
+  },
+);
 
 //injects Token for every request
-
 
 //duplicate of getNewAccessToken in auth.jsx
 export const getNewAccessToken = async () => {
   try {
-    const response = await axios.post(`${apiUrl}/auth/refresh_token`, {}, { withCredentials: true });
+    const response = await axios.post(
+      `${apiUrl}/auth/refresh_token`,
+      {},
+      { withCredentials: true },
+    );
     setAccessToken(response.data.data.access_token);
     return response.data.data.access_token;
   } catch (error) {
@@ -53,8 +50,8 @@ export const getNewAccessToken = async () => {
 //todo : handle outdated token (refresh fail)
 //!bugs out if attempting to refresh for search, search requests with outdated tokens are resent and return nothing or something, attempt to recreate later
 authAxiosInstance.interceptors.response.use(
-  response => response, // Directly return successful responses.
-  async error => {
+  (response) => response, // Directly return successful responses.
+  async (error) => {
     const originalRequest = error.config;
 
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -64,7 +61,9 @@ authAxiosInstance.interceptors.response.use(
         const accessToken = response;
         setAccessToken(accessToken);
 
-        authAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        authAxiosInstance.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${accessToken}`;
         return authAxiosInstance(originalRequest); // Retry the original request with the new access token.
       } catch (refreshError) {
         // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
@@ -74,7 +73,7 @@ authAxiosInstance.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
-    console.log(error)
+    console.log(error);
     return Promise.reject(error); // For all other errors, return the error as is.
-  }
+  },
 );

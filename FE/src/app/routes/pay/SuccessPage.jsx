@@ -1,13 +1,13 @@
 import {  CheckCircleTwoTone } from '@ant-design/icons';
 import { Button, Card, Flex, Typography } from 'antd';
 const { Text } = Typography;
-import { useAppointmentQuery } from '../../../../hooks/useAppointmentQuery';
-import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
+import { useAppointmentQuery } from '../../../hooks/useAppointmentQuery';
+import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getPaymentSuccessful } from '../../../../lib/payment';
+import { getPaymentSuccessful } from '../../../lib/payment';
 import { useState } from 'react';
-import CenterLayout from '../../../../components/layouts/CenterLayout';
+import CenterLayout from '../../../components/layouts/CenterLayout';
 
 const SuccessPage = () => {
   const navigate = useNavigate();

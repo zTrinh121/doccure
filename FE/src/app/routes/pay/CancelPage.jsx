@@ -1,10 +1,10 @@
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { Card, Flex, Button, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
-import CenterLayout from '../../../../components/layouts/CenterLayout';
+import IsPendingSpin from '../../../components/ui/IsPendingSpin';
+import CenterLayout from '../../../components/layouts/CenterLayout';
 
-import { getPaymentCancel } from '../../../../lib/payment';
+import { getPaymentCancel } from '../../../lib/payment';
 import { useState } from 'react';
 import { useEffect } from 'react';
 

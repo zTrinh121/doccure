@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
-import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
-import { useInvoiceQuery } from '../../../../hooks/useInvoiceQuery';
-import ContentLayout from '../../../../components/layouts/ContentLayout';
+import IsPendingSpin from '../../../components/ui/IsPendingSpin';
+import { useInvoiceQuery } from '../../../hooks/useInvoiceQuery';
+import ContentLayout from '../../../components/layouts/ContentLayout';
 import { Card } from 'antd';
 
 const InvoicePage = () => {

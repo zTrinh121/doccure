@@ -15,9 +15,9 @@ import {
 } from 'antd';
 const { Title } = Typography;
 
-import { useProfileQuery } from '../../../../hooks/useProfileQuery';
-import { changeAvatar, changeProfile } from '../../../../lib/user';
-import { useAccessToken } from '../../../../stores/authStore';
+import { useProfileQuery } from '../../../hooks/useProfileQuery';
+import { changeAvatar, changeProfile } from '../../../lib/user';
+import { useAccessToken } from '../../../stores/authStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const ChangeProfilePage = () => {

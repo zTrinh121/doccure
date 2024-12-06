@@ -1,16 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
-import { getSlot } from "../lib/slot";
-
-
+import { useQuery } from '@tanstack/react-query';
+import { getSlot } from '../lib/slot';
 
 export const useSlotQuery = (id) => {
+  //todo: Investigate how this is somehow disabled
+  console.log('useSlotQuery');
+  console.log(['slot', id]);
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['slot', id],
+    queryFn: async () => {
+      return getSlot(id);
+    },
 
-  const  { isPending, isError, data, error } = useQuery({
-    queryKey: ["slot", id],
-    queryFn: async () => { return getSlot(id) },
-
-
-    // enabled: Boolean(accessToken),
+    enabled: true,
   });
-  return  { isPending, isError, data, error }
-}
+  console.log('useSlotQuery', data);
+  return { isPending, isError, data, error };
+};

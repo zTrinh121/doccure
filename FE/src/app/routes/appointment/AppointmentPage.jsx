@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
-import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
-import { useAppointmentQuery } from '../../../../hooks/useAppointmentQuery';
-import ContentLayout from '../../../../components/layouts/ContentLayout';
-import DoctorPanel from '../../../../features/doctors/components/DoctorPanel';
-import AppointmentInfoPanel from '../../../../features/appointment/components/AppointmentInfoPanel';
+import IsPendingSpin from '../../../components/ui/IsPendingSpin';
+import { useAppointmentQuery } from '../../../hooks/useAppointmentQuery';
+import ContentLayout from '../../../components/layouts/ContentLayout';
+import DoctorPanel from '../../../features/doctors/components/DoctorPanel';
+import AppointmentInfoPanel from '../../../features/appointment/components/AppointmentInfoPanel';
 
 const AppointmentPage = () => {
   const { appointmentId } = useParams();

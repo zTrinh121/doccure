@@ -1,15 +1,15 @@
 import { DatePicker, Col, Card, Button, Row, Flex } from 'antd';
 const { RangePicker } = DatePicker;
-import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
-import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
-import SlotsTable from '../../../../features/slots/components/SlotsTable';
+import IsPendingSpin from '../../../components/ui/IsPendingSpin';
+import DoctorPanel from '../../../features/doctors/components/DoctorPanel';
+import SlotsTable from '../../../features/slots/components/SlotsTable';
 
 import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
-import { useDoctorSlotsQuery } from '../../../../hooks/useDoctorSlotsQuery';
+import { useDoctorSlotsQuery } from '../../../hooks/useDoctorSlotsQuery';
 import { useState } from 'react';
-import { postPayment } from '../../../../lib/payment';
-import { getDateArr, getKebabDateString } from '../../../../utils/dateUtils';
+import { postPayment } from '../../../lib/payment';
+import { getDateArr, getKebabDateString } from '../../../utils/dateUtils';
 
 const DoctorBookingPage = () => {
   const { doctorId } = useParams(); //for getting doctor id from url param

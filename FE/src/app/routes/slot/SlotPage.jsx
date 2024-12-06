@@ -1,11 +1,11 @@
-import { Row, Col, Button,Card } from 'antd';
-import DoctorPanel from './../../../../features/doctors/components/DoctorPanel';
-import IsPendingSpin from '../../../../components/ui/IsPendingSpin';
+import { Row, Col, Button, Card } from 'antd';
+import DoctorPanel from '../../../features/doctors/components/DoctorPanel';
+import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 
 import { useParams } from 'react-router-dom';
-import { useSlotQuery } from '../../../../hooks/useSlotQuery';
+import { useSlotQuery } from '../../../hooks/useSlotQuery';
 import { useState } from 'react';
-import { useDoctorQuery } from '../../../../hooks/useDoctorQuery';
+import { useDoctorQuery } from '../../../hooks/useDoctorQuery';
 
 const SlotPage = () => {
   const { slotId } = useParams(); //for getting doctor id from url param
@@ -13,10 +13,13 @@ const SlotPage = () => {
   const [specId, setSpecId] = useState('');
 
   const slotQuery = useSlotQuery(slotId);
-  const responseData = slotQuery.data.data.data;
+  console.log(slotQuery);
+  const responseData = slotQuery.data.data.data||{};
 
-  const doctorQuery =
-    useDoctorQuery(responseData.doctor_id, slotQuery.isPending);
+  const doctorQuery = useDoctorQuery(
+    responseData.doctor_id,
+    slotQuery.isPending,
+  );
 
   if (slotQuery.isPending) {
     return <IsPendingSpin></IsPendingSpin>;

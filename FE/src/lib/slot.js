@@ -1,5 +1,5 @@
 import { publicAxiosInstance } from './apiClient';
-const slotPrefix = '/slot';
+import { slotPrefix } from '../utils/apiConstants';
 
 export const getSlot = async (id) => {
   console.log('getSlot', id);

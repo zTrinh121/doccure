@@ -1,6 +1,6 @@
 import { authAxiosInstance, publicAxiosInstance } from "./apiClient";
 
-const paymentPrefix = "paypal/pay";
+import { paymentPrefix } from "../utils/apiConstants";
 
 export const postPayment = async ({ slotId, specId }) => {
   return authAxiosInstance.post(`${paymentPrefix}?slot_id=${slotId}&specialization_id=${specId}`)

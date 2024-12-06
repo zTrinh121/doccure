@@ -1,6 +1,6 @@
 import { publicAxiosInstance } from "./apiClient";
 
-const doctorPrefix = '/doctor'
+import { doctorPrefix } from "../utils/apiConstants";
 
 export const searchDoctors = async ({ input, spec }) => {
   const checkDupe = (array, doctor) => {

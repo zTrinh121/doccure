@@ -1,31 +1,25 @@
-import { Navigate } from 'react-router-dom';
 import {
   authAxiosInstance,
   getNewAccessToken,
   publicAxiosInstance,
 } from './apiClient';
-import { useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import {
-  getAccessToken,
-  getActions,
-  useAccessToken,
-  useResetStep,
-} from '../stores/authStore';
+import { getActions } from '../stores/authStore';
+import { authPrefix } from '../utils/apiConstants';
 
-const { setAccessToken, clearTokens } = getActions();
+const { clearTokens } = getActions();
 
 export const registerWithEmailAndPassword = async (data) => {
-  return publicAxiosInstance.post('/auth/register', data);
+  return publicAxiosInstance.post(`${authPrefix}/register`, data);
 };
 
 export const login = async (data) => {
-  return publicAxiosInstance.post('/auth/login', data);
+  return publicAxiosInstance.post(`${authPrefix}/login`, data);
 };
 
 export const logout = async (token) => {
   //todos:check invalid token
-  await authAxiosInstance.get('/auth/logout', {
+  await authAxiosInstance.get(`${authPrefix}/logout`, {
     headers: {
       Authorization: `Bearer ${token}`, // Adding the Bearer token to the request
     },
@@ -43,7 +37,7 @@ export const getUsernameFromToken = (token) => {
 
 export const changePassword = async (token, data) => {
   const putChangePassword = async (token, data) => {
-    return authAxiosInstance.put('/auth/change-password', data, {
+    return authAxiosInstance.put(`${authPrefix}/change-password`, data, {
       headers: {
         Authorization: `Bearer ${token}`, // Adding the Bearer token to the request
       },
@@ -65,28 +59,23 @@ export const changePassword = async (token, data) => {
   }
 };
 
-export const fetchProfile = async (token) => {
-  const username = getUsernameFromToken(getAccessToken());
-  return authAxiosInstance.get(`/users?username=${username}`);
-};
-
 // export const getNewAccessToken = async () => {
 //   return axiosInstance.post('auth/refresh_token');
 // };
 
 export const sendResetEmail = async ({ email }) => {
-  return publicAxiosInstance.post(`auth/verify-mail/${email}`);
+  return publicAxiosInstance.post(`${authPrefix}/verify-mail/${email}`);
 };
 
 export const verifyOtp = async ({ otp, email }) => {
-  return publicAxiosInstance.post(`auth/verify-otp/${otp}/${email}`);
+  return publicAxiosInstance.post(`${authPrefix}/verify-otp/${otp}/${email}`);
 };
 
 export const forgotPassword = async ({ values, email }) => {
-  return publicAxiosInstance.post(`auth/forgot-password/${email}`, values);
+  return publicAxiosInstance.post(
+    `${authPrefix}/forgot-password/${email}`,
+    values,
+  );
 };
 
-
-
 //Can change to custom prop route to allow reuse
-

@@ -1,5 +1,5 @@
 import { authAxiosInstance } from "./apiClient"
-const appointmentPrefix = '/appointment'
+import { appointmentPrefix } from "../utils/apiConstants"
 
 export const getAppointment = async (id) => {
   return authAxiosInstance.get(`${appointmentPrefix}/${id}`)

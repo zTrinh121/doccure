@@ -175,7 +175,7 @@ const HomeLayout = () => {
                   <Avatar
                     size={30}
                     icon={<UserOutlined />}
-                    src={data.data.data.avatar}
+                    src={data?.data.data.avatar}
                   />
                 </Popover>
               )}

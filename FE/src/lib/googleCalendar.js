@@ -1,6 +1,6 @@
 import { authAxiosInstance } from "./apiClient";
 
-const googleCalendarPrefix = '/google-calendar';
+import { googleCalendarPrefix } from "../utils/apiConstants";
 
 export const getCheckAuth = async () => {
   return authAxiosInstance.get(`${googleCalendarPrefix}/check-auth`)

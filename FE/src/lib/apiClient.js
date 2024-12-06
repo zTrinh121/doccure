@@ -59,6 +59,8 @@ authAxiosInstance.interceptors.response.use(
       try {
         const response = await getNewAccessToken();
         const accessToken = response;
+        console.log('get actions', typeof getActions);
+        console.log('setAccessToken', typeof setAccessToken);
         setAccessToken(accessToken);
 
         authAxiosInstance.defaults.headers.common[

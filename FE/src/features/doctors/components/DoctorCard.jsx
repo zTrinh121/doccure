@@ -20,9 +20,7 @@ const DoctorCard = ({ doctor }) => {
     <Card
       onClick={onClick}
       hoverable
-      style={{
-        width: 240,
-      }}
+      className="w-[240px]"
       cover={<img alt="example" src={doctor.avatar} />}
     >
       <Meta
@@ -33,7 +31,7 @@ const DoctorCard = ({ doctor }) => {
         allowHalf
         disabled
         defaultValue={getStars(doctor?.avg_rating)}
-        style={{ fontSize: 10 }}
+        className="text-[10px]"
       />
       ({doctor?.ratings?.length || 0})
       <p>
@@ -53,7 +51,6 @@ const DoctorCard = ({ doctor }) => {
 };
 
 export default DoctorCard;
-
 
 DoctorCard.propTypes = {
   doctor: PropTypes.object,

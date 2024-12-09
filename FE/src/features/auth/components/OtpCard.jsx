@@ -56,7 +56,7 @@ const OtpCard = () => {
 
   return (
     <Card>
-      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+      <Space direction="vertical" size="middle" className="flex">
         <Meta title="Enter OTP" />
         An email with the OTP has been sent to {resetEmail}
         <Form

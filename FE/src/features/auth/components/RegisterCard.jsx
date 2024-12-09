@@ -51,7 +51,7 @@ const RegisterCard = () => {
 
   return (
     <Card>
-      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+      <Space direction="vertical" size="middle" className="flex">
         <Meta title="Register Doccure" />
 
         <Form

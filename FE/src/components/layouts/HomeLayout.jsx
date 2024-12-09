@@ -76,12 +76,7 @@ const HomeLayout = () => {
           alignItems: 'center',
         }}
       >
-        <Row
-          align="center"
-          style={{
-            width: '100vw',
-          }}
-        >
+        <Row align="center" className="w-[100vw]">
           <Col span={4}>
             <Link to="/">
               <Image
@@ -184,21 +179,13 @@ const HomeLayout = () => {
         </Row>
       </Header>
 
-      <Content
-        style={{
-          padding: '48px 0',
-        }}
-      >
-        <BasicErrorBoundary fallback={<MainErrorFallback/>}>
+      <Content className="py-[48px]">
+        <BasicErrorBoundary fallback={<MainErrorFallback />}>
           <Outlet />
         </BasicErrorBoundary>
       </Content>
 
-      <Footer
-        style={{
-          textAlign: 'center',
-        }}
-      >
+      <Footer className="text-center">
         <Row>
           <Col span={6}>
             <Image
@@ -209,12 +196,7 @@ const HomeLayout = () => {
                 // margin: "10px",
               }}
             />
-            <Paragraph
-              style={{
-                textAlign: 'left',
-                fontSize: '10px',
-              }}
-            >
+            <Paragraph className="text-left text-[10px]">
               <p>We&apos;re no strangers to love</p>
               <p>You know the rules and so do I</p>
               <p>A full commitment&apos;s what I&apos;m thinking of</p>

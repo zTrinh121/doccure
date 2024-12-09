@@ -52,13 +52,7 @@ const HomePage = () => {
       <Flex
         justify="center"
         align="center"
-        style={{
-          width: '100%',
-          padding: '2rem 0',
-          backgroundColor: '#E6F7FF',
-          textAlign: 'center',
-          marginTop: '2rem',
-        }}
+        className="w-full py-8 bg-[#E6F7FF] text-center mt-8"
       >
         <Space direction="vertical" align="center">
           <h2 className="text-2xl font-semibold text-blue-700">

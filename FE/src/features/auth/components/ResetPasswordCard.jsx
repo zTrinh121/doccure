@@ -22,7 +22,7 @@ const ResetPasswordCard = () => {
   };
   return (
     <Card>
-      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+      <Space direction="vertical" size="middle" className="flex">
         <Meta title="Forgot password?" />
 
         <Form
@@ -72,4 +72,3 @@ const ResetPasswordCard = () => {
 };
 
 export default ResetPasswordCard;
-

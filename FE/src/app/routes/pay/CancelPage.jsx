@@ -49,14 +49,9 @@ const CancelPage = () => {
         <Flex vertical align="center">
           <CloseCircleTwoTone
             twoToneColor={'#DD3B29'}
-            style={{ fontSize: '400%' }}
+            className="text-[400%]"
           />
-          <Typography.Title
-            level={4}
-            style={{
-              margin: 0,
-            }}
-          >
+          <Typography.Title level={4} className="m-0">
             Appointment booking canceled!
           </Typography.Title>
           <Button

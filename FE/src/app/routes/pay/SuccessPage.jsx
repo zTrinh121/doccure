@@ -1,4 +1,4 @@
-import {  CheckCircleTwoTone } from '@ant-design/icons';
+import { CheckCircleTwoTone } from '@ant-design/icons';
 import { Button, Card, Flex, Typography } from 'antd';
 const { Text } = Typography;
 import { useAppointmentQuery } from '../../../hooks/useAppointmentQuery';
@@ -65,14 +65,9 @@ const SuccessPage = () => {
         <Flex vertical align="center">
           <CheckCircleTwoTone
             twoToneColor={'#09E5AB'}
-            style={{ fontSize: '400%' }}
+            className="text-[400%]"
           />
-          <Typography.Title
-            level={4}
-            style={{
-              margin: 0,
-            }}
-          >
+          <Typography.Title level={4} className="m-0">
             Appointment booked Successfully!
           </Typography.Title>
           <div>{paymentId.slice(6)}</div>

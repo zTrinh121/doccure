@@ -6,7 +6,7 @@ const ForgotPasswordPage = () => {
     <>
       <div>
         <Flex justify="center" align="center">
-          <Row style={{ width: '100%' }}>
+          <Row  className="w-full">
             <Col span={6}></Col>
             <Col span={12}>
               <ForgotPasswordEmailCard />

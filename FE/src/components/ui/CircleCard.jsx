@@ -20,18 +20,7 @@ const CircleCard = () => {
         <img
           style={{
             margin: ' auto',
-            // width: '100px',
-            // height: '100px',
-            // position: 'absolute',
-            // left: '50%',
-            // display: 'block',
-            // position: 'absolute',
-            // top: '50%',
-            // right: '0',
-            // left: '0',
-            // borderRadius: '50%',
-            // boxShadow: '10px',
-            // margin: '0 auto',
+            
           }}
           src="https://doccure.dreamstechnologies.com/react/template/assets/img/specialities/specialities-01.png"
         />

@@ -42,7 +42,7 @@ const SearchResultPage = () => {
 
   return (
     <>
-      <Row style={{ width: '100%' }}>
+      <Row className="w-full">
         <Col span={2}></Col>
         <Col span={20} className="grid grid-cols-3 gap-4">
           <Card className="col-span-1">

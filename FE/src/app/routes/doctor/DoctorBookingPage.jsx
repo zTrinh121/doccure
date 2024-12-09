@@ -40,7 +40,6 @@ const DoctorBookingPage = () => {
       return (
         <div>
           Something went wrong!
-       
           <p>{JSON.stringify(error.message)}</p>
         </div>
       );
@@ -69,7 +68,7 @@ const DoctorBookingPage = () => {
 
   return (
     <Flex justify="center" align="center">
-      <Row style={{ width: '100%' }}>
+      <Row className="w-full">
         <Col span={2}></Col>
         <Col span={20}>
           <div className="flex flex-col gap-2">

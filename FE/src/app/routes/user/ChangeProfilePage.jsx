@@ -76,7 +76,7 @@ const ChangeProfilePage = () => {
 
   return (
     <Flex justify="center" align="center">
-      <Row style={{ width: '100%' }}>
+      <Row className="w-full">
         <Col span={1}></Col>
         <Col span={15}>
           <Title level={3}>Change profile</Title>

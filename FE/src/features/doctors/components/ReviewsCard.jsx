@@ -19,7 +19,7 @@ const ReviewsCard = forwardRef(({ doctorId }, ref) => {
               allowHalf
               disabled
               defaultValue={review.rating}
-              style={{ fontSize: 15 }}
+              className="text-[15px]"
             />{' '}
             {review.rating}
             <p>{new Date(review.created_at).toLocaleString('en-AU')}</p>

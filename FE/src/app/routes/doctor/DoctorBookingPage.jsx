@@ -17,6 +17,7 @@ const DoctorBookingPage = () => {
   //todo: handle both pending and error within the component rather than on the whole page
   // This arrangement can be altered based on how we want the date's format to appear.
 
+  const minDate = new dayjs();
   const [startDate, setStartDate] = useState(getKebabDateString(new Date()));
   const [endDate, setEndDate] = useState(getKebabDateString(new Date()));
   const [range, setRange] = useState([new dayjs(), new dayjs()]);
@@ -74,7 +75,7 @@ const DoctorBookingPage = () => {
           <div className="flex flex-col gap-2">
             <DoctorPanel doctorId={doctorId} showBottomSection={false} />
 
-            <RangePicker onChange={onChange} value={range} />
+            <RangePicker onChange={onChange} value={range} minDate={minDate} />
             <SlotsTable
               startDate={startDate}
               endDate={endDate}

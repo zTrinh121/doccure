@@ -92,10 +92,15 @@ const LoginCard = () => {
             <FloatLabel label="Username" name="username" value={username}>
               <Form.Item
                 name="username"
+                validateDebounce={1000}
                 rules={[
                   {
                     required: true,
                     message: 'Please input your username!',
+                  },
+                  {
+                    min: 6,
+                    message: 'Username must be at least 6 characters!',
                   },
                 ]}
               >
@@ -105,10 +110,15 @@ const LoginCard = () => {
             <FloatLabel label="Password" name="password" value={password}>
               <Form.Item
                 name="password"
+                validateDebounce={1000}
                 rules={[
                   {
                     required: true,
                     message: 'Please input your password!',
+                  },
+                  {
+                    min: 6,
+                    message: 'Password must be at least 6 characters!',
                   },
                 ]}
               >

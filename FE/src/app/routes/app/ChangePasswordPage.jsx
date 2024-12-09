@@ -48,10 +48,15 @@ const ChangePasswordPage = () => {
                 <Form.Item
                   label="Old Password"
                   name="old_password"
+                  validateDebounce={1000}
                   rules={[
                     {
                       required: true,
                       message: 'Please input your username!',
+                    },
+                    {
+                      min: 6,
+                      message: 'Password must be at least 6 characters!',
                     },
                   ]}
                 >
@@ -61,10 +66,15 @@ const ChangePasswordPage = () => {
                 <Form.Item
                   label="New password"
                   name="new_password"
+                  validateDebounce={1000}
                   rules={[
                     {
                       required: true,
                       message: 'Please input your password!',
+                    },
+                    {
+                      min: 6,
+                      message: 'Password must be at least 6 characters!',
                     },
                   ]}
                 >
@@ -75,10 +85,15 @@ const ChangePasswordPage = () => {
                   label="Confirm password"
                   name="confirm_password"
                   dependencies={['new_password']}
+                  validateDebounce={1000}
                   rules={[
                     {
                       required: true,
                       message: 'Please confirm your password!',
+                    },
+                    {
+                      min: 6,
+                      message: 'Password must be at least 6 characters!',
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {

@@ -19,6 +19,7 @@ import { getCheckAuth, postAddEvent } from '../../../lib/googleCalendar';
 import { postInsertRating } from '../../../lib/rating';
 import { Spin } from 'antd';
 import PropTypes from 'prop-types';
+import { useRatingMutation } from '../../../hooks/useRatingMutation';
 
 const AppointmentItem = ({ time, appointment, queryKey }) => {
   const navigate = useNavigate();
@@ -28,34 +29,6 @@ const AppointmentItem = ({ time, appointment, queryKey }) => {
   const [comment, setComment] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const mutation = useMutation({
-    mutationFn: () => {
-      return postInsertRating({
-        comment,
-        rating: rate,
-        appointment_id: appointment.appointment_id,
-      });
-    },
-    // onMutate: (variables) => {
-
-    // },
-    onError: (error, variables, context) => {
-      // An error happened!
-      // console.log(`rolling back optimistic update with id ${context.id}`);
-      openNotificationError(error.message);
-    },
-    onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: queryKey });
-    },
-    onSettled: () => {
-      setIsModalOpen(false);
-    },
-  });
-
-  const onOk = async () => {
-    mutation.mutate();
-  };
 
   const openNotificationError = (description) => {
     notification.error({
@@ -75,6 +48,16 @@ const AppointmentItem = ({ time, appointment, queryKey }) => {
         width: 300,
       },
     });
+  };
+
+  const mutation = useRatingMutation({
+    openNotificationError,
+    setIsModalOpen,
+    queryKey,
+  });
+
+  const onOk = async () => {
+    mutation.mutate({ comment, rate, appointment });
   };
 
   const onClickDetails = () => {

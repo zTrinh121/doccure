@@ -66,6 +66,7 @@ const RegisterCard = () => {
           <Form.Item
             label="Email"
             name="email"
+            validateDebounce={1000}
             rules={[
               {
                 type: 'email',
@@ -83,10 +84,15 @@ const RegisterCard = () => {
           <Form.Item
             label="Username"
             name="username"
+            validateDebounce={1000}
             rules={[
               {
                 required: true,
                 message: 'Please input your username!',
+              },
+              {
+                min: 6,
+                message: 'Username must be at least 6 characters!',
               },
             ]}
           >
@@ -96,10 +102,15 @@ const RegisterCard = () => {
           <Form.Item
             label="Password"
             name="password"
+            validateDebounce={1000}
             rules={[
               {
                 required: true,
                 message: 'Please input your password!',
+              },
+              {
+                min: 6,
+                message: 'Password must be at least 6 characters!',
               },
             ]}
           >
@@ -110,10 +121,15 @@ const RegisterCard = () => {
             label="Repeat password"
             name="repeatPassword"
             dependencies={['password']}
+            validateDebounce={1000}
             rules={[
               {
                 required: true,
                 message: 'Please confirm your password!',
+              },
+              {
+                min: 6,
+                message: 'Password must be at least 6 characters!',
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
@@ -135,6 +151,7 @@ const RegisterCard = () => {
           <Form.Item
             label="First name"
             name="first_name"
+            validateDebounce={1000}
             rules={[
               {
                 required: true,
@@ -148,6 +165,7 @@ const RegisterCard = () => {
           <Form.Item
             label="Last name"
             name="last_name"
+            validateDebounce={1000}
             rules={[
               {
                 required: true,
@@ -161,6 +179,7 @@ const RegisterCard = () => {
           <Form.Item
             label="Gender"
             name="gender"
+            validateDebounce={1000}
             rules={[
               {
                 required: true,

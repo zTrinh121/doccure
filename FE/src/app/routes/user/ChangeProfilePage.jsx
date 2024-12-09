@@ -16,9 +16,10 @@ import {
 const { Title } = Typography;
 
 import { useProfileQuery } from '../../../hooks/useProfileQuery';
-import { changeAvatar, changeProfile } from '../../../lib/user';
+import { changeAvatar } from '../../../lib/user';
 import { useAccessToken } from '../../../stores/authStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useProfileMutation } from '../../../hooks/useProfileMutation';
 
 const ChangeProfilePage = () => {
   const accessToken = useAccessToken();
@@ -37,16 +38,7 @@ const ChangeProfilePage = () => {
     },
   });
 
-  const profileMutation = useMutation({
-    mutationFn: async ({ userId, values, token }) => {
-      return changeProfile({ userId, values, token });
-    },
-    onSuccess: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['profile'],
-      });
-    },
-  });
+  const profileMutation = useProfileMutation();
 
   const onChange = async ({ file }) => {
     avatarMutation.mutate({

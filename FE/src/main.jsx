@@ -15,15 +15,17 @@ const queryClient = new QueryClient({
     ...queryConfig,
   },
   queryCache: new QueryCache({
-    onError: (error) => {
-      notification.error({
-        message: 'Error',
-        style: {
-          width: 300,
-        },
-        description: error.message,
-      });
-    },
+    // Turn on if you want every errors to be popper to notification
+
+    // onError: (error) => {
+    //   notification.error({
+    //     message: 'Error',
+    //     style: {
+    //       width: 300,
+    //     },
+    //     description: error.message,
+    //   });
+    // },
   }),
 });
 

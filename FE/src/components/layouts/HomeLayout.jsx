@@ -1,36 +1,32 @@
-import doccure from '../../assets/doccure.png';
 import {
   Button,
   Col,
   Layout,
   Row,
-  Image,
   Divider,
   Space,
-  Typography,
   Avatar,
   Spin,
   Popover,
 } from 'antd';
-const { Header, Content, Footer } = Layout;
-const { Paragraph } = Typography;
+const { Header, Content } = Layout;
 import {
   LoginOutlined,
   UserAddOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import LogoButton from '../ui/LogoButton';
+import NavMenu from '../ui/NavMenu';
+import HomeFooter from '../ui/HomeFooter';
+import BasicErrorBoundary from './../errors/BasicErrorBoundary';
+import { MainErrorFallback } from './../errors/MainErrorFallback';
 import { Outlet } from 'react-router-dom';
+
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getUsernameFromToken, logout } from '../../lib/auth';
 import { useAccessToken } from '../../stores/authStore';
 import { useProfileQuery } from '../../hooks/useProfileQuery';
-import BasicErrorBoundary from './../errors/BasicErrorBoundary';
-import { MainErrorFallback } from './../errors/MainErrorFallback';
-import LogoButton from '../ui/LogoButton';
-import NavMenu from '../ui/NavMenu';
 import { memo } from 'react';
-import HomeFooter from '../ui/HomeFooter';
 
 const HomeLayout = () => {
   const locationArr = useLocation().pathname.split('/');
@@ -88,10 +84,11 @@ const HomeLayout = () => {
               {username}
               {!username ? ( // Only render if username is empty
                 <>
-                  {location.pathname === '/register' ? (
+                  {location === 'register' ? (
                     <></>
                   ) : (
                     <Button
+                      className="hidden sm:block"
                       onClick={() => {
                         navigate('/register');
                       }}
@@ -101,7 +98,7 @@ const HomeLayout = () => {
                     </Button>
                   )}
 
-                  {location.pathname === '/login' ? (
+                  {location === 'login' ? (
                     <></>
                   ) : (
                     <Button

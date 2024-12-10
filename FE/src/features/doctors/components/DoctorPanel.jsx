@@ -121,7 +121,7 @@ const DoctorPanel = ({
 export default memo(DoctorPanel);
 
 DoctorPanel.propTypes = {
-  doctorId: PropTypes.string,
+  doctorId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   showBottomSection: PropTypes.bool,
   viewProfile: PropTypes.bool,
 };

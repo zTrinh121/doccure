@@ -1,5 +1,5 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Carousel, Card, Col, Button, Typography } from 'antd';
+import { Carousel, Card, Col, Typography } from 'antd';
 const { Title } = Typography;
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 
@@ -8,6 +8,7 @@ import { useDoctorSlotsQuery } from '../../../hooks/useDoctorSlotsQuery';
 import { getKebabDateString } from './../../../utils/dateUtils';
 import { dayNames } from '../../../utils/constants';
 import PropTypes from 'prop-types';
+import SlotButton from './SlotButton';
 
 const SlotsTable = ({
   startDate,
@@ -76,23 +77,12 @@ const SlotsTable = ({
                     {date.toLocaleDateString('en-GB')}
                     {(tempMap.get(getKebabDateString(date)) || []).map(
                       (slot) => (
-                        <Button
-                          disabled={
-                            !slot.status || slot.status === 'CANCELED'
-                              ? false
-                              : true
-                          }
-                          type={select === slot.slot_id ? 'primary' : ''}
-                          block
-                          className=" my-1 "
-                          size="small"
+                        <SlotButton
                           key={slot.slot_id}
-                          onClick={() => {
-                            setSelect(slot.slot_id);
-                          }}
-                        >
-                          {slot.start_time}
-                        </Button>
+                          slot={slot}
+                          isSelected={select === slot.slot_id}
+                          setSelect={setSelect}
+                        />
                       ),
                     )}
                   </Col>

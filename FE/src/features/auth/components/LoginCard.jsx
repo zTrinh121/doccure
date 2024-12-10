@@ -68,6 +68,10 @@ const LoginCard = () => {
     navigate('/forgotPassword');
   };
 
+  const onClickRegister = () => {
+    navigate('/register');
+  };
+
   return (
     <>
       <Card>
@@ -128,7 +132,6 @@ const LoginCard = () => {
             <Form.Item>
               <Flex justify="flex-end" align="center">
                 <a onClick={onClickForgot}>Forgot Password</a>
-                {/* <Link to="/forgotPassword">Forgot password</Link> */}
               </Flex>
             </Form.Item>
             <Form.Item>

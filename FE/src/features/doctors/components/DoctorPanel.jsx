@@ -86,7 +86,7 @@ const DoctorPanel = ({
         </div>
       </div>
       {showBottomSection && (
-        <div className="mt-4 border-t pt-4 flex justify-between">
+        <div className="mt-4 border-t pt-4 flex flex-col md:flex-row justify-between">
           <div className="flex space-x-4">
             <div className="flex items-center">
               <ClockCircleOutlined className="mr-2 text-blue-500" />
@@ -95,10 +95,10 @@ const DoctorPanel = ({
               </Typography.Text>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-col md:flex-row md:items-center space-x-2">
             <Typography.Text>
               Price: ${responseDataDoctor.min_price} - $
-              {responseDataDoctor.max_price} per Session
+              {responseDataDoctor.max_price} per session
             </Typography.Text>
             <Col className="flex flex-row space-x-1">
               {viewProfile && (

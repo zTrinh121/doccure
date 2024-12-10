@@ -20,7 +20,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { getUsernameFromToken, logout } from '../../lib/auth';
 import { useAccessToken } from '../../stores/authStore';
@@ -30,6 +30,7 @@ import { MainErrorFallback } from './../errors/MainErrorFallback';
 import LogoButton from '../ui/LogoButton';
 import NavMenu from '../ui/NavMenu';
 import { memo } from 'react';
+import HomeFooter from '../ui/HomeFooter';
 
 const HomeLayout = () => {
   const locationArr = useLocation().pathname.split('/');
@@ -51,7 +52,6 @@ const HomeLayout = () => {
   if (accessToken) {
     username = getUsernameFromToken(accessToken);
   }
-
 
   const handleLogout = async () => {
     try {
@@ -75,7 +75,7 @@ const HomeLayout = () => {
         }}
       >
         <Row align="center" className="w-[100vw]">
-          <Col span={4}>
+          <Col span={4} className="hidden md:block">
             <LogoButton />
           </Col>
           <Col span={14}>
@@ -159,30 +159,7 @@ const HomeLayout = () => {
         </BasicErrorBoundary>
       </Content>
 
-      <Footer className="text-center">
-        <Row>
-          <Col span={6}>
-            <Image
-              preview={false}
-              src={doccure}
-              style={{
-                height: '35px',
-                // margin: "10px",
-              }}
-            />
-            <Paragraph className="text-left text-[10px]">
-              <p>We&apos;re no strangers to love</p>
-              <p>You know the rules and so do I</p>
-              <p>A full commitment&apos;s what I&apos;m thinking of</p>
-              <p>You wouldn&apos;t get this from any other guy</p>
-            </Paragraph>
-          </Col>
-          <Col span={4}>col-4</Col>
-          <Col span={4}>col-4</Col>
-          <Col span={4}>col-4</Col>
-          <Col span={6}>col-6</Col>
-        </Row>
-      </Footer>
+      <HomeFooter />
     </Layout>
   );
 };

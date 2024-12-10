@@ -42,61 +42,63 @@ const SearchResultPage = () => {
 
   return (
     <>
-      <Row className="w-full">
-        <Col span={2}></Col>
-        <Col span={20} className="grid grid-cols-3 gap-4">
-          <Card className="col-span-1">
-            <Form
-              form={form}
-              onFinish={onFinish}
-              autoComplete="off"
-              onValuesChange={onValuesChange}
-            >
-              <Form.Item name="search">
-                <Input prefix={<SearchOutlined />} value={search}></Input>
-              </Form.Item>
-            </Form>
-            <div>
-              Specialization
-              <Radio.Group
-                onChange={onChangeRadio}
-                value={spec}
-                className="flex flex-col"
+      <Row className="w-full grid grid-cols-12 gap-4">
+        <Col className="col-span-1"></Col>
+        <Col className="col-span-10 ">
+          <div className="flex flex-col md:grid md:grid-cols-3 gap-4">
+            <Card className="col-span-1">
+              <Form
+                form={form}
+                onFinish={onFinish}
+                autoComplete="off"
+                onValuesChange={onValuesChange}
               >
-                <Radio key={''} value={''}>
-                  All
-                </Radio>
-                {specializationQuery.data.data.data.map((spec) => (
-                  <Radio
-                    key={spec.specialization_id}
-                    value={spec.specialization_id}
-                  >
-                    {spec.specialization_name}
+                <Form.Item name="search">
+                  <Input prefix={<SearchOutlined />} value={search}></Input>
+                </Form.Item>
+              </Form>
+              <div>
+                Specialization
+                <Radio.Group
+                  onChange={onChangeRadio}
+                  value={spec}
+                  className="flex flex-col"
+                >
+                  <Radio key={''} value={''}>
+                    All
                   </Radio>
-                ))}
-              </Radio.Group>
-            </div>
-          </Card>
-
-          <div className="col-span-2">
-            <Spin spinning={searchQuery.isPending}>
-              <div className=" flex flex-col justify-between gap-3 ">
-                {searchQuery.data.length > 0
-                  ? searchQuery.data.map((item) => (
-                      <div key={item.doctor_id}>
-                        <DoctorPanel
-                          doctorId={item.doctor_id}
-                          viewProfile={true}
-                        />
-                      </div>
-                    ))
-                  : 'No results found.'}
+                  {specializationQuery.data.data.data.map((spec) => (
+                    <Radio
+                      key={spec.specialization_id}
+                      value={spec.specialization_id}
+                    >
+                      {spec.specialization_name}
+                    </Radio>
+                  ))}
+                </Radio.Group>
               </div>
-            </Spin>
+            </Card>
+
+            <div className="col-span-2">
+              <Spin spinning={searchQuery.isPending}>
+                <div className=" flex flex-col justify-between gap-3 ">
+                  {searchQuery.data.length > 0
+                    ? searchQuery.data.map((item) => (
+                        <div key={item.doctor_id}>
+                          <DoctorPanel
+                            doctorId={item.doctor_id}
+                            viewProfile={true}
+                          />
+                        </div>
+                      ))
+                    : 'No results found.'}
+                </div>
+              </Spin>
+            </div>
           </div>
         </Col>
 
-        <Col span={2}></Col>
+        <Col className="col-span-1"></Col>
       </Row>
     </>
   );

@@ -72,9 +72,9 @@ const DoctorBookingPage = () => {
 
   return (
     <Flex justify="center" align="center">
-      <Row className="w-full">
-        <Col span={2}></Col>
-        <Col span={20}>
+      <Row className="w-full grid grid-cols-12 gap-4">
+        <Col className="col-span-1"></Col>
+        <Col className="col-span-10">
           <div className="flex flex-col gap-2">
             <DoctorPanel doctorId={doctorId} showBottomSection={false} />
 
@@ -109,7 +109,7 @@ const DoctorBookingPage = () => {
           </div>
         </Col>
 
-        <Col span={2}></Col>
+        <Col className="col-span-1"></Col>
       </Row>
     </Flex>
   );

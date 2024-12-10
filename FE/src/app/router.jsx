@@ -5,11 +5,17 @@ import HomePage from './routes/app/HomePage';
 import RequireOtpVerification from '../features/auth/components/RequireOtpVerification';
 import HomeLayout from '../components/layouts/HomeLayout';
 import PrivateRoutes from '../features/auth/components/PrivateRoutes';
+import {
+  doctorPrefix,
+  homePrefix,
+  paymentPrefix,
+  userPrefix,
+} from '../utils/routerConstants';
 
 //https://stackoverflow.com/questions/76340518/lazy-loading-routes-in-react-router-v6
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: homePrefix,
     element: <HomeLayout />,
     children: [
       {
@@ -90,7 +96,7 @@ const router = createBrowserRouter([
 
       //user
       {
-        path: '/user',
+        path: userPrefix,
         async lazy() {
           const { default: DashboardLayout } = await import(
             '../components/layouts/DashboardLayout'
@@ -146,18 +152,14 @@ const router = createBrowserRouter([
           {
             path: 'invoice',
             async lazy() {
-              let InvoicesPage = await import(
-                './routes/invoice/InvoicesPage'
-              );
+              let InvoicesPage = await import('./routes/invoice/InvoicesPage');
               return { Component: InvoicesPage.default };
             },
           },
           {
             path: 'invoice/:invoiceId',
             async lazy() {
-              let InvoicePage = await import(
-                './routes/invoice/InvoicePage'
-              );
+              let InvoicePage = await import('./routes/invoice/InvoicePage');
               return { Component: InvoicePage.default };
             },
           },
@@ -179,7 +181,7 @@ const router = createBrowserRouter([
       //payment
 
       {
-        path: '/pay',
+        path: paymentPrefix,
         async lazy() {
           const { default: SimpleLayout } = await import(
             '../components/layouts/SimpleLayout'
@@ -218,7 +220,7 @@ const router = createBrowserRouter([
       },
       //doctor
       {
-        path: '/doctor',
+        path: doctorPrefix,
         children: [
           {
             path: ':doctorId',

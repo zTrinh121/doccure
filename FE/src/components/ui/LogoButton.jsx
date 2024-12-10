@@ -1,7 +1,7 @@
 import { Image } from 'antd';
 import doccure from '../../assets/doccure.png';
-import { Link } from "react-router-dom";
-
+import { Link } from 'react-router-dom';
+import { memo } from 'react';
 
 const LogoButton = () => {
   return (
@@ -18,4 +18,4 @@ const LogoButton = () => {
   );
 };
 
-export default LogoButton;
+export default memo(LogoButton);

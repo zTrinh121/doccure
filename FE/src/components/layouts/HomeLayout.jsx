@@ -3,7 +3,6 @@ import {
   Button,
   Col,
   Layout,
-  Menu,
   Row,
   Image,
   Divider,
@@ -20,7 +19,6 @@ import {
   UserAddOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
@@ -29,6 +27,9 @@ import { useAccessToken } from '../../stores/authStore';
 import { useProfileQuery } from '../../hooks/useProfileQuery';
 import BasicErrorBoundary from './../errors/BasicErrorBoundary';
 import { MainErrorFallback } from './../errors/MainErrorFallback';
+import LogoButton from '../ui/LogoButton';
+import NavMenu from '../ui/NavMenu';
+import { memo } from 'react';
 
 const HomeLayout = () => {
   const locationArr = useLocation().pathname.split('/');
@@ -51,9 +52,6 @@ const HomeLayout = () => {
     username = getUsernameFromToken(accessToken);
   }
 
-  const onClick = ({ key }) => {
-    navigate(`${key}`);
-  };
 
   const handleLogout = async () => {
     try {
@@ -78,34 +76,10 @@ const HomeLayout = () => {
       >
         <Row align="center" className="w-[100vw]">
           <Col span={4}>
-            <Link to="/">
-              <Image
-                src={doccure}
-                alt="Logo"
-                style={{
-                  height: '35px',
-                }}
-                preview={false}
-              />
-            </Link>
+            <LogoButton />
           </Col>
           <Col span={14}>
-            <Menu
-              onClick={onClick}
-              style={{
-                backgroundColor: '#E2E8F0',
-                flex: 1,
-                minWidth: 0,
-              }}
-              mode="horizontal"
-              defaultSelectedKeys={['']}
-              selectedKeys={[location]}
-              items={[
-                { key: '', label: 'Home' },
-                { key: 'search', label: 'Search' },
-                { key: 'user', label: 'User' },
-              ]}
-            />
+            <NavMenu />
           </Col>
 
           <Divider type="vertical" />
@@ -213,4 +187,4 @@ const HomeLayout = () => {
   );
 };
 
-export default HomeLayout;
+export default memo(HomeLayout);

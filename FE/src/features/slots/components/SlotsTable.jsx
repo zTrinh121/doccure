@@ -3,7 +3,7 @@ import { Carousel, Card, Col, Button, Typography } from 'antd';
 const { Title } = Typography;
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import { useDoctorSlotsQuery } from '../../../hooks/useDoctorSlotsQuery';
 import { getKebabDateString } from './../../../utils/dateUtils';
 import { dayNames } from '../../../utils/constants';
@@ -110,13 +110,13 @@ const SlotsTable = ({
   );
 };
 
-export default SlotsTable;
+export default memo(SlotsTable);
 
 SlotsTable.propTypes = {
   startDate: PropTypes.string,
   endDate: PropTypes.string,
   doctorId: PropTypes.string,
-  select: PropTypes.string,
+  select: PropTypes.number,
   setSelect: PropTypes.func,
   dateArr: PropTypes.array,
 };

@@ -14,6 +14,7 @@ import { useDoctorRatings } from '../../../hooks/useDoctorRatings';
 import { getStars } from '../../../utils/utils';
 import { getActions } from '../../../stores/scrollStore';
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 
 const DoctorPanel = ({
   doctorId,
@@ -117,7 +118,7 @@ const DoctorPanel = ({
   );
 };
 
-export default DoctorPanel;
+export default memo(DoctorPanel);
 
 DoctorPanel.propTypes = {
   doctorId: PropTypes.string,

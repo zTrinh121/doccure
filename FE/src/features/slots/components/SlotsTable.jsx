@@ -1,6 +1,6 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Carousel, Card, Col, Typography } from 'antd';
-const { Title } = Typography;
+const { Text, Title } = Typography;
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 
 import { useRef, memo } from 'react';
@@ -72,9 +72,19 @@ const SlotsTable = ({
               >
                 {dateArr.map((date) => (
                   <Col className="text-center" key={date.toString()}>
-                    <Title level={5}>{dayNames[date.getDay()]}</Title>
+                    <div className="hidden md:block">
+                      <Title level={5}>{dayNames[date.getDay()]}</Title>
+                      {date.toLocaleDateString('en-GB')}
+                    </div>
+                    <div className="block md:hidden">
+                      <Text strong>{dayNames[date.getDay()]}</Text>
+                      <br />
+                      {date.toLocaleDateString('en-AU', {
+                        day: '2-digit',
+                        month: '2-digit',
+                      })}
+                    </div>
 
-                    {date.toLocaleDateString('en-GB')}
                     {(tempMap.get(getKebabDateString(date)) || []).map(
                       (slot) => (
                         <SlotButton

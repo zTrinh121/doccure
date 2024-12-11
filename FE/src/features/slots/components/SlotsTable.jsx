@@ -9,6 +9,7 @@ import { getKebabDateString } from './../../../utils/dateUtils';
 import { dayNames } from '../../../utils/constants';
 import PropTypes from 'prop-types';
 import SlotButton from './SlotButton';
+import SlotCol from './SlotCol';
 
 const SlotsTable = ({
   startDate,
@@ -71,31 +72,14 @@ const SlotsTable = ({
                 dots={false}
               >
                 {dateArr.map((date) => (
-                  <Col className="text-center" key={date.toString()}>
-                    <div className="hidden md:block">
-                      <Title level={5}>{dayNames[date.getDay()]}</Title>
-                      {date.toLocaleDateString('en-GB')}
-                    </div>
-                    <div className="block md:hidden">
-                      <Text strong>{dayNames[date.getDay()]}</Text>
-                      <br />
-                      {date.toLocaleDateString('en-AU', {
-                        day: '2-digit',
-                        month: '2-digit',
-                      })}
-                    </div>
-
-                    {(tempMap.get(getKebabDateString(date)) || []).map(
-                      (slot) => (
-                        <SlotButton
-                          key={slot.slot_id}
-                          slot={slot}
-                          isSelected={select === slot.slot_id}
-                          setSelect={setSelect}
-                        />
-                      ),
-                    )}
-                  </Col>
+                  <SlotCol
+                    key={date.toString()}
+                    date={date}
+                    dayNames={dayNames}
+                    tempMap={tempMap}
+                    select={select}
+                    setSelect={setSelect}
+                  />
                 ))}
               </Carousel>
             </div>

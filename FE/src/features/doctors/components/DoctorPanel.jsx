@@ -64,7 +64,7 @@ const DoctorPanel = ({
             <EnvironmentOutlined className="mr-1" />
             <Typography.Text>{responseDataDoctor.hospital}</Typography.Text>
           </div>
-          <div className="mt-2 flex items-center">
+          <div className="mt-2 flex md:items-center flex-col md:flex-row ">
             <Rate
               allowHalf
               disabled
@@ -74,6 +74,7 @@ const DoctorPanel = ({
               <Typography.Text className="ml-2">
                 {responseDataRating?.avg_rating?.toFixed(2)}
               </Typography.Text>
+
               <Link underline onClick={onClickReview}>{`${
                 responseDataRating?.count_ratings || '0'
               } review${
@@ -97,10 +98,10 @@ const DoctorPanel = ({
           </div>
           <div className="flex flex-col md:flex-row md:items-center space-x-2">
             <Typography.Text>
-              Price: ${responseDataDoctor.min_price} - $
+              ${responseDataDoctor.min_price} - $
               {responseDataDoctor.max_price} per session
             </Typography.Text>
-            <Col className="flex flex-row space-x-1">
+            <Col className="flex flex-row space-x-1 self-end">
               {viewProfile && (
                 <Button className="px-1" onClick={onClickProfile}>
                   View profile

@@ -8,6 +8,7 @@ import useDebounce from '../../../hooks/useDebounce';
 import { Spin } from 'antd';
 import { useSpecializationsQuery } from '../../../hooks/useSpecializationsQuery';
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
+import MemoizedRadio from '../../../components/ui/MemoizedRadio';
 
 const SearchResultPage = () => {
   const query = new URLSearchParams(location.search).get('query');
@@ -68,12 +69,13 @@ const SearchResultPage = () => {
                     All
                   </Radio>
                   {specializationQuery.data.data.data.map((spec) => (
-                    <Radio
-                      key={spec.specialization_id}
-                      value={spec.specialization_id}
-                    >
-                      {spec.specialization_name}
-                    </Radio>
+                    // <Radio
+                    //   key={spec.specialization_id}
+                    //   value={spec.specialization_id}
+                    // >
+                    //   {spec.specialization_name}
+                    // </Radio>
+                    <MemoizedRadio spec={spec} key={spec.specialization_id} />
                   ))}
                 </Radio.Group>
               </div>

@@ -30,10 +30,10 @@ const ChangePasswordPage = () => {
   return (
     <>
       <div>
-        <Flex justify="center" align="center">
+        <Flex justify="center" align="center" className="md:w-full">
           <Row className="w-full">
             <Col span={1}></Col>
-            <Col span={15}>
+            <Col span={22}>
               <Title level={3}>Change password</Title>
               <Divider />
               <Form
@@ -125,7 +125,7 @@ const ChangePasswordPage = () => {
               </Form>
             </Col>
 
-            <Col span={8}></Col>
+            <Col span={1}></Col>
           </Row>
         </Flex>
       </div>

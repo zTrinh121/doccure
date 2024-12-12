@@ -1,14 +1,11 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Carousel, Card, Col, Typography } from 'antd';
-const { Text, Title } = Typography;
+import { Carousel, Card } from 'antd';
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 
 import { useRef, memo } from 'react';
 import { useDoctorSlotsQuery } from '../../../hooks/useDoctorSlotsQuery';
-import { getKebabDateString } from './../../../utils/dateUtils';
 import { dayNames } from '../../../utils/constants';
 import PropTypes from 'prop-types';
-import SlotButton from './SlotButton';
 import SlotCol from './SlotCol';
 
 const SlotsTable = ({
@@ -25,18 +22,6 @@ const SlotsTable = ({
     endDate: endDate,
     doctorId: doctorId,
   });
-
-  // useEffect(() => {
-  //   console.log(isError);
-  //   if (isError) {
-  //     notification.error({
-  //       message: 'Error',
-  //       style: {
-  //         width: 300,
-  //       },
-  //     });
-  //   }
-  // }, [isError]);
 
   if (isPending) {
     return <IsPendingSpin />;

@@ -8,6 +8,7 @@ import background from '../../assets/background.jpg';
 import { useProfileQuery } from '../../hooks/useProfileQuery';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import router from './../../app/router';
 
 const DashboardLayout = () => {
   //todo:memo thisthing:)
@@ -46,7 +47,8 @@ const DashboardLayout = () => {
               block
               type={location.pathname === '/user/profile' ? 'primary' : 'link'}
               onClick={() => {
-                navigate('/user/profile');
+                // navigate('/user/profile');
+                router.navigate('/user/profile');
               }}
             >
               Change profile

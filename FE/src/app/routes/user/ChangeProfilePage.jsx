@@ -70,7 +70,7 @@ const ChangeProfilePage = () => {
     <Flex justify="center" align="center">
       <Row className="w-full">
         <Col span={1}></Col>
-        <Col span={15}>
+        <Col span={22}>
           <Title level={3}>Change profile</Title>
           <Divider />
           <div className="flex flex-col justify-between gap-4">
@@ -162,7 +162,7 @@ const ChangeProfilePage = () => {
           </div>
         </Col>
 
-        <Col span={8}></Col>
+        <Col span={1}></Col>
       </Row>
     </Flex>
   );

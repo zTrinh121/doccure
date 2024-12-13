@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getAppointments } from 'src/lib/appointment';
+import { queryKeysConstants } from '../utils/queryKeysConstants';
 
 export const useAppointmentsInfiniteQuery = ({
   statusSelect,
@@ -15,7 +16,11 @@ export const useAppointmentsInfiniteQuery = ({
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ['appointments', statusSelect, '_', '_', startDate, endDate],
+    queryKey: queryKeysConstants.appointmentsInfinite({
+      statusSelect,
+      startDate,
+      endDate,
+    }),
     queryFn: async ({ pageParam }) => {
       const response = await getAppointments({
         status: statusSelect,

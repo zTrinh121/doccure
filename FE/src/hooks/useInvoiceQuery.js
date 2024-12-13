@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { getInvoiceById } from 'src/lib/invoice';
+import { queryKeysConstants } from '../utils/queryKeysConstants';
 
 export const useInvoiceQuery = (id) => {
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ['invoice', id],
+    queryKey: queryKeysConstants.invoice(id),
     queryFn: async () => {
       return (await getInvoiceById(id)).data.data;
     },

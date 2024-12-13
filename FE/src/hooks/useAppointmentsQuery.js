@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getAppointments } from 'src/lib/appointment';
+import { queryKeysConstants } from '../utils/queryKeysConstants';
 
 // status, offset, limit
 export const useAppointmentsQuery = ({
@@ -10,7 +11,13 @@ export const useAppointmentsQuery = ({
   endDate = '',
 }) => {
   const { isPending, isError, data, error } = useQuery({
-    queryKey: ['appointments', status, offset, limit, startDate, endDate],
+    queryKey: queryKeysConstants.appointmentsPaginated({
+      status,
+      offset,
+      limit,
+      startDate,
+      endDate,
+    }),
     queryFn: async () => {
       const response = await getAppointments({
         status,

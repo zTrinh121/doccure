@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { searchDoctors } from 'src/lib/doctor';
+import { queryKeysConstants } from '../utils/queryKeysConstants';
 
 export const useSearchQuery = ({ input = '', spec = '' }) => {
   const { data, isSuccess, isPending, error } = useQuery({
-    queryKey: ['search', input, spec],
+    queryKey: queryKeysConstants.search({ input, spec }),
     queryFn: async () => {
       return searchDoctors({ input, spec });
     },

@@ -6,7 +6,8 @@ const { RangePicker } = DatePicker;
 
 import { useAppointmentsInfiniteQuery } from './../../../hooks/useAppointmentsInfiniteQuery';
 import { getTimeString } from '../../../utils/timeUtils';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
+import { useIntersectionCallback } from '../../../hooks/useIntersectionCallback';
 
 const AppointmentFeed = () => {
   const [statusSelect, setStatusSelect] = useState('');
@@ -24,25 +25,30 @@ const AppointmentFeed = () => {
   } = useAppointmentsInfiniteQuery({ statusSelect, startDate, endDate });
 
   //intersection observer
-  const containerRef = useRef(null);
-  const intersectCallback = (entries) => {
-    const [entry] = entries;
-    if (hasNextPage && !isFetchingNextPage && entry.isIntersecting) {
-      fetchNextPage();
-    }
-  };
-  const options = {
-    root: null,
-    rootMargin: '0px',
-  };
+  const containerRef = useIntersectionCallback({
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  });
+  // const containerRef = useRef(null);
+  // const intersectCallback = (entries) => {
+  //   const [entry] = entries;
+  //   if (hasNextPage && !isFetchingNextPage && entry.isIntersecting) {
+  //     fetchNextPage();
+  //   }
+  // };
+  // const options = {
+  //   root: null,
+  //   rootMargin: '0px',
+  // };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(intersectCallback, options);
-    if (containerRef.current) observer.observe(containerRef.current);
-    return () => {
-      if (containerRef.current) observer.unobserve(containerRef.current);
-    };
-  }, [status]);
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(intersectCallback, options);
+  //   if (containerRef.current) observer.observe(containerRef.current);
+  //   return () => {
+  //     if (containerRef.current) observer.unobserve(containerRef.current);
+  //   };
+  // }, [status]);
 
   const onClick = useCallback(
     (value) => {

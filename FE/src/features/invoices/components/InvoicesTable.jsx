@@ -18,7 +18,7 @@ const InvoicesTable = () => {
     total: 100,
   });
 
-  const { data, error, isFetching } = useInvoicesQuery({
+  const { data } = useInvoicesQuery({
     offset: (pagination.page - 1) * pagination.pageSize,
     limit: pagination.pageSize,
   });

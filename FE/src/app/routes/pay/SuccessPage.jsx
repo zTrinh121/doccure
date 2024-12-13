@@ -4,10 +4,9 @@ const { Text } = Typography;
 import { useAppointmentQuery } from '../../../hooks/useAppointmentQuery';
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { getPaymentSuccessful } from '../../../lib/payment';
-import { useState } from 'react';
+
 import CenterLayout from '../../../components/layouts/CenterLayout';
+import { useGetPaymentSuccessful } from '../../../hooks/useGetPaymentSuccessful';
 
 const SuccessPage = () => {
   const navigate = useNavigate();
@@ -20,36 +19,45 @@ const SuccessPage = () => {
   const userId = urlParams.get('user_id');
   const token = urlParams.get('token');
   const payerId = urlParams.get('PayerID');
-  const [loading, setLoading] = useState('false');
 
   // appointmentId, invoiceId, slotId, userId, paymentId, payerId
-  useEffect(() => {
-    const getPayment = async () => {
-      setLoading(true);
-      //todo: fix race condition:)
-      try {
-        return await getPaymentSuccessful({
-          appointmentId,
-          invoiceId,
-          slotId,
-          userId,
-          paymentId,
-          token,
-          payerId,
-        });
-      } catch (error) {
-        console.log(error);
-        navigate('/pay/error');
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    console.log(getPayment());
-  }, []);
+  const loading = useGetPaymentSuccessful({
+    appointmentId,
+    invoiceId,
+    slotId,
+    userId,
+    paymentId,
+    token,
+    payerId,
+  });
+  // const [loading, setLoading] = useState('false');
+  // useEffect(() => {
+  //   const getPayment = async () => {
+  //     setLoading(true);
+  //     //todo: fix race condition:)
+  //     try {
+  //       return await getPaymentSuccessful({
+  //         appointmentId,
+  //         invoiceId,
+  //         slotId,
+  //         userId,
+  //         paymentId,
+  //         token,
+  //         payerId,
+  //       });
+  //     } catch (error) {
+  //       console.log(error);
+  //       navigate('/pay/error');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-  const { isPending, isError, data, error } =
-    useAppointmentQuery(appointmentId);
+  //   console.log(getPayment());
+  // }, []);
+
+  const { isPending, data } = useAppointmentQuery(appointmentId);
 
   if (isPending || loading) {
     return <IsPendingSpin></IsPendingSpin>;

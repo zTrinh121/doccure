@@ -40,6 +40,7 @@ const AppointmentList = () => {
       }));
     }
   }, [data?.total]);
+
   const responseData = data?.data || [];
 
   const onChangePagination = (page, pageSize) => {

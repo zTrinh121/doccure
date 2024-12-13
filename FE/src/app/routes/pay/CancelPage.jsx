@@ -4,9 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import IsPendingSpin from '../../../components/ui/IsPendingSpin';
 import CenterLayout from '../../../components/layouts/CenterLayout';
 
-import { getPaymentCancel } from '../../../lib/payment';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useGetPaymentCancel } from '../../../hooks/useGetPaymentCancel';
 
 const CancelPage = () => {
   const navigate = useNavigate();
@@ -15,29 +13,33 @@ const CancelPage = () => {
   const appointmentId = urlParams.get('appointment_id');
   const invoiceId = urlParams.get('invoice_id');
 
-  const [loading, setLoading] = useState('false');
-
   // appointmentId, invoiceId, slotId, userId, paymentId, payerId
 
-  useEffect(() => {
-    const getPayment = async () => {
-      setLoading(true);
-      //todo: fix race condition:)
-      try {
-        return await getPaymentCancel({
-          appointmentId,
-          invoiceId,
-        });
-      } catch (error) {
-        console.log(error);
-        navigate('/pay/error');
-      } finally {
-        setLoading(false);
-      }
-    };
+  // const [loading, setLoading] = useState('false');
+  // useEffect(() => {
+  //   const getPayment = async () => {
+  //     setLoading(true);
+  //     //todo: fix race condition:)
+  //     try {
+  //       return await getPaymentCancel({
+  //         appointmentId,
+  //         invoiceId,
+  //       });
+  //     } catch (error) {
+  //       console.log(error);
+  //       navigate('/pay/error');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    console.log(getPayment());
-  }, []);
+  //  getPayment();
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+  const loading = useGetPaymentCancel({
+    appointmentId,
+    invoiceId,
+  });
 
   if (loading) {
     return <IsPendingSpin />;

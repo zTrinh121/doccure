@@ -1,26 +1,19 @@
 import { Button, Card, Form, Input, Space } from 'antd';
 const { Meta } = Card;
-
-import { useNavigate } from 'react-router-dom';
-import { verifyOtp } from '../../../lib/auth';
-import {
-  getActions,
-  useResetEmail,
-  useResetStep,
-} from '../../../stores/authStore';
 import { Spin } from 'antd';
-import { useState } from 'react';
-import { useEffect } from 'react';
 import { Flex } from 'antd';
+
+import { getActions, useResetEmail } from '../../../stores/authStore';
+import { verifyOtp } from '../../../lib/auth';
+import { useState } from 'react';
 import { notification } from '../../../utils/antDesignGlobals';
+import { useNavigateResetPassword } from '../../../hooks/useNavigateResetPassword';
 
 const OtpCard = () => {
   const [loading, setLoading] = useState(false);
   const { setResetStep } = getActions();
   const resetEmail = useResetEmail();
   const [form] = Form.useForm();
-  const navigate = useNavigate();
-  const resetStep = useResetStep();
 
   const onChange = async () => {
     form.submit();
@@ -48,11 +41,12 @@ const OtpCard = () => {
     }
   };
 
-  useEffect(() => {
-    if (resetStep === 'password') {
-      navigate('/resetPassword');
-    }
-  }, [resetStep, navigate]);
+  // useEffect(() => {
+  //   if (resetStep === 'password') {
+  //     navigate('/resetPassword');
+  //   }
+  // }, [resetStep, navigate]);
+  useNavigateResetPassword();
 
   return (
     <Card>

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { useAccessToken } from '../stores/authStore';
-import { fetchProfile } from '../lib/user';
+import { useAccessToken } from 'src/stores/authStore';
+import { fetchProfile } from 'src/lib/user';
 
 export const useProfileQuery = () => {
   const accessToken = useAccessToken();

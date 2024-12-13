@@ -1,16 +1,16 @@
 import { Col, Button, Row, Flex } from 'antd';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
-import DoctorPanel from '../../../features/doctors/components/DoctorPanel';
-import SlotsTable from '../../../features/slots/components/SlotsTable';
-import SpecializationPicker from '../../../features/doctors/components/SpecializationPicker';
-import SlotDateRangePicker from '../../../features/doctors/components/SlotDateRangePicker';
+import IsPendingSpin from 'src/components/ui/IsPendingSpin';
+import DoctorPanel from 'src/features/doctors/components/DoctorPanel';
+import SlotsTable from 'src/features/slots/components/SlotsTable';
+import SpecializationPicker from 'src/features/doctors/components/SpecializationPicker';
+import SlotDateRangePicker from 'src/features/doctors/components/SlotDateRangePicker';
 
 import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
-import { useDoctorSlotsQuery } from '../../../hooks/useDoctorSlotsQuery';
+import { useDoctorSlotsQuery } from 'src/hooks/useDoctorSlotsQuery';
 import { useCallback, useMemo, useState } from 'react';
-import { postPayment } from '../../../lib/payment';
-import { getDateArr, getKebabDateString } from '../../../utils/dateUtils';
+import { postPayment } from 'src/lib/payment';
+import { getDateArr, getKebabDateString } from 'src/utils/dateUtils';
 
 const DoctorBookingPage = () => {
   const { doctorId } = useParams(); //for getting doctor id from url param

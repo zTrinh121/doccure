@@ -1,11 +1,11 @@
 import { Row, Col, Button, Card } from 'antd';
-import DoctorPanel from '../../../features/doctors/components/DoctorPanel';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
+import DoctorPanel from 'src/features/doctors/components/DoctorPanel';
+import IsPendingSpin from 'src/components/ui/IsPendingSpin';
 
 import { useParams } from 'react-router-dom';
-import { useSlotQuery } from '../../../hooks/useSlotQuery';
+import { useSlotQuery } from 'src/hooks/useSlotQuery';
 import { useState } from 'react';
-import { useDoctorQuery } from '../../../hooks/useDoctorQuery';
+import { useDoctorQuery } from 'src/hooks/useDoctorQuery';
 
 const SlotPage = () => {
   const { slotId } = useParams(); //for getting doctor id from url param
@@ -14,7 +14,7 @@ const SlotPage = () => {
 
   const slotQuery = useSlotQuery(slotId);
   console.log(slotQuery);
-  const responseData = slotQuery.data.data.data||{};
+  const responseData = slotQuery.data.data.data || {};
 
   const doctorQuery = useDoctorQuery(
     responseData.doctor_id,

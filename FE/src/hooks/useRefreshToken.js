@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { getActions } from '../stores/authStore';
-import { getNewAccessToken } from '../lib/apiClient';
+import { getActions } from 'src/stores/authStore';
+import { getNewAccessToken } from 'src/lib/apiClient';
 
 export const useRefreshToken = () => {
   const { setIsLoading } = getActions();

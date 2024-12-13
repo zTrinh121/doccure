@@ -1,6 +1,6 @@
 //confusing name, this is meant to be where you set the new password after completing otp authentication for forget password
 import { Flex, Row, Col } from 'antd';
-import ResetPasswordCard from '../../../features/auth/components/ResetPasswordCard';
+import ResetPasswordCard from 'src/features/auth/components/ResetPasswordCard';
 
 const ResetPasswordPage = () => {
   return (

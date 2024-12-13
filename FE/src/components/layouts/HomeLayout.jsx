@@ -15,17 +15,17 @@ import {
   UserAddOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import LogoButton from '../ui/LogoButton';
-import NavMenu from '../ui/NavMenu';
-import HomeFooter from '../ui/HomeFooter';
-import BasicErrorBoundary from './../errors/BasicErrorBoundary';
-import { MainErrorFallback } from './../errors/MainErrorFallback';
+import LogoButton from 'src/components/ui/LogoButton';
+import NavMenu from 'src/components/ui/NavMenu';
+import HomeFooter from 'src/components/ui/HomeFooter';
+import BasicErrorBoundary from 'src/components/errors/BasicErrorBoundary';
+import { MainErrorFallback } from 'src/components/errors/MainErrorFallback';
 import { Outlet } from 'react-router-dom';
 
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getUsernameFromToken, logout } from '../../lib/auth';
-import { useAccessToken } from '../../stores/authStore';
-import { useProfileQuery } from '../../hooks/useProfileQuery';
+import { getUsernameFromToken, logout } from 'src/lib/auth';
+import { useAccessToken } from 'src/stores/authStore';
+import { useProfileQuery } from 'src/hooks/useProfileQuery';
 import { memo } from 'react';
 
 const HomeLayout = () => {
@@ -34,7 +34,7 @@ const HomeLayout = () => {
   const location = locationArr[1];
 
   const accessToken = useAccessToken();
-  const { data, isSuccess, isPending, error } = useProfileQuery();
+  const { data, isPending } = useProfileQuery();
   const navigate = useNavigate();
 
   if (isPending) {

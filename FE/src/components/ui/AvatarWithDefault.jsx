@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 

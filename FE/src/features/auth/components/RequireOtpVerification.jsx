@@ -1,5 +1,4 @@
 import { Navigate } from 'react-router-dom';
-import { Outlet } from 'react-router-dom';
 import { useResetStep } from '../../../stores/authStore';
 import PropTypes from 'prop-types';
 

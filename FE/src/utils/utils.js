@@ -8,9 +8,8 @@ export const downloadBlob = (obj, name = 'download') => {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
-
-}
+};
 
 export const getStars = (rating = 0) => {
-  return Math.floor(rating / 0.5) * 0.5
-}
+  return Math.floor(rating / 0.5) * 0.5;
+};

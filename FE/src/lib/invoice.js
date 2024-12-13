@@ -1,6 +1,6 @@
-import { authAxiosInstance } from './apiClient';
+import { authAxiosInstance } from 'src/lib/apiClient';
 
-import { invoicePrefix } from '../utils/apiConstants';
+import { invoicePrefix } from 'src/utils/apiConstants';
 
 export const getInvoiceById = async (invoiceId) => {
   return authAxiosInstance.get(`${invoicePrefix}/${invoiceId}`);

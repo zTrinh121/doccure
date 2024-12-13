@@ -1,12 +1,8 @@
-import {
-  ClockCircleOutlined,
-  DollarOutlined,
-  EnvironmentOutlined,
-} from '@ant-design/icons';
+import { EnvironmentOutlined } from '@ant-design/icons';
 import { Card, Rate } from 'antd';
 const { Meta } = Card;
 
-import { getStars } from '../../../utils/utils';
+import { getStars } from 'src/utils/utils';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 

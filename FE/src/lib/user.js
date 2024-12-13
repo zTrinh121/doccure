@@ -1,7 +1,7 @@
-import { authAxiosInstance, getNewAccessToken } from './apiClient';
-import { getUsernameFromToken } from './auth';
-import { getAccessToken } from '../stores/authStore';
-import { userPrefix } from '../utils/apiConstants';
+import { authAxiosInstance, getNewAccessToken } from 'src/lib/apiClient';
+import { getAccessToken } from 'src/stores/authStore';
+import { userPrefix } from 'src/utils/apiConstants';
+import { getUsernameFromToken } from 'src/lib/auth';
 
 export const changeAvatar = async ({ userId, file, token }) => {
   const formData = new FormData();
@@ -38,7 +38,7 @@ export const changeProfile = async ({ userId, values }) => {
   return response;
 };
 
-export const fetchProfile = async (token) => {
+export const fetchProfile = async () => {
   const username = getUsernameFromToken(getAccessToken());
   return authAxiosInstance.get(`${userPrefix}?username=${username}`);
 };

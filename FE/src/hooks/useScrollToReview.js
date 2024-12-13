@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { getActions, useScrollTarget } from '../stores/scrollStore';
+import { getActions, useScrollTarget } from 'src/stores/scrollStore';
 
 export const useScrollToReview = () => {
   const scrollTarget = useScrollTarget();

@@ -1,13 +1,13 @@
 import { Table, Button, Modal, Card, Divider } from 'antd';
 const { Column } = Table;
 import { PrinterOutlined } from '@ant-design/icons';
-import doccure from '../../../assets/doccure.png';
+import doccure from 'src/assets/doccure.png';
 
-import { useInvoicesQuery } from '../../../hooks/useInvoicesQuery';
-import { getDownloadInvoice } from '../../../lib/invoice';
+import { useInvoicesQuery } from 'src/hooks/useInvoicesQuery';
+import { getDownloadInvoice } from 'src/lib/invoice';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { downloadBlob } from './../../../utils/utils';
+import { downloadBlob } from 'src/utils/utils';
 
 const InvoicesTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

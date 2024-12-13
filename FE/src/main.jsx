@@ -1,14 +1,13 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './app';
-import './index.css';
+import App from 'src/app';
+import 'src/index.css';
 import {
   QueryCache,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { queryConfig } from './utils/reactQuery';
-import { notification } from './utils/antDesignGlobals';
+import { queryConfig } from 'src/utils/reactQuery';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,7 +15,6 @@ const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     // Turn on if you want every errors to be popper to notification
-
     // onError: (error) => {
     //   notification.error({
     //     message: 'Error',

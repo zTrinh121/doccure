@@ -1,7 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postInsertRating } from '../lib/rating';
+import { postInsertRating } from 'src/lib/rating';
 
-export const useRatingMutation = ({ openNotificationError,setIsModalOpen,queryKey }) => {
+export const useRatingMutation = ({
+  openNotificationError,
+  setIsModalOpen,
+  queryKey,
+}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -15,12 +19,12 @@ export const useRatingMutation = ({ openNotificationError,setIsModalOpen,queryKe
     // onMutate: (variables) => {
 
     // },
-    onError: (error, variables, context) => {
+    onError: (error) => {
       // An error happened!
       // console.log(`rolling back optimistic update with id ${context.id}`);
       openNotificationError(error.message);
     },
-    onSuccess: (data, variables, context) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKey });
     },
     onSettled: () => {

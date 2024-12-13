@@ -15,16 +15,16 @@ import {
 } from 'antd';
 const { Title } = Typography;
 
-import { useProfileQuery } from '../../../hooks/useProfileQuery';
-import { changeAvatar } from '../../../lib/user';
-import { useAccessToken } from '../../../stores/authStore';
+import { useProfileQuery } from 'src/hooks/useProfileQuery';
+import { changeAvatar } from 'src/lib/user';
+import { useAccessToken } from 'src/stores/authStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useProfileMutation } from '../../../hooks/useProfileMutation';
+import { useProfileMutation } from 'src/hooks/useProfileMutation';
 
 const ChangeProfilePage = () => {
   const accessToken = useAccessToken();
   const queryClient = useQueryClient();
-  const { data, isSuccess, isPending, error } = useProfileQuery();
+  const { data, isPending } = useProfileQuery();
   let profileData = data.data.data;
 
   const avatarMutation = useMutation({

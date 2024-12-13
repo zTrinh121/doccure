@@ -1,5 +1,3 @@
-
-
 const CircleCard = () => {
   return (
     <div>
@@ -20,7 +18,6 @@ const CircleCard = () => {
         <img
           style={{
             margin: ' auto',
-            
           }}
           src="https://doccure.dreamstechnologies.com/react/template/assets/img/specialities/specialities-01.png"
         />

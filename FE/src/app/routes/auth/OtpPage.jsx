@@ -1,5 +1,5 @@
 import { Flex, Row, Col } from 'antd';
-import OtpCard from '../../../features/auth/components/OtpCard';
+import OtpCard from 'src/features/auth/components/OtpCard';
 
 const OtpPage = () => {
   return (

@@ -1,7 +1,7 @@
-export const homePrefix = "/"
+export const homePrefix = '/';
 
-export const userPrefix = "/user"
+export const userPrefix = '/user';
 
-export const paymentPrefix = "/pay"
+export const paymentPrefix = '/pay';
 
-export const doctorPrefix = "/doctor"
+export const doctorPrefix = '/doctor';

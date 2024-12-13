@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSlot } from '../lib/slot';
+import { getSlot } from 'src/lib/slot';
 
 export const useSlotQuery = (id) => {
   //todo: Investigate how this is somehow disabled

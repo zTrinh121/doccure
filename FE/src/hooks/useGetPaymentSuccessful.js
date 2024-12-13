@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getPaymentSuccessful } from '../lib/payment';
+import { getPaymentSuccessful } from 'src/lib/payment';
 
 export const useGetPaymentSuccessful = ({
   appointmentId,
@@ -37,7 +37,7 @@ export const useGetPaymentSuccessful = ({
     };
 
     getPayment();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return loading;
 };

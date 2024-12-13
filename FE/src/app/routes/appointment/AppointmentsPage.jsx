@@ -1,11 +1,11 @@
 import { Typography, Divider, Switch } from 'antd';
 const { Title } = Typography;
-import ContentLayout from '../../../components/layouts/ContentLayout';
-import AppointmentList from '../../../features/appointment/components/AppointmentList';
+import ContentLayout from 'src/components/layouts/ContentLayout';
+import AppointmentList from 'src/features/appointment/components/AppointmentList';
 
 import { memo } from 'react';
 import { useState } from 'react';
-import AppointmentFeed from '../../../features/appointment/components/AppointmentFeed';
+import AppointmentFeed from 'src/features/appointment/components/AppointmentFeed';
 
 const AppointmentsPage = () => {
   const [infinite, setInfinite] = useState(false);

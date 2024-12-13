@@ -1,15 +1,14 @@
 import { useParams } from 'react-router-dom';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
-import { useAppointmentQuery } from '../../../hooks/useAppointmentQuery';
-import ContentLayout from '../../../components/layouts/ContentLayout';
-import DoctorPanel from '../../../features/doctors/components/DoctorPanel';
-import AppointmentInfoPanel from '../../../features/appointment/components/AppointmentInfoPanel';
+import IsPendingSpin from 'src/components/ui/IsPendingSpin';
+import { useAppointmentQuery } from 'src/hooks/useAppointmentQuery';
+import ContentLayout from 'src/components/layouts/ContentLayout';
+import DoctorPanel from 'src/features/doctors/components/DoctorPanel';
+import AppointmentInfoPanel from 'src/features/appointment/components/AppointmentInfoPanel';
 
 const AppointmentPage = () => {
   const { appointmentId } = useParams();
 
-  const { isPending, isError, data, error } =
-    useAppointmentQuery(appointmentId);
+  const { isPending, data } = useAppointmentQuery(appointmentId);
 
   if (isPending) {
     //todo:replace with skeleton

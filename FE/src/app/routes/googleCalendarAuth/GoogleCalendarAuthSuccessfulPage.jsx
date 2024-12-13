@@ -1,4 +1,4 @@
-import { getCallback } from '../../../lib/googleCalendar';
+import { getCallback } from 'src/lib/googleCalendar';
 
 const GoogleCalendarAuthSuccessfulPage = () => {
   const params = new URLSearchParams(location.search);

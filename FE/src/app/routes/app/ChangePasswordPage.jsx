@@ -1,10 +1,10 @@
 import { Form, Input, Button, Flex, Row, Col, Typography, Divider } from 'antd';
 const { Title } = Typography;
 
-import { useAccessToken } from '../../../stores/authStore';
-import { changePassword, logout } from '../../../lib/auth';
+import { useAccessToken } from 'src/stores/authStore';
+import { changePassword, logout } from 'src/lib/auth';
 import { useState } from 'react';
-import { addNotificationSuccess } from '../../../utils/antDesignGlobals';
+import { addNotificationSuccess } from 'src/utils/antDesignGlobals';
 
 const ChangePasswordPage = () => {
   const accessToken = useAccessToken();

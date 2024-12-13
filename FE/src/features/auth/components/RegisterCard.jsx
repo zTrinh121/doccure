@@ -1,9 +1,9 @@
 import { Button, Card, Form, Input, Space, Radio } from 'antd';
 const { Meta } = Card;
 
-import { registerWithEmailAndPassword } from '../../../lib/auth';
+import { registerWithEmailAndPassword } from 'src/lib/auth';
 import { useNavigate } from 'react-router-dom';
-import { notification } from '../../../utils/antDesignGlobals';
+import { notification } from 'src/utils/antDesignGlobals';
 
 const RegisterCard = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const RegisterCard = () => {
 
   const onFinish = async (values) => {
     try {
-      const response = await registerWithEmailAndPassword(values);
+      await registerWithEmailAndPassword(values);
       openSuccessNotification('Succesful');
       navigate('/login');
     } catch (error) {

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useResetStep } from '../stores/authStore';
+import { useResetStep } from 'src/stores/authStore';
 import { useNavigate } from 'react-router-dom';
 
 export const useNavigateOtp = () => {

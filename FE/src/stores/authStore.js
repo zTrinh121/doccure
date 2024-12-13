@@ -13,7 +13,7 @@ export const decodeAccessToken = (accessToken) => {
 const authStore = createStore()(
   devtools(
     loggerMiddleware(
-      (set, get) => ({
+      (set) => ({
         accessToken: undefined,
         accessTokenData: undefined,
         isLoading: true,

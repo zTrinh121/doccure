@@ -1,11 +1,11 @@
 import { Card, Rate } from 'antd';
 const { Meta } = Card;
-import { useDoctorRatings } from '../../../hooks/useDoctorRatings';
+import { useDoctorRatings } from 'src/hooks/useDoctorRatings';
 import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 const ReviewsCard = forwardRef(({ doctorId }, ref) => {
-  const { isPending, isError, data, error } = useDoctorRatings(doctorId);
+  const { data } = useDoctorRatings(doctorId);
   const responseData = data?.data.data;
   return (
     <Card className="p-4 my-1 " ref={ref}>

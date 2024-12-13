@@ -8,7 +8,7 @@ export const googleCalendarPrefix = '/google-calendar';
 
 export const invoicePrefix = '/invoice';
 
-export const paymentPrefix = "paypal/pay";
+export const paymentPrefix = 'paypal/pay';
 
 export const ratingPrefix = '/rating';
 

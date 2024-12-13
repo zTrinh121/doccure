@@ -1,10 +1,10 @@
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { Card, Flex, Button, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
-import CenterLayout from '../../../components/layouts/CenterLayout';
+import IsPendingSpin from 'src/components/ui/IsPendingSpin';
+import CenterLayout from 'src/components/layouts/CenterLayout';
 
-import { useGetPaymentCancel } from '../../../hooks/useGetPaymentCancel';
+import { useGetPaymentCancel } from 'src/hooks/useGetPaymentCancel';
 
 const CancelPage = () => {
   const navigate = useNavigate();

@@ -1,10 +1,9 @@
 import { Col } from 'antd';
-import SlotButton from './SlotButton';
+import SlotButton from 'src/features/slots/components/SlotButton';
 import { memo } from 'react';
-import { getKebabDateString } from './../../../utils/dateUtils';
-import SlotColHead from './SlotColHead';
+import { getKebabDateString } from 'src/utils/dateUtils';
+import SlotColHead from 'src/features/slots/components/SlotColHead';
 import PropTypes from 'prop-types';
-
 
 const SlotCol = ({ date, dayNames, tempMap, select, setSelect }) => {
   return (

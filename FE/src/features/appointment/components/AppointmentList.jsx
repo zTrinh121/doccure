@@ -1,15 +1,11 @@
-import AppointmentItem from './AppointmentItem';
+import AppointmentItem from 'src/features/appointment/components/AppointmentItem';
 import { Pagination, Spin, DatePicker } from 'antd';
 const { RangePicker } = DatePicker;
-import MemoizedButton from './MemoizedButton';
+import MemoizedButton from 'src/features/appointment/components/MemoizedButton';
 
-import { useAppointmentsQuery } from '../../../hooks/useAppointmentsQuery';
-import { getTimeString } from '../../../utils/timeUtils';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { useCallback } from 'react';
-import { memo } from 'react';
-import { startTransition } from 'react';
+import { useAppointmentsQuery } from 'src/hooks/useAppointmentsQuery';
+import { getTimeString } from 'src/utils/timeUtils';
+import { useState, useEffect, startTransition, useCallback, memo } from 'react';
 
 const AppointmentList = () => {
   const [status, setStatus] = useState('');
@@ -22,7 +18,7 @@ const AppointmentList = () => {
     pageSize: 10,
     total: 10,
   });
-  const { isPending, isError, data, error } = useAppointmentsQuery({
+  const { isPending, data } = useAppointmentsQuery({
     status: statusQuery,
     offset: (pagination.page - 1) * pagination.pageSize,
     limit: pagination.pageSize,

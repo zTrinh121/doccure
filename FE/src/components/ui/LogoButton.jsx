@@ -1,5 +1,5 @@
 import { Image } from 'antd';
-import doccure from '../../assets/doccure.png';
+import doccure from 'src/assets/doccure.png';
 import { Link } from 'react-router-dom';
 import { memo } from 'react';
 

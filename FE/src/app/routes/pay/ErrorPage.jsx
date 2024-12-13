@@ -1,7 +1,7 @@
 import { CloseCircleTwoTone } from '@ant-design/icons';
 import { Card, Flex, Button, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import CenterLayout from '../../../components/layouts/CenterLayout';
+import CenterLayout from 'src/components/layouts/CenterLayout';
 
 const ErrorPage = () => {
   const navigate = useNavigate();

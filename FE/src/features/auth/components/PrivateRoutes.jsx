@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAccessToken } from '../../../stores/authStore';
+import { useAccessToken } from 'src/stores/authStore';
 import PropTypes from 'prop-types';
 
 const PrivateRoutes = ({ children }) => {

@@ -1,7 +1,7 @@
 import { Col, Layout, Row, Image, Typography } from 'antd';
 const { Footer } = Layout;
 const { Paragraph } = Typography;
-import doccure from '../../assets/doccure.png';
+import doccure from 'src/assets/doccure.png';
 
 const HomeFooter = () => {
   const importantLink = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';

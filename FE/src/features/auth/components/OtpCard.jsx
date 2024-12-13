@@ -3,11 +3,11 @@ const { Meta } = Card;
 import { Spin } from 'antd';
 import { Flex } from 'antd';
 
-import { getActions, useResetEmail } from '../../../stores/authStore';
-import { verifyOtp } from '../../../lib/auth';
+import { getActions, useResetEmail } from 'src/stores/authStore';
+import { verifyOtp } from 'src/lib/auth';
 import { useState } from 'react';
-import { notification } from '../../../utils/antDesignGlobals';
-import { useNavigateResetPassword } from '../../../hooks/useNavigateResetPassword';
+import { notification } from 'src/utils/antDesignGlobals';
+import { useNavigateResetPassword } from 'src/hooks/useNavigateResetPassword';
 
 const OtpCard = () => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ const OtpCard = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await verifyOtp({ otp: values.otp, email: resetEmail });
+      await verifyOtp({ otp: values.otp, email: resetEmail });
       notification.success({
         message: 'Success',
 

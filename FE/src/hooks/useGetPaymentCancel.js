@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
-import { getPaymentCancel } from "../lib/payment";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { getPaymentCancel } from 'src/lib/payment';
+import { useNavigate } from 'react-router-dom';
 
-export const useGetPaymentCancel=({
-  appointmentId,
-  invoiceId,
-})=>{
+export const useGetPaymentCancel = ({ appointmentId, invoiceId }) => {
   const [loading, setLoading] = useState('false');
   const navigate = useNavigate();
   useEffect(() => {
@@ -25,8 +22,8 @@ export const useGetPaymentCancel=({
       }
     };
 
-   getPayment();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    getPayment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return loading;
-}
+};

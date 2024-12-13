@@ -1,13 +1,13 @@
-import background from '../../../assets/background.png';
+import background from 'src/assets/background.png';
 import { Flex, Input, Space, Carousel, Button, Form } from 'antd';
-import DoctorCard from '../../../features/doctors/components/DoctorCard';
+import DoctorCard from 'src/features/doctors/components/DoctorCard';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
+import IsPendingSpin from 'src/components/ui/IsPendingSpin';
 
-import { searchDoctors } from '../../../lib/doctor';
+import { searchDoctors } from 'src/lib/doctor';
 import { useNavigate } from 'react-router-dom';
-import { useDoctorsRating } from '../../../hooks/useDoctorsRating';
+import { useDoctorsRating } from 'src/hooks/useDoctorsRating';
 
 // import { useAuthStore } from '../../../stores/authStore';
 
@@ -21,7 +21,7 @@ const HomePage = () => {
     }
   };
 
-  const { isPending, isError, data, error } = useDoctorsRating();
+  const { isPending, data } = useDoctorsRating();
   if (isPending) {
     return <IsPendingSpin></IsPendingSpin>;
   }

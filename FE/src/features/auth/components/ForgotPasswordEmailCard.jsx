@@ -1,12 +1,12 @@
 import { Button, Card, Form, Input, Space } from 'antd';
 const { Meta } = Card;
 
-import { sendResetEmail } from '../../../lib/auth';
-import { getActions } from '../../../stores/authStore';
+import { sendResetEmail } from 'src/lib/auth';
+import { getActions } from 'src/stores/authStore';
 import { Spin } from 'antd';
 import { useState } from 'react';
-import { notification } from '../../../utils/antDesignGlobals';
-import { useNavigateOtp } from '../../../hooks/useNavigateOtp.';
+import { notification } from 'src/utils/antDesignGlobals';
+import { useNavigateOtp } from 'src/hooks/useNavigateOtp.';
 //todos:notification,disabled button
 
 const ForgotPasswordEmailCard = () => {

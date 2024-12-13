@@ -4,15 +4,14 @@ import { Spin, App as AppAntd } from 'antd';
 import { ConfigProvider } from 'antd';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import router from './router';
-import {  useIsLoading } from '../stores/authStore';
-import AntDesignGlobals from '../utils/antDesignGlobals';
-import { useRefreshToken } from '../hooks/useRefreshToken';
+import router from 'src/app/router';
+import { useIsLoading } from 'src/stores/authStore';
+import AntDesignGlobals from 'src/utils/antDesignGlobals';
+import { useRefreshToken } from 'src/hooks/useRefreshToken';
 
 function App() {
   const isLoading = useIsLoading();
   useRefreshToken();
- 
 
   if (isLoading) {
     return (

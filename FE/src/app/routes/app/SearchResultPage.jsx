@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { useSearchQuery } from '../../../hooks/useSearchQuery';
+import { useSearchQuery } from 'src/hooks/useSearchQuery';
 import { Form, Input, Row, Col, Radio, Card } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import DoctorPanel from './../../../features/doctors/components/DoctorPanel';
+import DoctorPanel from 'src/features/doctors/components/DoctorPanel';
 import { useNavigate } from 'react-router-dom';
-import useDebounce from '../../../hooks/useDebounce';
+import useDebounce from 'src/hooks/useDebounce';
 import { Spin } from 'antd';
-import { useSpecializationsQuery } from '../../../hooks/useSpecializationsQuery';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
-import MemoizedRadio from '../../../components/ui/MemoizedRadio';
+import { useSpecializationsQuery } from 'src/hooks/useSpecializationsQuery';
+import IsPendingSpin from 'src/components/ui/IsPendingSpin';
+import MemoizedRadio from 'src/components/ui/MemoizedRadio';
 
 const SearchResultPage = () => {
   const query = new URLSearchParams(location.search).get('query');

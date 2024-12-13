@@ -1,10 +1,7 @@
-import {
-  authAxiosInstance,
-  publicAxiosInstance,
-} from './apiClient';
+import { authAxiosInstance, publicAxiosInstance } from 'src/lib/apiClient';
 import { jwtDecode } from 'jwt-decode';
-import { getActions } from '../stores/authStore';
-import { authPrefix } from '../utils/apiConstants';
+import { getActions } from 'src/stores/authStore';
+import { authPrefix } from 'src/utils/apiConstants';
 
 const { clearTokens } = getActions();
 

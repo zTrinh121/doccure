@@ -1,4 +1,4 @@
-import { useDoctorQuery } from '../../../hooks/useDoctorQuery';
+import { useDoctorQuery } from 'src/hooks/useDoctorQuery';
 import { Card, Typography, Rate, Button, Col } from 'antd';
 const { Link } = Typography;
 import {
@@ -6,13 +6,13 @@ import {
   EnvironmentOutlined,
   ClockCircleOutlined,
 } from '@ant-design/icons';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
-import AvatarWithDefault from '../../../components/ui/AvatarWithDefault';
+import IsPendingSpin from 'src/components/ui/IsPendingSpin';
+import AvatarWithDefault from 'src/components/ui/AvatarWithDefault';
 
 import { useNavigate } from 'react-router-dom';
-import { useDoctorRatings } from '../../../hooks/useDoctorRatings';
-import { getStars } from '../../../utils/utils';
-import { getActions } from '../../../stores/scrollStore';
+import { useDoctorRatings } from 'src/hooks/useDoctorRatings';
+import { getStars } from 'src/utils/utils';
+import { getActions } from 'src/stores/scrollStore';
 import PropTypes from 'prop-types';
 import { memo } from 'react';
 
@@ -98,8 +98,8 @@ const DoctorPanel = ({
           </div>
           <div className="flex flex-col md:flex-row md:items-center space-x-2">
             <Typography.Text>
-              ${responseDataDoctor.min_price} - $
-              {responseDataDoctor.max_price} per session
+              ${responseDataDoctor.min_price} - ${responseDataDoctor.max_price}{' '}
+              per session
             </Typography.Text>
             <Col className="flex flex-row space-x-1 self-end">
               {viewProfile && (

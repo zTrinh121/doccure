@@ -1,16 +1,16 @@
 //Splitting router into separate file
 import { createBrowserRouter } from 'react-router-dom';
 
-import HomePage from './routes/app/HomePage';
-import RequireOtpVerification from '../features/auth/components/RequireOtpVerification';
-import HomeLayout from '../components/layouts/HomeLayout';
-import PrivateRoutes from '../features/auth/components/PrivateRoutes';
+import HomePage from 'src/app/routes/app/HomePage';
+import RequireOtpVerification from 'src/features/auth/components/RequireOtpVerification';
+import HomeLayout from 'src/components/layouts/HomeLayout';
+import PrivateRoutes from 'src/features/auth/components/PrivateRoutes';
 import {
   doctorPrefix,
   homePrefix,
   paymentPrefix,
   userPrefix,
-} from '../utils/routerConstants';
+} from 'src/utils/routerConstants';
 
 //https://stackoverflow.com/questions/76340518/lazy-loading-routes-in-react-router-v6
 const router = createBrowserRouter([
@@ -25,21 +25,23 @@ const router = createBrowserRouter([
       {
         path: '/login',
         async lazy() {
-          let LoginPage = await import('./routes/auth/LoginPage');
+          let LoginPage = await import('src/app/routes/auth/LoginPage');
           return { Component: LoginPage.default };
         },
       },
       {
         path: '/register',
         async lazy() {
-          let RegisterPage = await import('./routes/auth/RegisterPage');
+          let RegisterPage = await import('src/app/routes/auth/RegisterPage');
           return { Component: RegisterPage.default };
         },
       },
       {
         path: '/search',
         async lazy() {
-          let SearchResultPage = await import('./routes/app/SearchResultPage');
+          let SearchResultPage = await import(
+            'src/app/routes/app/SearchResultPage'
+          );
           return { Component: SearchResultPage.default };
         },
       },
@@ -48,7 +50,7 @@ const router = createBrowserRouter([
         path: '/googleCalendarAuthSuccessful',
         async lazy() {
           let GoogleCalendarAuthSuccessfulPage = await import(
-            './routes/googleCalendarAuth/GoogleCalendarAuthSuccessfulPage'
+            'src/app/routes/googleCalendarAuth/GoogleCalendarAuthSuccessfulPage'
           );
           return { Component: GoogleCalendarAuthSuccessfulPage.default };
         },
@@ -59,7 +61,7 @@ const router = createBrowserRouter([
         path: '/forgotPassword',
         async lazy() {
           let ForgotPasswordPage = await import(
-            './routes/auth/ForgotPasswordPage'
+            'src/app/routes/auth/ForgotPasswordPage'
           );
           return { Component: ForgotPasswordPage.default };
         },
@@ -67,7 +69,9 @@ const router = createBrowserRouter([
       {
         path: '/otp',
         async lazy() {
-          const { default: OtpPage } = await import('./routes/auth/OtpPage');
+          const { default: OtpPage } = await import(
+            'src/app/routes/auth/OtpPage'
+          );
           return {
             Component: (props) => (
               <RequireOtpVerification allowedSteps={['otp', 'password']}>
@@ -81,7 +85,7 @@ const router = createBrowserRouter([
         path: '/resetPassword',
         async lazy() {
           const { default: ResetPasswordPage } = await import(
-            './routes/auth/ResetPasswordPage'
+            'src/app/routes/auth/ResetPasswordPage'
           );
           return {
             Component: (props) => (
@@ -99,7 +103,7 @@ const router = createBrowserRouter([
         path: userPrefix,
         async lazy() {
           const { default: DashboardLayout } = await import(
-            '../components/layouts/DashboardLayout'
+            'src/components/layouts/DashboardLayout'
           );
           return {
             Component: () => (
@@ -114,7 +118,7 @@ const router = createBrowserRouter([
             path: 'profile',
             async lazy() {
               let ChangeProfilePage = await import(
-                './routes/user/ChangeProfilePage'
+                'src/app/routes/user/ChangeProfilePage'
               );
               return { Component: ChangeProfilePage.default };
             },
@@ -123,7 +127,7 @@ const router = createBrowserRouter([
             path: 'changePassword',
             async lazy() {
               let ChangePasswordPage = await import(
-                './routes/app/ChangePasswordPage'
+                'src/app/routes/app/ChangePasswordPage'
               );
               return { Component: ChangePasswordPage.default };
             },
@@ -133,7 +137,7 @@ const router = createBrowserRouter([
             path: 'appointment',
             async lazy() {
               let AppointmentsPage = await import(
-                './routes/appointment/AppointmentsPage'
+                'src/app/routes/appointment/AppointmentsPage'
               );
               return { Component: AppointmentsPage.default };
             },
@@ -142,7 +146,7 @@ const router = createBrowserRouter([
             path: 'appointment/:appointmentId',
             async lazy() {
               let AppointmentPage = await import(
-                './routes/appointment/AppointmentPage'
+                'src/app/routes/appointment/AppointmentPage'
               );
               return { Component: AppointmentPage.default };
             },
@@ -152,14 +156,18 @@ const router = createBrowserRouter([
           {
             path: 'invoice',
             async lazy() {
-              let InvoicesPage = await import('./routes/invoice/InvoicesPage');
+              let InvoicesPage = await import(
+                'src/app/routes/invoice/InvoicesPage'
+              );
               return { Component: InvoicesPage.default };
             },
           },
           {
             path: 'invoice/:invoiceId',
             async lazy() {
-              let InvoicePage = await import('./routes/invoice/InvoicePage');
+              let InvoicePage = await import(
+                'src/app/routes/invoice/InvoicePage'
+              );
               return { Component: InvoicePage.default };
             },
           },
@@ -172,7 +180,7 @@ const router = createBrowserRouter([
           {
             path: ':slotId',
             async lazy() {
-              let SlotPage = await import('./routes/slot/SlotPage');
+              let SlotPage = await import('src/app/routes/slot/SlotPage');
               return { Component: SlotPage.default };
             },
           },
@@ -184,7 +192,7 @@ const router = createBrowserRouter([
         path: paymentPrefix,
         async lazy() {
           const { default: SimpleLayout } = await import(
-            '../components/layouts/SimpleLayout'
+            'src/components/layouts/SimpleLayout'
           );
           return {
             Component: () => (
@@ -198,21 +206,21 @@ const router = createBrowserRouter([
           {
             path: 'success',
             async lazy() {
-              let SuccessPage = await import('./routes/pay/SuccessPage');
+              let SuccessPage = await import('src/app/routes/pay/SuccessPage');
               return { Component: SuccessPage.default };
             },
           },
           {
             path: 'cancel',
             async lazy() {
-              let CancelPage = await import('./routes/pay/CancelPage');
+              let CancelPage = await import('src/app/routes/pay/CancelPage');
               return { Component: CancelPage.default };
             },
           },
           {
             path: 'error',
             async lazy() {
-              let ErrorPage = await import('./routes/pay/ErrorPage');
+              let ErrorPage = await import('src/app/routes/pay/ErrorPage');
               return { Component: ErrorPage.default };
             },
           },
@@ -225,7 +233,7 @@ const router = createBrowserRouter([
           {
             path: ':doctorId',
             async lazy() {
-              let DoctorPage = await import('./routes/doctor/DoctorPage');
+              let DoctorPage = await import('src/app/routes/doctor/DoctorPage');
               return { Component: DoctorPage.default };
             },
           },
@@ -233,7 +241,7 @@ const router = createBrowserRouter([
             path: ':doctorId/booking',
             async lazy() {
               const { default: DoctorBookingPage } = await import(
-                './routes/doctor/DoctorBookingPage'
+                'src/app/routes/doctor/DoctorBookingPage'
               );
               return {
                 Component: () => (
@@ -250,7 +258,7 @@ const router = createBrowserRouter([
       {
         path: '*',
         lazy: async () => {
-          const { NotFoundRoute } = await import('./routes/NotFound');
+          const { NotFoundRoute } = await import('src/app/routes/NotFound');
           return { Component: NotFoundRoute };
         },
       },

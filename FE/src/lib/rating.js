@@ -1,6 +1,5 @@
-import { publicAxiosInstance } from './apiClient';
-import { authAxiosInstance } from './apiClient';
-import { ratingPrefix } from '../utils/apiConstants';
+import { publicAxiosInstance, authAxiosInstance } from 'src/lib/apiClient';
+import { ratingPrefix } from 'src/utils/apiConstants';
 
 // http://localhost:8080/api/v1/doctor/rating/21
 export const getRatingsOfDoctorById = async (doctorId) => {

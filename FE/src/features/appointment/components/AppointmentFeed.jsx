@@ -1,13 +1,13 @@
 import React from 'react';
-import AppointmentItem from './AppointmentItem';
-import MemoizedButton from './MemoizedButton';
+import AppointmentItem from 'src/features/appointment/components/AppointmentItem';
+import MemoizedButton from 'src/features/appointment/components/MemoizedButton';
 import { DatePicker } from 'antd';
 const { RangePicker } = DatePicker;
 
-import { useAppointmentsInfiniteQuery } from './../../../hooks/useAppointmentsInfiniteQuery';
-import { getTimeString } from '../../../utils/timeUtils';
+import { useAppointmentsInfiniteQuery } from 'src/hooks/useAppointmentsInfiniteQuery';
+import { getTimeString } from 'src/utils/timeUtils';
 import { useState, useCallback } from 'react';
-import { useIntersectionCallback } from '../../../hooks/useIntersectionCallback';
+import { useIntersectionCallback } from 'src/hooks/useIntersectionCallback';
 
 const AppointmentFeed = () => {
   const [statusSelect, setStatusSelect] = useState('');

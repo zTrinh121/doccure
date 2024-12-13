@@ -1,9 +1,9 @@
-import loginImage from '../../../assets/login.png';
+import loginImage from 'src/assets/login.png';
 import { Col, Row, Skeleton } from 'antd';
 import { Image } from 'antd';
 import { Flex } from 'antd';
 
-import LoginCard from '../../../features/auth/components/LoginCard';
+import LoginCard from 'src/features/auth/components/LoginCard';
 
 function LoginPage() {
   return (

@@ -1,5 +1,5 @@
-import loginImage from '../../../assets/login.png';
-import RegisterCard from '../../../features/auth/components/RegisterCard';
+import loginImage from 'src/assets/login.png';
+import RegisterCard from 'src/features/auth/components/RegisterCard';
 import { Flex, Row, Col, Image, Skeleton } from 'antd';
 
 const RegisterPage = () => {

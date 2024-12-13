@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { useResetStep } from "../stores/authStore";
-import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useResetStep } from 'src/stores/authStore';
+import { useEffect } from 'react';
 
 export const useNavigateResetPassword = () => {
   const navigate = useNavigate();

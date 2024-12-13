@@ -23,4 +23,4 @@ const addNotificationSuccess = (message, description) => {
 
 export default AntDesignGlobals;
 
-export { message, modal, notification,addNotificationSuccess };
+export { message, modal, notification, addNotificationSuccess };

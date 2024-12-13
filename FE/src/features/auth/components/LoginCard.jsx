@@ -1,13 +1,13 @@
 import { Button, Card, Flex, Form, Input, Space, Spin } from 'antd';
 const { Meta } = Card;
-import FloatLabel from '../../../components/ui/float-lable/FloatLabel';
+import FloatLabel from 'src/components/ui/float-lable/FloatLabel';
 
 import { useState } from 'react';
-import { login } from '../../../lib/auth';
+import { login } from 'src/lib/auth';
 import { useNavigate } from 'react-router-dom';
-import { getActions } from '../../../stores/authStore';
+import { getActions } from 'src/stores/authStore';
 import { useQueryClient } from '@tanstack/react-query';
-import { notification } from '../../../utils/antDesignGlobals';
+import { notification } from 'src/utils/antDesignGlobals';
 
 const LoginCard = () => {
   const { setAccessToken, setResetStep, setResetEmail } = getActions();
@@ -16,7 +16,7 @@ const LoginCard = () => {
   const [password, setPassword] = useState('');
   const queryClient = useQueryClient();
 
-  const openNotificationError = (description) => {
+  const openNotificationError = () => {
     notification.error({
       message: 'Error',
       description: 'Incorrect username or password',
@@ -26,7 +26,7 @@ const LoginCard = () => {
     });
   };
 
-  const openNotificationSuccess = (description) => {
+  const openNotificationSuccess = () => {
     notification.success({
       message: 'Login Successful',
       // description: 'Incorrect username or password',
@@ -68,9 +68,9 @@ const LoginCard = () => {
     navigate('/forgotPassword');
   };
 
-  const onClickRegister = () => {
-    navigate('/register');
-  };
+  // const onClickRegister = () => {
+  //   navigate('/register');
+  // };
 
   return (
     <>

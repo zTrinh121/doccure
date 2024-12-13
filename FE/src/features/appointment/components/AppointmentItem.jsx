@@ -1,4 +1,4 @@
-import { Card, Modal, Input, Rate, Button } from 'antd';
+import { Card, Modal, Input, Rate, Button, Spin } from 'antd';
 const { TextArea } = Input;
 import { Tooltip } from 'antd';
 import {
@@ -12,14 +12,13 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { notification } from '../../../utils/antDesignGlobals';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAppointment } from '../../../lib/appointment';
-import { getCheckAuth, postAddEvent } from '../../../lib/googleCalendar';
-import { postInsertRating } from '../../../lib/rating';
-import { Spin } from 'antd';
+import { notification } from 'src/utils/antDesignGlobals';
+import { useQueryClient } from '@tanstack/react-query';
+import { getAppointment } from 'src/lib/appointment';
+import { getCheckAuth, postAddEvent } from 'src/lib/googleCalendar';
+import { useRatingMutation } from 'src/hooks/useRatingMutation';
+
 import PropTypes from 'prop-types';
-import { useRatingMutation } from '../../../hooks/useRatingMutation';
 
 const AppointmentItem = ({ time, appointment, queryKey }) => {
   const navigate = useNavigate();

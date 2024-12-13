@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
-import { useInvoiceQuery } from '../../../hooks/useInvoiceQuery';
-import ContentLayout from '../../../components/layouts/ContentLayout';
+import IsPendingSpin from 'src/components/ui/IsPendingSpin';
+import { useInvoiceQuery } from 'src/hooks/useInvoiceQuery';
+import ContentLayout from 'src/components/layouts/ContentLayout';
 import { Card } from 'antd';
 
 const InvoicePage = () => {
   const { invoiceId } = useParams();
-  const { isPending, isError, data, error } = useInvoiceQuery(invoiceId);
+  const { isPending, data } = useInvoiceQuery(invoiceId);
 
   if (isPending) {
     //todo:replace with skeleton

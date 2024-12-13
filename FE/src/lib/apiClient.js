@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAccessToken, getActions } from '../stores/authStore';
+import { getAccessToken, getActions } from 'src/stores/authStore';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const { setAccessToken, clearTokens } = getActions();

@@ -2,8 +2,8 @@ import { Suspense } from 'react';
 import { Typography, Divider } from 'antd';
 const { Title } = Typography;
 
-import ContentLayout from '../../../components/layouts/ContentLayout';
-import InvoicesTable from './../../../features/invoices/components/InvoicesTable';
+import ContentLayout from 'src/components/layouts/ContentLayout';
+import InvoicesTable from 'src/features/invoices/components/InvoicesTable';
 const InvoicesPage = () => {
   return (
     <ContentLayout>

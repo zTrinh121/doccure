@@ -1,12 +1,12 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Carousel, Card } from 'antd';
-import IsPendingSpin from '../../../components/ui/IsPendingSpin';
+import IsPendingSpin from 'src/components/ui/IsPendingSpin';
 
 import { useRef, memo } from 'react';
-import { useDoctorSlotsQuery } from '../../../hooks/useDoctorSlotsQuery';
-import { dayNames } from '../../../utils/constants';
+import { useDoctorSlotsQuery } from 'src/hooks/useDoctorSlotsQuery';
+import { dayNames } from 'src/utils/constants';
 import PropTypes from 'prop-types';
-import SlotCol from './SlotCol';
+import SlotCol from 'src/features/slots/components/SlotCol';
 
 const SlotsTable = ({
   startDate,
@@ -17,7 +17,7 @@ const SlotsTable = ({
   dateArr,
 }) => {
   const carouselRef = useRef(null);
-  const { isPending, isError, data, error } = useDoctorSlotsQuery({
+  const { isPending, isError, data } = useDoctorSlotsQuery({
     startDate: startDate,
     endDate: endDate,
     doctorId: doctorId,

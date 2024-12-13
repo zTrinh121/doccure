@@ -2,20 +2,19 @@ import { Spin, Typography, Layout, Card, Flex, Button } from 'antd';
 const { Link } = Typography;
 const { Sider, Content } = Layout;
 import { Outlet } from 'react-router-dom';
-import AvatarWithDefault from './../ui/AvatarWithDefault';
-import background from '../../assets/background.jpg';
+import AvatarWithDefault from 'src/components/ui/AvatarWithDefault';
+import background from 'src/assets/background.jpg';
 
-import { useProfileQuery } from '../../hooks/useProfileQuery';
+import { useProfileQuery } from 'src/hooks/useProfileQuery';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import router from './../../app/router';
 
 const DashboardLayout = () => {
   //todo:memo thisthing:)
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, isSuccess, isPending, error } = useProfileQuery();
+  const { data, isPending } = useProfileQuery();
 
   if (isPending) {
     return (
@@ -47,8 +46,8 @@ const DashboardLayout = () => {
               block
               type={location.pathname === '/user/profile' ? 'primary' : 'link'}
               onClick={() => {
-                // navigate('/user/profile');
-                router.navigate('/user/profile');
+                navigate('/user/profile');
+                // router.navigate('/user/profile');
               }}
             >
               Change profile

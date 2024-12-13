@@ -6,7 +6,7 @@ class BasicErrorBoundary extends React.Component {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError() {
     // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
@@ -19,7 +19,6 @@ class BasicErrorBoundary extends React.Component {
     //   in App
     // logErrorToMyService(error, info.componentStack);
     console.log(error, info.componentStack);
-    
   }
 
   render() {
